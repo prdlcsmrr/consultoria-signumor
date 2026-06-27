@@ -9,6 +9,7 @@
     --navy:#1a2a5e; --navy2:#22357a; --gold:#c9972a; --gold-l:#e3b94f;
     --bg:#0f1530; --card:#ffffff; --ink:#1c2333; --muted:#6a7283;
     --green:#1a7a3a; --red:#b91c1c; --line:#e6e8ef;
+    --a1:#2563c9; --a2:#c9972a; --a3:#1a7a3a;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
@@ -20,47 +21,33 @@
     color:var(--ink); min-height:100vh;
     -webkit-text-size-adjust:100%; overflow-x:hidden;
   }
-  .wrap{max-width:440px;margin:0 auto;padding:24px 18px 60px}
-  /* TOPO */
-  .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:26px}
+  .wrap{max-width:480px;margin:0 auto;padding:24px 18px 60px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:22px}
   .brand{display:flex;align-items:center;gap:10px;color:#fff}
-  .brand .emblem{
-    width:42px;height:42px;border-radius:50%;
+  .brand .emblem{width:42px;height:42px;border-radius:50%;
     background:radial-gradient(circle at 35% 30%,var(--gold-l),var(--gold) 60%,#9c7320);
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 0 0 2px rgba(255,255,255,.15),0 6px 18px rgba(0,0,0,.35);
-    flex:0 0 auto;
-  }
+    box-shadow:0 0 0 2px rgba(255,255,255,.15),0 6px 18px rgba(0,0,0,.35);flex:0 0 auto}
   .brand .emblem span{font-size:20px;font-weight:bold;color:var(--navy)}
   .brand .name{line-height:1.05}
   .brand .name b{font-size:18px;letter-spacing:3px;display:block}
   .brand .name small{font-size:9px;letter-spacing:2px;color:var(--gold-l);text-transform:uppercase}
   .lang{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:10px}
-  .lang button{
-    border:0;background:transparent;color:#c7cde0;font-family:inherit;
-    font-size:12px;padding:5px 8px;border-radius:7px;cursor:pointer;letter-spacing:.5px;
-  }
+  .lang button{border:0;background:transparent;color:#c7cde0;font-family:inherit;font-size:12px;padding:5px 8px;border-radius:7px;cursor:pointer;letter-spacing:.5px}
   .lang button.active{background:var(--gold);color:var(--navy);font-weight:bold}
-  /* CARD */
-  .card{
-    background:var(--card);border-radius:18px;padding:28px 22px;
-    box-shadow:0 18px 50px rgba(0,0,0,.45);border:1px solid rgba(201,151,42,.25);
-  }
+  .card{background:var(--card);border-radius:18px;padding:24px 20px;
+    box-shadow:0 18px 50px rgba(0,0,0,.45);border:1px solid rgba(201,151,42,.25)}
   .card h1{font-size:22px;margin:0 0 4px;color:var(--navy);text-align:center;letter-spacing:.5px}
   .card .sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:22px}
   label.fld{display:block;margin-bottom:14px}
   label.fld .lbl{font-size:12px;color:var(--navy);font-weight:bold;letter-spacing:.5px;display:block;margin-bottom:5px;text-transform:uppercase}
-  input{
-    width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;
-    font-family:inherit;font-size:15px;color:var(--ink);background:#fbfbfd;min-width:0;
-  }
-  input:focus{outline:none;border-color:var(--gold);background:#fff}
-  .btn{
-    width:100%;padding:13px;border:0;border-radius:11px;cursor:pointer;
+  input,select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;
+    font-family:inherit;font-size:15px;color:var(--ink);background:#fbfbfd;min-width:0}
+  input:focus,select:focus{outline:none;border-color:var(--gold);background:#fff}
+  .btn{width:100%;padding:13px;border:0;border-radius:11px;cursor:pointer;
     font-family:inherit;font-size:15px;font-weight:bold;letter-spacing:.5px;margin-top:6px;
     background:linear-gradient(180deg,var(--navy2),var(--navy));color:#fff;
-    box-shadow:0 8px 20px rgba(26,42,94,.35);transition:transform .05s;
-  }
+    box-shadow:0 8px 20px rgba(26,42,94,.35);transition:transform .05s}
   .btn:active{transform:translateY(1px)}
   .btn.gold{background:linear-gradient(180deg,var(--gold-l),var(--gold));color:var(--navy);box-shadow:0 8px 20px rgba(201,151,42,.35)}
   .btn[disabled]{opacity:.6;cursor:wait}
@@ -70,19 +57,48 @@
   .msg.err{background:#fdecec;color:var(--red);border:1px solid #f5c2c2;display:block}
   .msg.ok{background:#eaf6ee;color:var(--green);border:1px solid #b7e0c4;display:block}
   .hide{display:none!important}
-  /* DASHBOARD shell */
-  .dash .card{padding:24px 20px}
-  .userline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
-  .userline .who{font-size:13px;color:var(--muted)}
-  .userline .who b{color:var(--navy);display:block;font-size:14px}
-  .btn-out{background:transparent;border:1.5px solid var(--line);color:var(--muted);
+  /* DASHBOARD */
+  .userline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;color:#fff}
+  .userline .who{font-size:12px;color:#aeb6d4}
+  .userline .who b{color:#fff;display:block;font-size:13px}
+  .btn-out{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#dfe4f5;
     padding:8px 12px;border-radius:9px;font-family:inherit;font-size:12px;cursor:pointer;font-weight:bold}
-  .soon{
-    border:1.5px dashed var(--line);border-radius:12px;padding:22px 16px;text-align:center;
-    color:var(--muted);font-size:14px;line-height:1.5;margin-top:4px;
-  }
+  .tabs{display:flex;gap:6px;margin-bottom:14px}
+  .tabs button{flex:1;border:0;background:rgba(255,255,255,.08);color:#c7cde0;font-family:inherit;
+    font-size:13px;font-weight:bold;padding:11px;border-radius:11px;cursor:pointer;letter-spacing:.5px}
+  .tabs button.active{background:var(--gold);color:var(--navy)}
+  .pane-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .pane-head h2{font-size:18px;color:var(--navy);margin:0;letter-spacing:.5px}
+  .btn-mini{border:0;background:linear-gradient(180deg,var(--navy2),var(--navy));color:#fff;
+    font-family:inherit;font-size:13px;font-weight:bold;padding:8px 12px;border-radius:9px;cursor:pointer}
+  .funnel{font-size:11px;color:var(--muted);text-align:center;margin:-4px 0 14px;letter-spacing:1px}
+  .vform{background:#f7f8fc;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
+  .vform .row2{display:flex;gap:10px}
+  .vform .row2>*{flex:1}
+  .chk{display:flex;align-items:center;gap:8px;margin:4px 0 10px}
+  .chk input{width:auto;min-width:0}
+  .chk span{font-size:13px;color:var(--navy);font-weight:bold}
+  .vform .acts{display:flex;gap:8px;margin-top:4px}
+  .vform .acts .btn{margin-top:0}
+  .grp{margin-bottom:16px}
+  .grp-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .dot{width:10px;height:10px;border-radius:50%}
+  .grp-h b{font-size:14px;color:var(--navy);letter-spacing:1px}
+  .grp-h .cnt{font-size:11px;color:var(--muted);margin-left:auto}
+  .vitem{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);
+    border-radius:10px;margin-bottom:7px;background:#fff}
+  .vitem .vc{font-weight:bold;color:var(--navy);font-size:15px;min-width:46px}
+  .vitem .vn{flex:1;font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .vitem .vn small{color:var(--muted)}
+  .badge{font-size:10px;font-weight:bold;padding:3px 7px;border-radius:20px;letter-spacing:.5px}
+  .badge.on{background:#eaf6ee;color:var(--green)}
+  .badge.off{background:#f0f0f3;color:var(--muted)}
+  .iconbtn{border:0;background:transparent;cursor:pointer;font-size:15px;padding:4px;color:var(--muted)}
+  .empty{font-size:12px;color:var(--muted);font-style:italic;padding:6px 2px}
+  .soon{border:1.5px dashed var(--line);border-radius:12px;padding:26px 16px;text-align:center;
+    color:var(--muted);font-size:14px;line-height:1.5}
   .soon .ic{font-size:28px;display:block;margin-bottom:8px}
-  .foot{text-align:center;color:rgba(255,255,255,.35);font-size:11px;letter-spacing:2px;margin-top:26px;text-transform:uppercase}
+  .foot{text-align:center;color:rgba(255,255,255,.35);font-size:11px;letter-spacing:2px;margin-top:24px;text-transform:uppercase}
   .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
   @keyframes sp{to{transform:rotate(360deg)}}
   .boot{color:#c7cde0;text-align:center;padding:80px 20px;font-size:14px}
@@ -103,7 +119,6 @@
     </div>
   </div>
 
-  <!-- BOOT -->
   <div id="boot" class="boot"><span class="spin"></span><span data-i="loading">Carregando…</span></div>
 
   <!-- LOGIN -->
@@ -132,18 +147,53 @@
     <div class="linkrow"><a id="go-login" data-i="back_login">← Voltar ao login</a></div>
   </div>
 
-  <!-- DASHBOARD (shell) -->
-  <div id="view-dash" class="dash hide">
-    <div class="card">
-      <div class="userline">
-        <div class="who"><span data-i="logged_as">Conectado como</span><b id="d-email">—</b></div>
-        <button class="btn-out" id="btn-logout" data-i="logout">Sair</button>
+  <!-- DASHBOARD -->
+  <div id="view-dash" class="hide">
+    <div class="userline">
+      <div class="who"><span data-i="logged_as">Conectado como</span><b id="d-email">—</b></div>
+      <button class="btn-out" id="btn-logout" data-i="logout">Sair</button>
+    </div>
+    <div class="tabs">
+      <button data-tab="vend" class="active" data-i="nav_vend">Vendedores</button>
+      <button data-tab="cli" data-i="nav_cli">Clientes</button>
+    </div>
+
+    <!-- TAB VENDEDORES -->
+    <div id="tab-vend" class="card">
+      <div class="pane-head">
+        <h2 data-i="vend_title">Vendedores</h2>
+        <button class="btn-mini" id="v-new" data-i="vend_new">+ Novo</button>
       </div>
-      <h1 style="color:var(--navy);font-size:20px;margin:0 0 4px;text-align:center" data-i="dash_title">Painel</h1>
-      <div class="soon">
-        <span class="ic">🏗️</span>
-        <span data-i="soon">Sistema em construção. As próximas etapas (vendedores, clientes, cálculos e canais A1/A2/A3) serão liberadas em breve.</span>
+      <div class="funnel">A1 → A2 → A3</div>
+
+      <div id="v-form" class="vform hide">
+        <input type="hidden" id="vf-id">
+        <div class="row2">
+          <label class="fld"><span class="lbl" data-i="vend_code">Código</span>
+            <input id="vf-code" maxlength="10" placeholder="B66"></label>
+          <label class="fld"><span class="lbl" data-i="vend_channel">Canal</span>
+            <select id="vf-canal">
+              <option value="A1">A1</option>
+              <option value="A2">A2</option>
+              <option value="A3">A3</option>
+            </select></label>
+        </div>
+        <label class="fld" style="margin-bottom:8px"><span class="lbl" data-i="vend_name">Nome (opcional)</span>
+          <input id="vf-nome" maxlength="60" placeholder="—"></label>
+        <label class="chk"><input type="checkbox" id="vf-ativo" checked><span data-i="vend_active">Ativo</span></label>
+        <div class="acts">
+          <button class="btn" id="vf-save" data-i="vend_save">Salvar</button>
+          <button class="btn gold" id="vf-cancel" data-i="vend_cancel">Cancelar</button>
+        </div>
       </div>
+
+      <div id="v-msg" class="msg"></div>
+      <div id="v-list"><div class="empty" data-i="loading">Carregando…</div></div>
+    </div>
+
+    <!-- TAB CLIENTES -->
+    <div id="tab-cli" class="card hide">
+      <div class="soon"><span class="ic">🏗️</span><span data-i="soon_cli">Cadastro de clientes — próxima fase.</span></div>
     </div>
   </div>
 
@@ -152,129 +202,192 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* ===== CONFIG SUPABASE ===== */
-const SB_URL = 'https://exvocatkdzhsvlewpvik.supabase.co';
-const SB_KEY = 'sb_publishable__96M4ijl_Azu2zPU6Jma-g_hp1beIqh';
-const sb = supabase.createClient(SB_URL, SB_KEY);
+const SB_URL='https://exvocatkdzhsvlewpvik.supabase.co';
+const SB_KEY='sb_publishable__96M4ijl_Azu2zPU6Jma-g_hp1beIqh';
+const sb=supabase.createClient(SB_URL,SB_KEY);
 
-/* ===== i18n ===== */
-const I18N = {
-  pt:{
-    brand_sub:'Consultoria', loading:'Carregando…',
-    login_title:'Acesso', login_sub:'Painel de gestão · acesso restrito',
-    email:'E-mail', password:'Senha', login_btn:'Entrar',
-    first_access:'Primeiro acesso? Criar conta',
-    signup_title:'Criar conta', signup_sub:'Apenas gerentes autorizados',
-    signup_btn:'Criar conta', back_login:'← Voltar ao login',
-    logged_as:'Conectado como', logout:'Sair', dash_title:'Painel',
-    soon:'Sistema em construção. As próximas etapas (vendedores, clientes, cálculos e canais A1/A2/A3) serão liberadas em breve.',
-    fill:'Preencha e-mail e senha.', invalid:'E-mail ou senha incorretos.',
-    signup_ok:'Conta criada! Verifique seu e-mail para confirmar e depois faça login.',
-    signup_exists:'Este e-mail já está cadastrado. Faça login.',
-    weakpass:'A senha precisa ter ao menos 6 caracteres.',
-    generic:'Algo deu errado. Tente novamente.'
-  },
-  en:{
-    brand_sub:'Advisory', loading:'Loading…',
-    login_title:'Sign in', login_sub:'Management panel · restricted access',
-    email:'E-mail', password:'Password', login_btn:'Sign in',
-    first_access:'First time? Create account',
-    signup_title:'Create account', signup_sub:'Authorized managers only',
-    signup_btn:'Create account', back_login:'← Back to sign in',
-    logged_as:'Signed in as', logout:'Sign out', dash_title:'Dashboard',
-    soon:'System under construction. The next stages (sellers, clients, calculations and channels A1/A2/A3) will be released soon.',
-    fill:'Enter e-mail and password.', invalid:'Wrong e-mail or password.',
-    signup_ok:'Account created! Check your e-mail to confirm, then sign in.',
-    signup_exists:'This e-mail is already registered. Please sign in.',
-    weakpass:'Password must be at least 6 characters.',
-    generic:'Something went wrong. Please try again.'
-  },
-  zh:{
-    brand_sub:'顧問', loading:'載入中…',
-    login_title:'登入', login_sub:'管理面板 · 限受權人員',
-    email:'電子郵件', password:'密碼', login_btn:'登入',
-    first_access:'首次使用？建立帳號',
-    signup_title:'建立帳號', signup_sub:'僅限授權經理',
-    signup_btn:'建立帳號', back_login:'← 返回登入',
-    logged_as:'登入身分', logout:'登出', dash_title:'面板',
-    soon:'系統建置中。下一階段（業務員、客戶、計算與通路 A1/A2/A3）即將推出。',
-    fill:'請輸入電子郵件與密碼。', invalid:'電子郵件或密碼錯誤。',
-    signup_ok:'帳號已建立！請查收電子郵件確認後再登入。',
-    signup_exists:'此電子郵件已註冊，請直接登入。',
-    weakpass:'密碼至少需 6 個字元。',
-    generic:'發生錯誤，請再試一次。'
-  }
+const I18N={
+ pt:{brand_sub:'Consultoria',loading:'Carregando…',
+   login_title:'Acesso',login_sub:'Painel de gestão · acesso restrito',email:'E-mail',password:'Senha',login_btn:'Entrar',
+   first_access:'Primeiro acesso? Criar conta',signup_title:'Criar conta',signup_sub:'Apenas gerentes autorizados',
+   signup_btn:'Criar conta',back_login:'← Voltar ao login',logged_as:'Conectado como',logout:'Sair',
+   nav_vend:'Vendedores',nav_cli:'Clientes',vend_title:'Vendedores',vend_new:'+ Novo',
+   vend_code:'Código',vend_channel:'Canal',vend_name:'Nome (opcional)',vend_active:'Ativo',
+   vend_save:'Salvar',vend_cancel:'Cancelar',soon_cli:'Cadastro de clientes — próxima fase.',
+   fill:'Preencha e-mail e senha.',invalid:'E-mail ou senha incorretos.',
+   signup_ok:'Conta criada! Verifique seu e-mail para confirmar e depois faça login.',
+   signup_exists:'Este e-mail já está cadastrado. Faça login.',weakpass:'A senha precisa ter ao menos 6 caracteres.',
+   v_code_req:'Informe o código.',v_dup:'Já existe um vendedor com esse código.',
+   v_saved:'Vendedor salvo.',v_del:'Excluir este vendedor?',v_none:'Nenhum vendedor neste canal.',
+   v_empty:'Nenhum vendedor cadastrado. Toque em “+ Novo”.',generic:'Algo deu errado. Tente novamente.'},
+ en:{brand_sub:'Advisory',loading:'Loading…',
+   login_title:'Sign in',login_sub:'Management panel · restricted access',email:'E-mail',password:'Password',login_btn:'Sign in',
+   first_access:'First time? Create account',signup_title:'Create account',signup_sub:'Authorized managers only',
+   signup_btn:'Create account',back_login:'← Back to sign in',logged_as:'Signed in as',logout:'Sign out',
+   nav_vend:'Sellers',nav_cli:'Clients',vend_title:'Sellers',vend_new:'+ New',
+   vend_code:'Code',vend_channel:'Channel',vend_name:'Name (optional)',vend_active:'Active',
+   vend_save:'Save',vend_cancel:'Cancel',soon_cli:'Client registry — next phase.',
+   fill:'Enter e-mail and password.',invalid:'Wrong e-mail or password.',
+   signup_ok:'Account created! Check your e-mail to confirm, then sign in.',
+   signup_exists:'This e-mail is already registered. Please sign in.',weakpass:'Password must be at least 6 characters.',
+   v_code_req:'Enter the code.',v_dup:'A seller with this code already exists.',
+   v_saved:'Seller saved.',v_del:'Delete this seller?',v_none:'No sellers in this channel.',
+   v_empty:'No sellers yet. Tap “+ New”.',generic:'Something went wrong. Please try again.'},
+ zh:{brand_sub:'顧問',loading:'載入中…',
+   login_title:'登入',login_sub:'管理面板 · 限受權人員',email:'電子郵件',password:'密碼',login_btn:'登入',
+   first_access:'首次使用？建立帳號',signup_title:'建立帳號',signup_sub:'僅限授權經理',
+   signup_btn:'建立帳號',back_login:'← 返回登入',logged_as:'登入身分',logout:'登出',
+   nav_vend:'業務員',nav_cli:'客戶',vend_title:'業務員',vend_new:'+ 新增',
+   vend_code:'代碼',vend_channel:'通路',vend_name:'姓名（選填）',vend_active:'啟用',
+   vend_save:'儲存',vend_cancel:'取消',soon_cli:'客戶建檔 — 下一階段。',
+   fill:'請輸入電子郵件與密碼。',invalid:'電子郵件或密碼錯誤。',
+   signup_ok:'帳號已建立！請查收電子郵件確認後再登入。',
+   signup_exists:'此電子郵件已註冊，請直接登入。',weakpass:'密碼至少需 6 個字元。',
+   v_code_req:'請輸入代碼。',v_dup:'此代碼已存在。',
+   v_saved:'已儲存業務員。',v_del:'確定刪除此業務員？',v_none:'此通路尚無業務員。',
+   v_empty:'尚無業務員，請點「+ 新增」。',generic:'發生錯誤，請再試一次。'}
 };
-let LANG = localStorage.getItem('sig_lang') || 'pt';
-function t(k){ return (I18N[LANG]&&I18N[LANG][k]) || I18N.pt[k] || k; }
+let LANG=localStorage.getItem('sig_lang')||'pt';
+function t(k){return (I18N[LANG]&&I18N[LANG][k])||I18N.pt[k]||k;}
 function applyLang(){
-  document.documentElement.lang = LANG==='zh'?'zh-Hant':(LANG==='en'?'en':'pt-BR');
-  document.querySelectorAll('[data-i]').forEach(el=>{ el.textContent = t(el.getAttribute('data-i')); });
-  document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('active', b.dataset.lang===LANG));
+  document.documentElement.lang=LANG==='zh'?'zh-Hant':(LANG==='en'?'en':'pt-BR');
+  document.querySelectorAll('[data-i]').forEach(el=>{el.textContent=t(el.getAttribute('data-i'));});
+  document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('active',b.dataset.lang===LANG));
+  if(VEND.loaded) renderVend();
 }
 document.getElementById('lang').addEventListener('click',e=>{
-  const b=e.target.closest('button'); if(!b)return;
-  LANG=b.dataset.lang; localStorage.setItem('sig_lang',LANG); applyLang();
+  const b=e.target.closest('button');if(!b)return;
+  LANG=b.dataset.lang;localStorage.setItem('sig_lang',LANG);applyLang();
 });
 
-/* ===== Navegação de telas ===== */
 const views={boot:'boot',login:'view-login',signup:'view-signup',dash:'view-dash'};
-function show(v){ Object.values(views).forEach(id=>document.getElementById(id).classList.add('hide'));
-  document.getElementById(views[v]).classList.remove('hide'); }
-function msg(box,type,text){ const el=document.getElementById(box); el.className='msg '+(type||''); el.textContent=text||''; if(!text) el.style.display='none'; }
+function show(v){Object.values(views).forEach(id=>document.getElementById(id).classList.add('hide'));
+  document.getElementById(views[v]).classList.remove('hide');}
+function msg(box,type,text){const el=document.getElementById(box);el.className='msg '+(type||'');el.textContent=text||'';if(!text)el.style.display='none';}
 
-document.getElementById('go-signup').onclick=()=>{ msg('msg-login'); msg('msg-signup'); show('signup'); };
-document.getElementById('go-login').onclick=()=>{ msg('msg-signup'); msg('msg-login'); show('login'); };
+document.getElementById('go-signup').onclick=()=>{msg('msg-login');msg('msg-signup');show('signup');};
+document.getElementById('go-login').onclick=()=>{msg('msg-signup');msg('msg-login');show('login');};
 
-/* ===== LOGIN ===== */
 document.getElementById('btn-login').onclick=async function(){
   const email=document.getElementById('li-email').value.trim();
   const pass=document.getElementById('li-pass').value;
-  if(!email||!pass){ msg('msg-login','err',t('fill')); return; }
-  this.disabled=true; const old=this.textContent; this.innerHTML='<span class="spin"></span>'+t('login_btn');
+  if(!email||!pass){msg('msg-login','err',t('fill'));return;}
+  this.disabled=true;const old=this.textContent;this.innerHTML='<span class="spin"></span>'+t('login_btn');
   const {error}=await sb.auth.signInWithPassword({email,password:pass});
-  this.disabled=false; this.textContent=old;
-  if(error){ msg('msg-login','err', /invalid/i.test(error.message)?t('invalid'):error.message); return; }
-  // onAuthStateChange cuida do resto
+  this.disabled=false;this.textContent=old;
+  if(error){msg('msg-login','err',/invalid/i.test(error.message)?t('invalid'):error.message);return;}
 };
-
-/* ===== SIGNUP ===== */
 document.getElementById('btn-signup').onclick=async function(){
   const email=document.getElementById('su-email').value.trim();
   const pass=document.getElementById('su-pass').value;
-  if(!email||!pass){ msg('msg-signup','err',t('fill')); return; }
-  if(pass.length<6){ msg('msg-signup','err',t('weakpass')); return; }
-  this.disabled=true; const old=this.textContent; this.innerHTML='<span class="spin"></span>'+t('signup_btn');
+  if(!email||!pass){msg('msg-signup','err',t('fill'));return;}
+  if(pass.length<6){msg('msg-signup','err',t('weakpass'));return;}
+  this.disabled=true;const old=this.textContent;this.innerHTML='<span class="spin"></span>'+t('signup_btn');
   const {data,error}=await sb.auth.signUp({email,password:pass});
-  this.disabled=false; this.textContent=old;
-  if(error){
-    msg('msg-signup','err', /registered|already/i.test(error.message)?t('signup_exists'):error.message); return;
-  }
-  if(data && data.user && data.user.identities && data.user.identities.length===0){
-    msg('msg-signup','err',t('signup_exists')); return;
-  }
+  this.disabled=false;this.textContent=old;
+  if(error){msg('msg-signup','err',/registered|already/i.test(error.message)?t('signup_exists'):error.message);return;}
+  if(data&&data.user&&data.user.identities&&data.user.identities.length===0){msg('msg-signup','err',t('signup_exists'));return;}
   msg('msg-signup','ok',t('signup_ok'));
 };
+document.getElementById('btn-logout').onclick=async()=>{await sb.auth.signOut();};
 
-/* ===== LOGOUT ===== */
-document.getElementById('btn-logout').onclick=async()=>{ await sb.auth.signOut(); };
+/* ===== TABS ===== */
+document.querySelector('.tabs').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));
+  document.getElementById('tab-vend').classList.toggle('hide',b.dataset.tab!=='vend');
+  document.getElementById('tab-cli').classList.toggle('hide',b.dataset.tab!=='cli');
+});
+
+/* ===== VENDEDORES ===== */
+const VEND={list:[],loaded:false};
+const CANAIS=[['A1','var(--a1)'],['A2','var(--a2)'],['A3','var(--a3)']];
+
+async function loadVend(){
+  const {data,error}=await sb.from('vendedores').select('*').order('codigo');
+  if(error){document.getElementById('v-list').innerHTML='<div class="empty">'+t('generic')+'</div>';return;}
+  VEND.list=data||[];VEND.loaded=true;renderVend();
+}
+function renderVend(){
+  const box=document.getElementById('v-list');
+  if(!VEND.list.length){box.innerHTML='<div class="empty">'+t('v_empty')+'</div>';return;}
+  let html='';
+  CANAIS.forEach(([c,color])=>{
+    const arr=VEND.list.filter(v=>v.canal===c);
+    html+='<div class="grp"><div class="grp-h"><span class="dot" style="background:'+color+'"></span>'
+      +'<b>'+c+'</b><span class="cnt">'+arr.length+'</span></div>';
+    if(!arr.length){html+='<div class="empty">'+t('v_none')+'</div>';}
+    else arr.forEach(v=>{
+      const nm=v.nome?esc(v.nome):'<small>—</small>';
+      html+='<div class="vitem"><span class="vc">'+esc(v.codigo)+'</span>'
+        +'<span class="vn">'+nm+'</span>'
+        +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):'•')+'</span>'
+        +'<button class="iconbtn" data-edit="'+v.id+'">✏️</button>'
+        +'<button class="iconbtn" data-del="'+v.id+'">🗑️</button></div>';
+    });
+    html+='</div>';
+  });
+  box.innerHTML=html;
+}
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+const vform=document.getElementById('v-form');
+function openForm(v){
+  document.getElementById('vf-id').value=v?v.id:'';
+  document.getElementById('vf-code').value=v?v.codigo:'';
+  document.getElementById('vf-canal').value=v?v.canal:'A1';
+  document.getElementById('vf-nome').value=v&&v.nome?v.nome:'';
+  document.getElementById('vf-ativo').checked=v?!!v.ativo:true;
+  msg('v-msg');vform.classList.remove('hide');
+  document.getElementById('vf-code').focus();
+}
+document.getElementById('v-new').onclick=()=>openForm(null);
+document.getElementById('vf-cancel').onclick=()=>{vform.classList.add('hide');msg('v-msg');};
+
+document.getElementById('v-list').addEventListener('click',e=>{
+  const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
+  if(ed){const v=VEND.list.find(x=>x.id===ed.dataset.edit);if(v)openForm(v);}
+  if(dl){delVend(dl.dataset.del);}
+});
+
+document.getElementById('vf-save').onclick=async function(){
+  const id=document.getElementById('vf-id').value;
+  const codigo=document.getElementById('vf-code').value.trim().toUpperCase();
+  const canal=document.getElementById('vf-canal').value;
+  const nome=document.getElementById('vf-nome').value.trim();
+  const ativo=document.getElementById('vf-ativo').checked;
+  if(!codigo){msg('v-msg','err',t('v_code_req'));return;}
+  this.disabled=true;const old=this.textContent;this.innerHTML='<span class="spin"></span>';
+  const payload={codigo,canal,nome:nome||null,ativo};
+  let error;
+  if(id){({error}=await sb.from('vendedores').update(payload).eq('id',id));}
+  else{({error}=await sb.from('vendedores').insert(payload));}
+  this.disabled=false;this.textContent=old;
+  if(error){
+    msg('v-msg','err',(error.code==='23505'||/duplicate/i.test(error.message||''))?t('v_dup'):(error.message||t('generic')));
+    return;
+  }
+  vform.classList.add('hide');msg('v-msg','ok',t('v_saved'));
+  await loadVend();
+  setTimeout(()=>msg('v-msg'),1800);
+};
+async function delVend(id){
+  if(!confirm(t('v_del')))return;
+  const {error}=await sb.from('vendedores').delete().eq('id',id);
+  if(error){msg('v-msg','err',error.message||t('generic'));return;}
+  await loadVend();
+}
 
 /* ===== Sessão ===== */
 function enter(session){
-  if(session && session.user){
+  if(session&&session.user){
     document.getElementById('d-email').textContent=session.user.email;
     show('dash');
-  } else {
-    show('login');
-  }
+    if(!VEND.loaded) loadVend();
+  } else { VEND.loaded=false; show('login'); }
 }
-sb.auth.onAuthStateChange((_e,session)=>{ enter(session); });
-
-(async function init(){
-  applyLang();
-  const {data}=await sb.auth.getSession();
-  enter(data.session);
-})();
+sb.auth.onAuthStateChange((_e,session)=>{enter(session);});
+(async function init(){applyLang();const {data}=await sb.auth.getSession();enter(data.session);})();
 </script>
 </body>
 </html>
