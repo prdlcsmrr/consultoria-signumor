@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIGNUMOR · Consultoria</title>
+<style>
+  :root{
+    --navy:#1a2a5e; --navy2:#22357a; --gold:#c9972a; --gold-l:#e3b94f;
+    --bg:#0f1530; --card:#ffffff; --ink:#1c2333; --muted:#6a7283;
+    --green:#1a7a3a; --red:#b91c1c; --line:#e6e8ef;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #1c2a5e 0%, transparent 60%),
+      linear-gradient(160deg,#0f1530 0%,#131b3d 100%);
+    color:var(--ink); min-height:100vh;
+    -webkit-text-size-adjust:100%; overflow-x:hidden;
+  }
+  .wrap{max-width:440px;margin:0 auto;padding:24px 18px 60px}
+  /* TOPO */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:26px}
+  .brand{display:flex;align-items:center;gap:10px;color:#fff}
+  .brand .emblem{
+    width:42px;height:42px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,var(--gold-l),var(--gold) 60%,#9c7320);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 2px rgba(255,255,255,.15),0 6px 18px rgba(0,0,0,.35);
+    flex:0 0 auto;
+  }
+  .brand .emblem span{font-size:20px;font-weight:bold;color:var(--navy)}
+  .brand .name{line-height:1.05}
+  .brand .name b{font-size:18px;letter-spacing:3px;display:block}
+  .brand .name small{font-size:9px;letter-spacing:2px;color:var(--gold-l);text-transform:uppercase}
+  .lang{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:10px}
+  .lang button{
+    border:0;background:transparent;color:#c7cde0;font-family:inherit;
+    font-size:12px;padding:5px 8px;border-radius:7px;cursor:pointer;letter-spacing:.5px;
+  }
+  .lang button.active{background:var(--gold);color:var(--navy);font-weight:bold}
+  /* CARD */
+  .card{
+    background:var(--card);border-radius:18px;padding:28px 22px;
+    box-shadow:0 18px 50px rgba(0,0,0,.45);border:1px solid rgba(201,151,42,.25);
+  }
+  .card h1{font-size:22px;margin:0 0 4px;color:var(--navy);text-align:center;letter-spacing:.5px}
+  .card .sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:22px}
+  label.fld{display:block;margin-bottom:14px}
+  label.fld .lbl{font-size:12px;color:var(--navy);font-weight:bold;letter-spacing:.5px;display:block;margin-bottom:5px;text-transform:uppercase}
+  input{
+    width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;
+    font-family:inherit;font-size:15px;color:var(--ink);background:#fbfbfd;min-width:0;
+  }
+  input:focus{outline:none;border-color:var(--gold);background:#fff}
+  .btn{
+    width:100%;padding:13px;border:0;border-radius:11px;cursor:pointer;
+    font-family:inherit;font-size:15px;font-weight:bold;letter-spacing:.5px;margin-top:6px;
+    background:linear-gradient(180deg,var(--navy2),var(--navy));color:#fff;
+    box-shadow:0 8px 20px rgba(26,42,94,.35);transition:transform .05s;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn.gold{background:linear-gradient(180deg,var(--gold-l),var(--gold));color:var(--navy);box-shadow:0 8px 20px rgba(201,151,42,.35)}
+  .btn[disabled]{opacity:.6;cursor:wait}
+  .linkrow{text-align:center;margin-top:16px}
+  .linkrow a{color:var(--navy);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+  .msg{padding:11px 13px;border-radius:9px;font-size:13px;margin-bottom:16px;display:none;line-height:1.4}
+  .msg.err{background:#fdecec;color:var(--red);border:1px solid #f5c2c2;display:block}
+  .msg.ok{background:#eaf6ee;color:var(--green);border:1px solid #b7e0c4;display:block}
+  .hide{display:none!important}
+  /* DASHBOARD shell */
+  .dash .card{padding:24px 20px}
+  .userline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+  .userline .who{font-size:13px;color:var(--muted)}
+  .userline .who b{color:var(--navy);display:block;font-size:14px}
+  .btn-out{background:transparent;border:1.5px solid var(--line);color:var(--muted);
+    padding:8px 12px;border-radius:9px;font-family:inherit;font-size:12px;cursor:pointer;font-weight:bold}
+  .soon{
+    border:1.5px dashed var(--line);border-radius:12px;padding:22px 16px;text-align:center;
+    color:var(--muted);font-size:14px;line-height:1.5;margin-top:4px;
+  }
+  .soon .ic{font-size:28px;display:block;margin-bottom:8px}
+  .foot{text-align:center;color:rgba(255,255,255,.35);font-size:11px;letter-spacing:2px;margin-top:26px;text-transform:uppercase}
+  .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .boot{color:#c7cde0;text-align:center;padding:80px 20px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="emblem"><span>S</span></div>
+      <div class="name"><b>SIGNUMOR</b><small data-i="brand_sub">Consultoria</small></div>
+    </div>
+    <div class="lang" id="lang">
+      <button data-lang="pt">PT</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="zh">繁中</button>
+    </div>
+  </div>
+
+  <!-- BOOT -->
+  <div id="boot" class="boot"><span class="spin"></span><span data-i="loading">Carregando…</span></div>
+
+  <!-- LOGIN -->
+  <div id="view-login" class="card hide">
+    <h1 data-i="login_title">Acesso</h1>
+    <div class="sub" data-i="login_sub">Painel de gestão · acesso restrito</div>
+    <div id="msg-login" class="msg"></div>
+    <label class="fld"><span class="lbl" data-i="email">E-mail</span>
+      <input id="li-email" type="email" autocomplete="email" inputmode="email" placeholder="voce@exemplo.com"></label>
+    <label class="fld"><span class="lbl" data-i="password">Senha</span>
+      <input id="li-pass" type="password" autocomplete="current-password" placeholder="••••••••"></label>
+    <button class="btn" id="btn-login" data-i="login_btn">Entrar</button>
+    <div class="linkrow"><a id="go-signup" data-i="first_access">Primeiro acesso? Criar conta</a></div>
+  </div>
+
+  <!-- SIGNUP -->
+  <div id="view-signup" class="card hide">
+    <h1 data-i="signup_title">Criar conta</h1>
+    <div class="sub" data-i="signup_sub">Apenas gerentes autorizados</div>
+    <div id="msg-signup" class="msg"></div>
+    <label class="fld"><span class="lbl" data-i="email">E-mail</span>
+      <input id="su-email" type="email" autocomplete="email" inputmode="email" placeholder="voce@exemplo.com"></label>
+    <label class="fld"><span class="lbl" data-i="password">Senha</span>
+      <input id="su-pass" type="password" autocomplete="new-password" placeholder="mín. 6 caracteres"></label>
+    <button class="btn gold" id="btn-signup" data-i="signup_btn">Criar conta</button>
+    <div class="linkrow"><a id="go-login" data-i="back_login">← Voltar ao login</a></div>
+  </div>
+
+  <!-- DASHBOARD (shell) -->
+  <div id="view-dash" class="dash hide">
+    <div class="card">
+      <div class="userline">
+        <div class="who"><span data-i="logged_as">Conectado como</span><b id="d-email">—</b></div>
+        <button class="btn-out" id="btn-logout" data-i="logout">Sair</button>
+      </div>
+      <h1 style="color:var(--navy);font-size:20px;margin:0 0 4px;text-align:center" data-i="dash_title">Painel</h1>
+      <div class="soon">
+        <span class="ic">🏗️</span>
+        <span data-i="soon">Sistema em construção. As próximas etapas (vendedores, clientes, cálculos e canais A1/A2/A3) serão liberadas em breve.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">SIGNUMOR · ORION VALE</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ===== CONFIG SUPABASE ===== */
+const SB_URL = 'https://exvocatkdzhsvlewpvik.supabase.co';
+const SB_KEY = 'sb_publishable__96M4ijl_Azu2zPU6Jma-g_hp1beIqh';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+/* ===== i18n ===== */
+const I18N = {
+  pt:{
+    brand_sub:'Consultoria', loading:'Carregando…',
+    login_title:'Acesso', login_sub:'Painel de gestão · acesso restrito',
+    email:'E-mail', password:'Senha', login_btn:'Entrar',
+    first_access:'Primeiro acesso? Criar conta',
+    signup_title:'Criar conta', signup_sub:'Apenas gerentes autorizados',
+    signup_btn:'Criar conta', back_login:'← Voltar ao login',
+    logged_as:'Conectado como', logout:'Sair', dash_title:'Painel',
+    soon:'Sistema em construção. As próximas etapas (vendedores, clientes, cálculos e canais A1/A2/A3) serão liberadas em breve.',
+    fill:'Preencha e-mail e senha.', invalid:'E-mail ou senha incorretos.',
+    signup_ok:'Conta criada! Verifique seu e-mail para confirmar e depois faça login.',
+    signup_exists:'Este e-mail já está cadastrado. Faça login.',
+    weakpass:'A senha precisa ter ao menos 6 caracteres.',
+    generic:'Algo deu errado. Tente novamente.'
+  },
+  en:{
+    brand_sub:'Advisory', loading:'Loading…',
+    login_title:'Sign in', login_sub:'Management panel · restricted access',
+    email:'E-mail', password:'Password', login_btn:'Sign in',
+    first_access:'First time? Create account',
+    signup_title:'Create account', signup_sub:'Authorized managers only',
+    signup_btn:'Create account', back_login:'← Back to sign in',
+    logged_as:'Signed in as', logout:'Sign out', dash_title:'Dashboard',
+    soon:'System under construction. The next stages (sellers, clients, calculations and channels A1/A2/A3) will be released soon.',
+    fill:'Enter e-mail and password.', invalid:'Wrong e-mail or password.',
+    signup_ok:'Account created! Check your e-mail to confirm, then sign in.',
+    signup_exists:'This e-mail is already registered. Please sign in.',
+    weakpass:'Password must be at least 6 characters.',
+    generic:'Something went wrong. Please try again.'
+  },
+  zh:{
+    brand_sub:'顧問', loading:'載入中…',
+    login_title:'登入', login_sub:'管理面板 · 限受權人員',
+    email:'電子郵件', password:'密碼', login_btn:'登入',
+    first_access:'首次使用？建立帳號',
+    signup_title:'建立帳號', signup_sub:'僅限授權經理',
+    signup_btn:'建立帳號', back_login:'← 返回登入',
+    logged_as:'登入身分', logout:'登出', dash_title:'面板',
+    soon:'系統建置中。下一階段（業務員、客戶、計算與通路 A1/A2/A3）即將推出。',
+    fill:'請輸入電子郵件與密碼。', invalid:'電子郵件或密碼錯誤。',
+    signup_ok:'帳號已建立！請查收電子郵件確認後再登入。',
+    signup_exists:'此電子郵件已註冊，請直接登入。',
+    weakpass:'密碼至少需 6 個字元。',
+    generic:'發生錯誤，請再試一次。'
+  }
+};
+let LANG = localStorage.getItem('sig_lang') || 'pt';
+function t(k){ return (I18N[LANG]&&I18N[LANG][k]) || I18N.pt[k] || k; }
+function applyLang(){
+  document.documentElement.lang = LANG==='zh'?'zh-Hant':(LANG==='en'?'en':'pt-BR');
+  document.querySelectorAll('[data-i]').forEach(el=>{ el.textContent = t(el.getAttribute('data-i')); });
+  document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('active', b.dataset.lang===LANG));
+}
+document.getElementById('lang').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  LANG=b.dataset.lang; localStorage.setItem('sig_lang',LANG); applyLang();
+});
+
+/* ===== Navegação de telas ===== */
+const views={boot:'boot',login:'view-login',signup:'view-signup',dash:'view-dash'};
+function show(v){ Object.values(views).forEach(id=>document.getElementById(id).classList.add('hide'));
+  document.getElementById(views[v]).classList.remove('hide'); }
+function msg(box,type,text){ const el=document.getElementById(box); el.className='msg '+(type||''); el.textContent=text||''; if(!text) el.style.display='none'; }
+
+document.getElementById('go-signup').onclick=()=>{ msg('msg-login'); msg('msg-signup'); show('signup'); };
+document.getElementById('go-login').onclick=()=>{ msg('msg-signup'); msg('msg-login'); show('login'); };
+
+/* ===== LOGIN ===== */
+document.getElementById('btn-login').onclick=async function(){
+  const email=document.getElementById('li-email').value.trim();
+  const pass=document.getElementById('li-pass').value;
+  if(!email||!pass){ msg('msg-login','err',t('fill')); return; }
+  this.disabled=true; const old=this.textContent; this.innerHTML='<span class="spin"></span>'+t('login_btn');
+  const {error}=await sb.auth.signInWithPassword({email,password:pass});
+  this.disabled=false; this.textContent=old;
+  if(error){ msg('msg-login','err', /invalid/i.test(error.message)?t('invalid'):error.message); return; }
+  // onAuthStateChange cuida do resto
+};
+
+/* ===== SIGNUP ===== */
+document.getElementById('btn-signup').onclick=async function(){
+  const email=document.getElementById('su-email').value.trim();
+  const pass=document.getElementById('su-pass').value;
+  if(!email||!pass){ msg('msg-signup','err',t('fill')); return; }
+  if(pass.length<6){ msg('msg-signup','err',t('weakpass')); return; }
+  this.disabled=true; const old=this.textContent; this.innerHTML='<span class="spin"></span>'+t('signup_btn');
+  const {data,error}=await sb.auth.signUp({email,password:pass});
+  this.disabled=false; this.textContent=old;
+  if(error){
+    msg('msg-signup','err', /registered|already/i.test(error.message)?t('signup_exists'):error.message); return;
+  }
+  if(data && data.user && data.user.identities && data.user.identities.length===0){
+    msg('msg-signup','err',t('signup_exists')); return;
+  }
+  msg('msg-signup','ok',t('signup_ok'));
+};
+
+/* ===== LOGOUT ===== */
+document.getElementById('btn-logout').onclick=async()=>{ await sb.auth.signOut(); };
+
+/* ===== Sessão ===== */
+function enter(session){
+  if(session && session.user){
+    document.getElementById('d-email').textContent=session.user.email;
+    show('dash');
+  } else {
+    show('login');
+  }
+}
+sb.auth.onAuthStateChange((_e,session)=>{ enter(session); });
+
+(async function init(){
+  applyLang();
+  const {data}=await sb.auth.getSession();
+  enter(data.session);
+})();
+</script>
+</body>
+</html>
