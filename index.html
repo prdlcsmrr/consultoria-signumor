@@ -21,8 +21,8 @@
   .brand{display:flex;align-items:center;gap:10px;color:#fff}
   .brand .emblem{width:40px;height:40px;border-radius:50%;
     background:radial-gradient(circle at 35% 30%,var(--gold-l),var(--gold) 60%,#9c7320);
-    display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,.15),0 6px 18px rgba(0,0,0,.35);flex:0 0 auto}
-  .brand .emblem span{font-size:19px;font-weight:bold;color:var(--navy)}
+    display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,.15),0 6px 18px rgba(0,0,0,.35);flex:0 0 auto;overflow:hidden}
+  .brand .emblem img{width:100%;height:100%;object-fit:cover}
   .brand .name b{font-size:17px;letter-spacing:3px;display:block;line-height:1}
   .brand .name small{font-size:9px;letter-spacing:2px;color:var(--gold-l);text-transform:uppercase}
   .lang{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:10px}
@@ -112,7 +112,7 @@
 <body>
 <div class="wrap">
   <div class="topbar">
-    <div class="brand"><div class="emblem"><span>S</span></div>
+    <div class="brand"><div class="emblem"><img src="logo.png" alt="Logo SIGNUMOR" width="40" height="40" decoding="async"></div>
       <div class="name"><b>SIGNUMOR</b><small data-i="brand_sub">Consultoria</small></div></div>
     <div class="lang" id="lang">
       <button data-lang="pt">PT</button><button data-lang="en">EN</button><button data-lang="zh">繁中</button></div>
@@ -494,7 +494,8 @@ function openCForm(c){
   document.getElementById('cf-pnome').value=c?c.primeiro_nome||'':'';
   document.getElementById('cf-snome').value=c?c.segundo_nome||'':'';
   fillVendSelects();
-  ensureOpt('cf-va1',c?c.vendedor_a1:''); ensureOpt('cf-va2',c?c.vendedor_a2:''); ensureOpt('cf-va3',c?c.vendedor_a3:'');
+  ensureOpt('cf-va1',c?c.vendedor_a1:''); ensureOpt('cf-va2',c?c.vendedor_a2:'');
+  ensureOpt('cf-va3', c ? (c.vendedor_a3 || c.vendedor_a2 || '') : '');
   if(!c){document.getElementById('cf-va1').value='';document.getElementById('cf-va2').value='';document.getElementById('cf-va3').value='';}
   document.getElementById('cf-dtentrada').value=c&&c.data_entrada?c.data_entrada:'';
   document.getElementById('cf-dtentregue').value=c&&c.data_entregue?c.data_entregue:'';
@@ -514,6 +515,10 @@ document.getElementById('c-list').addEventListener('click',e=>{const it=e.target
 document.querySelectorAll('.fin').forEach(el=>el.addEventListener('input',calcTotal));
 document.getElementById('cf-dtentrada').addEventListener('change',calcPrazos);
 document.getElementById('cf-dtentregue').addEventListener('change',calcPrazos);
+document.getElementById('cf-va2').addEventListener('change',e=>{
+  const val=e.target.value;
+  if(val){ensureOpt('cf-va3',val);}
+});
 document.getElementById('c-filtros').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   CLI.filtro=b.dataset.f;document.querySelectorAll('#c-filtros button').forEach(x=>x.classList.toggle('active',x===b));renderCli();});
 
