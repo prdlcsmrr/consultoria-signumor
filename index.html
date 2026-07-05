@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070511';
+  var V='2026070512';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -148,7 +148,7 @@
 <div class="wrap">
   <div class="topbar">
     <div class="brand"><div class="emblem"><img src="logo.png" alt="Logo SIGNUMOR" width="40" height="40" decoding="async"></div>
-      <div class="name"><b>SISTEMA SIGNUMOR</b></div></div>
+      <div class="name"><b><span data-i="brand_sistema">SISTEMA</span> SIGNUMOR</b></div></div>
     <div class="lang" id="lang">
       <button data-lang="pt">PT</button><button data-lang="en">EN</button><button data-lang="zh">繁中</button></div>
   </div>
@@ -318,7 +318,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070511';
+const APP_VERSION='2026070512';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -343,7 +343,7 @@ const SB_KEY='sb_publishable__96M4ijl_Azu2zPU6Jma-g_hp1beIqh';
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const I18N={
- pt:{brand_sub:'Consultoria',loading:'Carregando…',
+ pt:{brand_sub:'Consultoria',brand_sistema:'SISTEMA',loading:'Carregando…',
    login_title:'Acesso',login_sub:'Painel de gestão · acesso restrito',email:'E-mail',password:'Senha',login_btn:'Entrar',
    first_access:'Primeiro acesso? Criar conta',signup_title:'Criar conta',signup_sub:'Apenas gerentes autorizados',
    signup_btn:'Criar conta',back_login:'← Voltar ao login',logged_as:'Conectado como',logout:'Sair',
@@ -369,7 +369,7 @@ const I18N={
    none_opt:'—',generic:'Algo deu errado. Tente novamente.',
    fill:'Preencha e-mail e senha.',invalid:'E-mail ou senha incorretos.',
    signup_ok:'Conta criada! Verifique seu e-mail para confirmar e depois faça login.',signup_exists:'Este e-mail já está cadastrado. Faça login.',weakpass:'A senha precisa ter ao menos 6 caracteres.'},
- en:{brand_sub:'Advisory',loading:'Loading…',
+ en:{brand_sub:'Advisory',brand_sistema:'SYSTEM',loading:'Loading…',
    login_title:'Sign in',login_sub:'Management panel · restricted access',email:'E-mail',password:'Password',login_btn:'Sign in',
    first_access:'First time? Create account',signup_title:'Create account',signup_sub:'Authorized managers only',
    signup_btn:'Create account',back_login:'← Back to sign in',logged_as:'Signed in as',logout:'Sign out',
@@ -395,7 +395,7 @@ const I18N={
    none_opt:'—',generic:'Something went wrong. Please try again.',
    fill:'Enter e-mail and password.',invalid:'Wrong e-mail or password.',
    signup_ok:'Account created! Check your e-mail to confirm, then sign in.',signup_exists:'This e-mail is already registered. Please sign in.',weakpass:'Password must be at least 6 characters.'},
- zh:{brand_sub:'顧問',loading:'載入中…',
+ zh:{brand_sub:'顧問',brand_sistema:'系統',loading:'載入中…',
    login_title:'登入',login_sub:'管理面板 · 限受權人員',email:'電子郵件',password:'密碼',login_btn:'登入',
    first_access:'首次使用？建立帳號',signup_title:'建立帳號',signup_sub:'僅限授權經理',
    signup_btn:'建立帳號',back_login:'← 返回登入',logged_as:'登入身分',logout:'登出',
@@ -426,6 +426,7 @@ let LANG=localStorage.getItem('sig_lang')||'pt';
 function t(k){return (I18N[LANG]&&I18N[LANG][k])||I18N.pt[k]||k;}
 function applyLang(){
   document.documentElement.lang=LANG==='zh'?'zh-Hant':(LANG==='en'?'en':'pt-BR');
+  document.title=t('brand_sistema')+' SIGNUMOR';
   document.querySelectorAll('[data-i]').forEach(el=>{el.textContent=t(el.getAttribute('data-i'));});
   document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('active',b.dataset.lang===LANG));
   if(VEND.loaded) renderVend();
