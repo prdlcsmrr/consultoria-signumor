@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070508';
+  var V='2026070509';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -34,8 +34,9 @@
   .brand{display:flex;align-items:center;gap:10px;color:#fff}
   .brand .emblem{width:40px;height:40px;border-radius:50%;
     background:radial-gradient(circle at 35% 30%,var(--gold-l),var(--gold) 60%,#9c7320);
-    display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,.15),0 6px 18px rgba(0,0,0,.35);flex:0 0 auto;overflow:hidden}
-  .brand .emblem img{width:100%;height:100%;object-fit:cover}
+    display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,.15),0 6px 18px rgba(0,0,0,.35);flex:0 0 auto;position:relative}
+  .brand .emblem img{width:56px;height:56px;object-fit:contain;position:relative;
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.55)) drop-shadow(0 -1px 0 rgba(255,255,255,.35)) drop-shadow(0 1px 1px rgba(0,0,0,.3));}
   .brand .name b{font-size:17px;letter-spacing:3px;display:block;line-height:1}
   .brand .name small{font-size:9px;letter-spacing:2px;color:var(--gold-l);text-transform:uppercase}
   .lang{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:10px}
@@ -317,7 +318,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070508';
+const APP_VERSION='2026070509';
 (function(){
   let checking=false;
   async function checkVersion(){
