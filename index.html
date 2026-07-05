@@ -307,6 +307,26 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const APP_VERSION='2026070506';
+(function(){
+  let checking=false;
+  async function checkVersion(){
+    if(checking)return;checking=true;
+    try{
+      const res=await fetch(location.pathname+'?_cb='+Date.now(),{cache:'no-store'});
+      const txt=await res.text();
+      const m=txt.match(/const APP_VERSION='([^']+)'/);
+      if(m&&m[1]&&m[1]!==APP_VERSION){
+        location.reload();
+      }
+    }catch(e){/* ignora falha de rede silenciosamente */}
+    checking=false;
+  }
+  checkVersion();
+  setInterval(checkVersion,120000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkVersion();});
+  window.addEventListener('focus',checkVersion);
+})();
 const SB_URL='https://exvocatkdzhsvlewpvik.supabase.co';
 const SB_KEY='sb_publishable__96M4ijl_Azu2zPU6Jma-g_hp1beIqh';
 const sb=supabase.createClient(SB_URL,SB_KEY);
