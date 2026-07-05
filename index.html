@@ -122,6 +122,7 @@
   .vitem .vn{flex:1;font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .vitem .vn small{color:var(--muted)}
   .badge.on{background:#eaf6ee;color:var(--green)}.badge.off{background:#f0f0f3;color:var(--muted)}
+  .badge.a3tag{background:#fdf3e3;color:#9c7320}
   .iconbtn{border:0;background:transparent;cursor:pointer;font-size:15px;padding:4px;color:var(--muted)}
   .empty{font-size:12px;color:var(--muted);font-style:italic;padding:8px 2px}
   .soon{border:1.5px dashed var(--line);border-radius:12px;padding:26px 16px;text-align:center;color:var(--muted);font-size:14px;line-height:1.5}
@@ -282,6 +283,7 @@
         </div>
         <label class="fld" style="margin-bottom:8px"><span class="lbl" data-i="vend_name">Nome (opcional)</span><input id="vf-nome" maxlength="60" placeholder="—"></label>
         <label class="chk"><input type="checkbox" id="vf-ativo" checked><span data-i="vend_active">Ativo</span></label>
+        <label class="chk hide" id="vf-a3-wrap"><input type="checkbox" id="vf-atua-a3"><span data-i="vend_atua_a3">Também atua em A3</span></label>
         <div class="acts"><button class="btn" id="vf-save" data-i="vend_save">Salvar</button><button class="btn gold" id="vf-cancel" data-i="vend_cancel">Cancelar</button></div>
       </div>
       <div id="v-msg" class="msg"></div>
@@ -315,7 +317,7 @@ const I18N={
    first_access:'Primeiro acesso? Criar conta',signup_title:'Criar conta',signup_sub:'Apenas gerentes autorizados',
    signup_btn:'Criar conta',back_login:'← Voltar ao login',logged_as:'Conectado como',logout:'Sair',
    nav_vend:'Funcionários',nav_cli:'Clientes',
-   vend_title:'Funcionários',vend_new:'+ Novo',vend_code:'Código',vend_channel:'Canal',vend_name:'Nome (opcional)',vend_active:'Ativo',vend_save:'Salvar',vend_cancel:'Cancelar',
+   vend_title:'Funcionários',vend_new:'+ Novo',vend_code:'Código',vend_channel:'Canal',vend_name:'Nome (opcional)',vend_active:'Ativo',vend_atua_a3:'Também atua em A3',vend_save:'Salvar',vend_cancel:'Cancelar',
    cli_title:'Clientes',cli_new:'+ Novo',cli_pnome:'Primeiro nome',cli_snome:'Segundo nome',
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',
    cli_dtentrada:'Entrada',cli_dtentregue:'Entregue',cli_situacao:'Situação',
@@ -341,7 +343,7 @@ const I18N={
    first_access:'First time? Create account',signup_title:'Create account',signup_sub:'Authorized managers only',
    signup_btn:'Create account',back_login:'← Back to sign in',logged_as:'Signed in as',logout:'Sign out',
    nav_vend:'Employees',nav_cli:'Clients',
-   vend_title:'Employees',vend_new:'+ New',vend_code:'Code',vend_channel:'Channel',vend_name:'Name (optional)',vend_active:'Active',vend_save:'Save',vend_cancel:'Cancel',
+   vend_title:'Employees',vend_new:'+ New',vend_code:'Code',vend_channel:'Channel',vend_name:'Name (optional)',vend_active:'Active',vend_atua_a3:'Also works in A3',vend_save:'Save',vend_cancel:'Cancel',
    cli_title:'Clients',cli_new:'+ New',cli_pnome:'First name',cli_snome:'Second name',
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',
    cli_dtentrada:'Entered',cli_dtentregue:'Delivered',cli_situacao:'Status',
@@ -367,7 +369,7 @@ const I18N={
    first_access:'首次使用？建立帳號',signup_title:'建立帳號',signup_sub:'僅限授權經理',
    signup_btn:'建立帳號',back_login:'← 返回登入',logged_as:'登入身分',logout:'登出',
    nav_vend:'員工',nav_cli:'客戶',
-   vend_title:'員工',vend_new:'+ 新增',vend_code:'代碼',vend_channel:'通路',vend_name:'姓名（選填）',vend_active:'啟用',vend_save:'儲存',vend_cancel:'取消',
+   vend_title:'員工',vend_new:'+ 新增',vend_code:'代碼',vend_channel:'通路',vend_name:'姓名（選填）',vend_active:'啟用',vend_atua_a3:'同時支援A3',vend_save:'儲存',vend_cancel:'取消',
    cli_title:'客戶',cli_new:'+ 新增',cli_pnome:'名',cli_snome:'第二名',
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',
    cli_dtentrada:'進入',cli_dtentregue:'交付',cli_situacao:'狀態',
@@ -458,6 +460,7 @@ function renderVend(){
     if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
     else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
       html+='<div class="vitem"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
+        +(v.canal==='A2'&&v.atua_a3?'<span class="badge a3tag">+A3</span>':'')
         +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):'•')+'</span>'
         +'<button class="iconbtn" data-edit="'+v.id+'">✏️</button><button class="iconbtn" data-del="'+v.id+'">🗑️</button></div>';});
     html+='</div>';
@@ -471,8 +474,14 @@ function openVForm(v){
   document.getElementById('vf-canal').value=v?v.canal:'A1';
   document.getElementById('vf-nome').value=v&&v.nome?v.nome:'';
   document.getElementById('vf-ativo').checked=v?!!v.ativo:true;
+  document.getElementById('vf-atua-a3').checked=v?!!v.atua_a3:false;
+  document.getElementById('vf-a3-wrap').classList.toggle('hide',document.getElementById('vf-canal').value!=='A2');
   msg('v-msg');vform.classList.remove('hide');document.getElementById('vf-code').focus();
 }
+document.getElementById('vf-canal').addEventListener('change',e=>{
+  document.getElementById('vf-a3-wrap').classList.toggle('hide',e.target.value!=='A2');
+  if(e.target.value!=='A2')document.getElementById('vf-atua-a3').checked=false;
+});
 document.getElementById('v-new').onclick=()=>openVForm(null);
 document.getElementById('vf-cancel').onclick=()=>{vform.classList.add('hide');msg('v-msg');};
 document.getElementById('v-list').addEventListener('click',e=>{
@@ -486,9 +495,10 @@ document.getElementById('vf-save').onclick=async function(){
   const canal=document.getElementById('vf-canal').value;
   const nome=document.getElementById('vf-nome').value.trim();
   const ativo=document.getElementById('vf-ativo').checked;
+  const atua_a3=canal==='A2'?document.getElementById('vf-atua-a3').checked:false;
   if(!codigo){msg('v-msg','err',t('v_code_req'));return;}
   this.disabled=true;const o=this.textContent;this.innerHTML='<span class="spin"></span>';
-  const payload={codigo,canal,nome:nome||null,ativo};let error;
+  const payload={codigo,canal,nome:nome||null,ativo,atua_a3};let error;
   if(id)({error}=await sb.from('vendedores').update(payload).eq('id',id));
   else ({error}=await sb.from('vendedores').insert(payload));
   this.disabled=false;this.textContent=o;
@@ -580,12 +590,18 @@ function collectResgates(){
   return out;
 }
 
-function fillVendSelects(){ ['cf-va1','cf-va2','cf-va3'].forEach((id,i)=>{
-  const canal='A'+(i+1);const sel=document.getElementById(id);const cur=sel.value;
-  let html='<option value="">'+t('none_opt')+'</option>';
-  VEND.list.filter(v=>v.canal===canal).forEach(v=>{html+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+'</option>';});
-  sel.innerHTML=html;if(cur)sel.value=cur;
-}); }
+function fillVendSelects(){
+  ['cf-va1','cf-va2'].forEach((id,i)=>{
+    const canal='A'+(i+1);const sel=document.getElementById(id);const cur=sel.value;
+    let html='<option value="">'+t('none_opt')+'</option>';
+    VEND.list.filter(v=>v.canal===canal).forEach(v=>{html+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+'</option>';});
+    sel.innerHTML=html;if(cur)sel.value=cur;
+  });
+  const sel3=document.getElementById('cf-va3');const cur3=sel3.value;
+  let html3='<option value="">'+t('none_opt')+'</option>';
+  VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)).forEach(v=>{html3+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+(v.canal==='A2'?' (A2+A3)':'')+'</option>';});
+  sel3.innerHTML=html3;if(cur3)sel3.value=cur3;
+}
 function ensureOpt(id,val){ if(!val)return;const sel=document.getElementById(id);
   if(!Array.from(sel.options).some(o=>o.value===val)){const o=document.createElement('option');o.value=val;o.textContent=val;sel.appendChild(o);} sel.value=val; }
 
@@ -629,7 +645,8 @@ function openCForm(c){
   document.getElementById('cf-snome').value=c?c.segundo_nome||'':'';
   fillVendSelects();
   ensureOpt('cf-va1',c?c.vendedor_a1:''); ensureOpt('cf-va2',c?c.vendedor_a2:'');
-  ensureOpt('cf-va3', c ? (c.vendedor_a3 || c.vendedor_a2 || '') : '');
+  const va2emp=c&&c.vendedor_a2?VEND.list.find(v=>v.codigo===c.vendedor_a2):null;
+  ensureOpt('cf-va3', c ? (c.vendedor_a3 || ((va2emp&&va2emp.atua_a3)?c.vendedor_a2:'')) : '');
   if(!c){document.getElementById('cf-va1').value='';document.getElementById('cf-va2').value='';document.getElementById('cf-va3').value='';}
   document.getElementById('cf-dtentrada').value=c&&c.data_entrada?c.data_entrada:'';
   document.getElementById('cf-dtentregue').value=c&&c.data_entregue?c.data_entregue:'';
@@ -653,11 +670,13 @@ document.getElementById('cf-dtentrada').addEventListener('change',calcPrazos);
 document.getElementById('cf-dtentregue').addEventListener('change',calcPrazos);
 document.getElementById('cf-va2').addEventListener('change',e=>{
   const val=e.target.value;
-  if(val){ensureOpt('cf-va3',val);}
+  const emp=val?VEND.list.find(v=>v.codigo===val):null;
+  if(emp&&emp.atua_a3){ensureOpt('cf-va3',val);}
 });
 document.getElementById('cf-va2').addEventListener('input',e=>{
   const val=e.target.value;
-  if(val){ensureOpt('cf-va3',val);}
+  const emp=val?VEND.list.find(v=>v.codigo===val):null;
+  if(emp&&emp.atua_a3){ensureOpt('cf-va3',val);}
 });
 document.getElementById('c-filtros').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   CLI.filtro=b.dataset.f;document.querySelectorAll('#c-filtros button').forEach(x=>x.classList.toggle('active',x===b));renderCli();});
