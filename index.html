@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070507';
+  var V='2026070508';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -317,7 +317,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070507';
+const APP_VERSION='2026070508';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -485,12 +485,13 @@ function renderVend(){
   if(!VEND.list.length){box.innerHTML='<div class="empty">'+t('v_empty')+'</div>';return;}
   let html='';
   CANAIS.forEach(([c,color])=>{
-    const arr=VEND.list.filter(v=>v.canal===c);
+    const arr=c==='A3'?VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)):VEND.list.filter(v=>v.canal===c);
     html+='<div class="grp"><div class="grp-h"><span class="dot" style="background:'+color+'"></span><b>'+c+'</b><span class="cnt">'+arr.length+'</span></div>';
     if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
     else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
+      const dual=c==='A3'&&v.canal==='A2';
       html+='<div class="vitem"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
-        +(v.canal==='A2'&&v.atua_a3?'<span class="badge a3tag">+A3</span>':'')
+        +(dual?'<span class="badge a3tag">A2+A3</span>':'')
         +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):'•')+'</span>'
         +'<button class="iconbtn" data-edit="'+v.id+'">✏️</button><button class="iconbtn" data-del="'+v.id+'">🗑️</button></div>';});
     html+='</div>';
