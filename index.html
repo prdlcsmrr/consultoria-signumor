@@ -70,6 +70,26 @@
   .totbox{background:#fff;border:1.5px solid var(--gold);border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:4px}
   .totbox .tl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
   .totbox .tv{font-size:18px;font-weight:bold;color:var(--navy)}
+  .resg-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .resg-row:last-child{border-bottom:none}
+  .resg-chk{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--navy);flex:1;cursor:pointer}
+  .resg-chk input{width:16px;height:16px}
+  .resg-date{width:140px;font-size:12.5px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-family:inherit}
+  .resg-date:disabled{background:#f2f2f2;color:#aaa}
+  .reltab-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:4px}
+  .reltab{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+  .reltab th{text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.4px;padding:6px 10px;border-bottom:1.5px solid var(--gold)}
+  .reltab td{padding:8px 10px;border-bottom:1px solid var(--line);color:var(--navy)}
+  .reltab tr:last-child td{border-bottom:none}
+  .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:9px 12px;font-size:12.5px}
+  .rel-ghead b{letter-spacing:.3px}
+  .rel-ghead span{font-size:11px;color:#c7cde0}
+  .rel-sub{display:flex;justify-content:space-between;padding:8px 12px;font-size:12.5px;color:var(--navy);border-bottom:1px solid var(--line)}
+  .rel-sub:last-child{border-bottom:none}
+  .rel-sub.muted{color:var(--muted);font-style:italic}
+  .rel-group .citem{border-radius:0;border:none;border-bottom:1px solid var(--line)}
+  .rel-group .citem:last-child{border-bottom:none}
   .prazos{display:flex;gap:6px;margin-top:8px}
   .prazo{flex:1;background:#f2f4fb;border-radius:9px;padding:7px 4px;text-align:center}
   .prazo .pv{font-size:16px;font-weight:bold;color:var(--navy)}
@@ -147,6 +167,7 @@
     <div class="tabs">
       <button data-tab="cli" class="active" data-i="nav_cli">Clientes</button>
       <button data-tab="vend" data-i="nav_vend">Funcionários</button>
+      <button data-tab="rel" data-i="nav_rel">Relatórios</button>
     </div>
 
     <!-- TAB CLIENTES -->
@@ -156,6 +177,7 @@
       <!-- FICHA -->
       <div id="c-form" class="vform hide">
         <input type="hidden" id="cf-id">
+        <input type="hidden" id="cf-dtA3">
         <div class="sec-t" data-i="sec_ident">Identidade</div>
         <div class="row2">
           <label class="fld"><span class="lbl" data-i="cli_pnome">Primeiro nome</span><input id="cf-pnome" maxlength="40" placeholder="—"></label>
@@ -216,6 +238,8 @@
             <label class="fld"><span class="lbl" data-i="f_est">Saldo estimado</span><input id="cf-saldo_estimado" type="number" inputmode="decimal" step="any" placeholder="0"></label>
             <label class="fld"><span class="lbl" data-i="f_res">Saldo resgatável</span><input id="cf-saldo_resgatavel" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           </div>
+          <div class="sec-t" style="margin-top:14px;font-size:12px" data-i="resg_title">Resgates por categoria</div>
+          <div id="cf-resgates"></div>
         </div>
 
         <div class="sec"><div class="sec-t" data-i="sec_obs">Observações</div>
@@ -260,6 +284,17 @@
       <div id="v-msg" class="msg"></div>
       <div id="v-list"><div class="empty" data-i="loading">Carregando…</div></div>
     </div>
+
+    <!-- TAB RELATÓRIOS -->
+    <div id="tab-rel" class="card hide">
+      <div class="pane-head"><h2 data-i="rel_title">Relatórios</h2></div>
+      <div class="sec-t" data-i="rel_a1">A1 — Captação</div>
+      <div id="rel-a1" class="reltab-wrap"></div>
+      <div class="sec-t" style="margin-top:16px" data-i="rel_a2">A2 — Gestão</div>
+      <div id="rel-a2" class="reltab-wrap"></div>
+      <div class="sec-t" style="margin-top:16px" data-i="rel_a3">A3 — Resgate</div>
+      <div id="rel-a3" class="reltab-wrap"></div>
+    </div>
   </div>
 
   <div class="foot">SIGNUMOR · ORION VALE</div>
@@ -283,13 +318,18 @@ const I18N={
    cli_dtentrada:'Entrada',cli_dtentregue:'Entregue',cli_situacao:'Situação',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
-   f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',
+   f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',resg_title:'Resgates por categoria',
    cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',
    f_all:'Todos',st_morto:'Morreu',
    st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu A2','st_MORREU A3':'Morreu A3',
    pz_funil:'dias no funil',pz_entrega:'p/ entregar',pz_a3:'dias em A3',
    c_pnome_req:'Informe o primeiro nome.',c_saved:'Cliente salvo.',c_del:'Excluir este cliente?',c_empty:'Nenhum cliente cadastrado. Toque em “+ Novo”.',c_none:'Nenhum cliente neste filtro.',
    v_code_req:'Informe o código.',v_dup:'Já existe um funcionário com esse código.',v_saved:'Funcionário salvo.',v_del:'Excluir este funcionário?',v_none:'Nenhum funcionário neste canal.',v_empty:'Nenhum funcionário cadastrado. Toque em “+ Novo”.',
+   nav_rel:'Relatórios',rel_title:'Relatórios',rel_a1:'A1 — Captação',rel_a2:'A2 — Gestão',rel_a3:'A3 — Resgate',
+   rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',
+   rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ A3',rel_col_valenva3:'Valor enviado A3',
+   rel_col_cliente:'Cliente',rel_col_diasa3:'Dias em A3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
+   rel_empty:'Sem dados.',
    none_opt:'—',generic:'Algo deu errado. Tente novamente.',
    fill:'Preencha e-mail e senha.',invalid:'E-mail ou senha incorretos.',
    signup_ok:'Conta criada! Verifique seu e-mail para confirmar e depois faça login.',signup_exists:'Este e-mail já está cadastrado. Faça login.',weakpass:'A senha precisa ter ao menos 6 caracteres.'},
@@ -304,13 +344,18 @@ const I18N={
    cli_dtentrada:'Entered',cli_dtentregue:'Delivered',cli_situacao:'Status',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
-   f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',
+   f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',resg_title:'Redemptions by category',
    cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',
    f_all:'All',st_morto:'Lost',
    st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost A2','st_MORREU A3':'Lost A3',
    pz_funil:'days in funnel',pz_entrega:'to deliver',pz_a3:'days in A3',
    c_pnome_req:'Enter the first name.',c_saved:'Client saved.',c_del:'Delete this client?',c_empty:'No clients yet. Tap “+ New”.',c_none:'No clients in this filter.',
    v_code_req:'Enter the code.',v_dup:'An employee with this code already exists.',v_saved:'Employee saved.',v_del:'Delete this employee?',v_none:'No employees in this channel.',v_empty:'No employees yet. Tap “+ New”.',
+   nav_rel:'Reports',rel_title:'Reports',rel_a1:'A1 — Acquisition',rel_a2:'A2 — Management',rel_a3:'A3 — Redemption',
+   rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',
+   rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to A3',rel_col_valenva3:'Value sent to A3',
+   rel_col_cliente:'Client',rel_col_diasa3:'Days in A3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
+   rel_empty:'No data.',
    none_opt:'—',generic:'Something went wrong. Please try again.',
    fill:'Enter e-mail and password.',invalid:'Wrong e-mail or password.',
    signup_ok:'Account created! Check your e-mail to confirm, then sign in.',signup_exists:'This e-mail is already registered. Please sign in.',weakpass:'Password must be at least 6 characters.'},
@@ -325,13 +370,18 @@ const I18N={
    cli_dtentrada:'進入',cli_dtentregue:'交付',cli_situacao:'狀態',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
-   f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',
+   f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',resg_title:'分類贖回設定',
    cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',
    f_all:'全部',st_morto:'流失',
    st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'A2流失','st_MORREU A3':'A3流失',
    pz_funil:'漏斗天數',pz_entrega:'待交付',pz_a3:'A3天數',
    c_pnome_req:'請輸入名。',c_saved:'已儲存客戶。',c_del:'確定刪除此客戶？',c_empty:'尚無客戶，請點「+ 新增」。',c_none:'此篩選無客戶。',
    v_code_req:'請輸入代碼。',v_dup:'此代碼已存在。',v_saved:'已儲存員工。',v_del:'確定刪除此員工？',v_none:'此通路尚無員工。',v_empty:'尚無員工，請點「+ 新增」。',
+   nav_rel:'報表',rel_title:'報表',rel_a1:'A1 — 開發',rel_a2:'A2 — 管理',rel_a3:'A3 — 贖回',
+   rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',
+   rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入A3',rel_col_valenva3:'轉入A3金額',
+   rel_col_cliente:'客戶',rel_col_diasa3:'在A3天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
+   rel_empty:'無資料。',
    none_opt:'—',generic:'發生錯誤，請再試一次。',
    fill:'請輸入電子郵件與密碼。',invalid:'電子郵件或密碼錯誤。',
    signup_ok:'帳號已建立！請查收電子郵件確認後再登入。',signup_exists:'此電子郵件已註冊，請直接登入。',weakpass:'密碼至少需 6 個字元。'}
@@ -383,6 +433,8 @@ document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.cl
   document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));
   document.getElementById('tab-cli').classList.toggle('hide',b.dataset.tab!=='cli');
   document.getElementById('tab-vend').classList.toggle('hide',b.dataset.tab!=='vend');
+  document.getElementById('tab-rel').classList.toggle('hide',b.dataset.tab!=='rel');
+  if(b.dataset.tab==='rel')renderRel();
 });
 
 /* ===== VENDEDORES ===== */
@@ -442,9 +494,88 @@ document.getElementById('vf-save').onclick=async function(){
 };
 async function delVend(id){if(!confirm(t('v_del')))return;const {error}=await sb.from('vendedores').delete().eq('id',id);if(error){msg('v-msg','err',error.message||t('generic'));return;}await loadVend();}
 
+/* ===== RELATÓRIOS ===== */
+function relBuild(){
+  const mapA1={},mapA2={};
+  CLI.list.forEach(c=>{
+    const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
+    if(c.vendedor_a1){const k=c.vendedor_a1;mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
+      mapA1[k].receb++;
+      if(c.vendedor_a2)mapA1[k].transferidos.push({nome:nome||'—',valor:Number(c.valor_total)||0});}
+    if(c.vendedor_a2){const k=c.vendedor_a2;mapA2[k]=mapA2[k]||{ativos:0,valadm:0,enva3:0,valenva3:0,clientes:[]};
+      mapA2[k].clientes.push(c);
+      if(c.situacao==='ATENCAO'){mapA2[k].ativos++;mapA2[k].valadm+=Number(c.valor_total)||0;}
+      if(c.vendedor_a3){mapA2[k].enva3++;mapA2[k].valenva3+=Number(c.valor_total)||0;}}
+  });
+  const listA3=CLI.list.filter(c=>c.vendedor_a3).map(c=>({
+    nome:(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''),
+    func:c.vendedor_a3,
+    dias:days(c.data_entrada_a3,today()),
+    resg:c.saldo_resgatavel,
+    cats:FINF.filter(k=>c.resgates&&c.resgates[k]&&c.resgates[k].marcado).map(k=>t(FINLBL[k])+(c.resgates[k].data?' ('+c.resgates[k].data+')':''))
+  }));
+  return {mapA1,mapA2,listA3};
+}
+function relClientCard(c){
+  const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
+  const vd=[c.vendedor_a1,c.vendedor_a2,c.vendedor_a3].map(x=>x?'<b>'+esc(x)+'</b>':'·').join(' › ');
+  return '<div class="citem" data-edit="'+c.id+'"><div class="c1"><span class="cnome">'+(nome||'—')+'</span>'
+    +'<span class="cval">'+fmtMoney(c.valor_total)+'</span></div>'
+    +'<div class="c2"><span class="cvend">'+vd+'</span>'+stBadge(c.situacao)+'</div></div>';
+}
+function renderRel(){
+  if(!CLI.loaded)return;
+  const {mapA1,mapA2,listA3}=relBuild();
+  const k1=Object.keys(mapA1).sort();
+  document.getElementById('rel-a1').innerHTML=!k1.length?'<div class="empty">'+t('rel_empty')+'</div>':
+    k1.map(k=>{const r=mapA1[k];
+      const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub"><span>'+esc(x.nome)+'</span><span>'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
+      return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.receb+' '+t('rel_col_receb')+' · '+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
+    }).join('');
+  const k2=Object.keys(mapA2).sort();
+  document.getElementById('rel-a2').innerHTML=!k2.length?'<div class="empty">'+t('rel_empty')+'</div>':
+    k2.map(k=>{const r=mapA2[k];
+      return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.ativos+' '+t('rel_col_ativos')+' · '+fmtMoney(r.valadm)+' · '+r.enva3+' '+t('rel_col_enva3')+' ('+fmtMoney(r.valenva3)+')</span></div>'
+        +r.clientes.map(relClientCard).join('')+'</div>';
+    }).join('');
+  document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
+    '<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>'+t('rel_col_func')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th></tr></thead><tbody>'
+    +listA3.map(r=>'<tr><td>'+esc(r.nome||'—')+'</td><td>'+esc(r.func||'—')+'</td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td></tr>').join('')
+    +'</tbody></table>';
+}
+document.getElementById('rel-a2').addEventListener('click',e=>{const it=e.target.closest('[data-edit]');if(!it)return;
+  const c=CLI.list.find(x=>x.id===it.dataset.edit);if(!c)return;
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='cli'));
+  document.getElementById('tab-cli').classList.remove('hide');document.getElementById('tab-vend').classList.add('hide');document.getElementById('tab-rel').classList.add('hide');
+  openCForm(c);
+});
+
 /* ===== CLIENTES ===== */
 const CLI={list:[],loaded:false,filtro:'ALL'};
 const FINF=['conta_corrente','deposito_prazo','investimentos','acoes','criptomoedas','imoveis','ouro','dinheiro','conta_conjunta'];
+const FINLBL={conta_corrente:'f_cc',deposito_prazo:'f_dp',investimentos:'f_inv',acoes:'f_ac',criptomoedas:'f_cr',imoveis:'f_im',ouro:'f_ou',dinheiro:'f_di',conta_conjunta:'f_cj'};
+function renderResgList(data){
+  const box=document.getElementById('cf-resgates');let html='';
+  FINF.forEach(k=>{
+    const info=(data&&data[k])||{};const on=!!info.marcado;
+    html+='<div class="resg-row"><label class="resg-chk"><input type="checkbox" data-k="'+k+'" '+(on?'checked':'')+'>'+t(FINLBL[k])+'</label>'
+      +'<input type="date" class="resg-date" data-k="'+k+'" value="'+(info.data||'')+'" '+(on?'':'disabled')+'></div>';
+  });
+  box.innerHTML=html;
+  box.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',e=>{
+    const d=box.querySelector('.resg-date[data-k="'+e.target.dataset.k+'"]');
+    d.disabled=!e.target.checked; if(!e.target.checked)d.value='';
+  }));
+}
+function collectResgates(){
+  const box=document.getElementById('cf-resgates');const out={};
+  FINF.forEach(k=>{
+    const cb=box.querySelector('input[type=checkbox][data-k="'+k+'"]');
+    const d=box.querySelector('.resg-date[data-k="'+k+'"]');
+    if(cb&&cb.checked)out[k]={marcado:true,data:d.value||null};
+  });
+  return out;
+}
 
 function fillVendSelects(){ ['cf-va1','cf-va2','cf-va3'].forEach((id,i)=>{
   const canal='A'+(i+1);const sel=document.getElementById(id);const cur=sel.value;
@@ -499,9 +630,11 @@ function openCForm(c){
   if(!c){document.getElementById('cf-va1').value='';document.getElementById('cf-va2').value='';document.getElementById('cf-va3').value='';}
   document.getElementById('cf-dtentrada').value=c&&c.data_entrada?c.data_entrada:'';
   document.getElementById('cf-dtentregue').value=c&&c.data_entregue?c.data_entregue:'';
+  document.getElementById('cf-dtA3').value=c&&c.data_entrada_a3?c.data_entrada_a3:'';
   document.getElementById('cf-situacao').value=c?c.situacao||'ATENCAO':'ATENCAO';
   ['dia1','dia2','dia3','dia4'].forEach(d=>document.getElementById('cf-'+d).value=c&&c[d]?c[d]:'');
   FINF.forEach(k=>document.getElementById('cf-'+k).value=c&&c[k]!=null?c[k]:'');
+  renderResgList(c?c.resgates:null);
   document.getElementById('cf-saldo_estimado').value=c&&c.saldo_estimado!=null?c.saldo_estimado:'';
   document.getElementById('cf-saldo_resgatavel').value=c&&c.saldo_resgatavel!=null?c.saldo_resgatavel:'';
   document.getElementById('cf-obs').value=c&&c.observacoes?c.observacoes:'';
@@ -519,6 +652,10 @@ document.getElementById('cf-va2').addEventListener('change',e=>{
   const val=e.target.value;
   if(val){ensureOpt('cf-va3',val);}
 });
+document.getElementById('cf-va2').addEventListener('input',e=>{
+  const val=e.target.value;
+  if(val){ensureOpt('cf-va3',val);}
+});
 document.getElementById('c-filtros').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   CLI.filtro=b.dataset.f;document.querySelectorAll('#c-filtros button').forEach(x=>x.classList.toggle('active',x===b));renderCli();});
 
@@ -527,14 +664,17 @@ document.getElementById('cf-save').onclick=async function(){
   const primeiro_nome=document.getElementById('cf-pnome').value.trim();
   if(!primeiro_nome){msg('c-msg','err',t('c_pnome_req'));window.scrollTo(0,0);return;}
   this.disabled=true;const o=this.textContent;this.innerHTML='<span class="spin"></span>';
+  const va3=document.getElementById('cf-va3').value||null;
+  const dtA3atual=document.getElementById('cf-dtA3').value;
   const payload={
     primeiro_nome,
     segundo_nome:document.getElementById('cf-snome').value.trim()||null,
     data_entrada:document.getElementById('cf-dtentrada').value||null,
     data_entregue:document.getElementById('cf-dtentregue').value||null,
+    data_entrada_a3:(va3&&!dtA3atual)?today():(dtA3atual||null),
     vendedor_a1:document.getElementById('cf-va1').value||null,
     vendedor_a2:document.getElementById('cf-va2').value||null,
-    vendedor_a3:document.getElementById('cf-va3').value||null,
+    vendedor_a3:va3,
     situacao:document.getElementById('cf-situacao').value,
     dia1:document.getElementById('cf-dia1').value.trim()||null,
     dia2:document.getElementById('cf-dia2').value.trim()||null,
@@ -542,6 +682,7 @@ document.getElementById('cf-save').onclick=async function(){
     dia4:document.getElementById('cf-dia4').value.trim()||null,
     saldo_estimado:num('cf-saldo_estimado'),
     saldo_resgatavel:num('cf-saldo_resgatavel'),
+    resgates:collectResgates(),
     observacoes:document.getElementById('cf-obs').value.trim()||null
   };
   FINF.forEach(k=>payload[k]=num('cf-'+k));
