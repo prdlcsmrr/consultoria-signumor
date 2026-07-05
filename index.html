@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070510';
+  var V='2026070511';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -215,10 +215,10 @@
         <div class="sec"><div class="sec-t" data-i="sec_situacao">Situação & Procedimentos</div>
           <label class="fld"><span class="lbl" data-i="cli_situacao">Situação</span>
             <select id="cf-situacao">
-              <option value="ATENCAO">ATENÇÃO</option>
-              <option value="FINALIZADO">FINALIZADO</option>
-              <option value="MORREU A2">MORREU A2</option>
-              <option value="MORREU A3">MORREU A3</option>
+              <option value="ATENCAO" data-i="st_ATENCAO">ATENÇÃO</option>
+              <option value="FINALIZADO" data-i="st_FINALIZADO">FINALIZADO</option>
+              <option value="MORREU A2" data-i="st_MORREU A2">MORREU A2</option>
+              <option value="MORREU A3" data-i="st_MORREU A3">MORREU A3</option>
             </select></label>
           <div class="row2">
             <label class="fld"><span class="lbl" data-i="cli_dia1">Dia 1</span><input id="cf-dia1" maxlength="40"></label>
@@ -318,7 +318,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070510';
+const APP_VERSION='2026070511';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -429,7 +429,7 @@ function applyLang(){
   document.querySelectorAll('[data-i]').forEach(el=>{el.textContent=t(el.getAttribute('data-i'));});
   document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('active',b.dataset.lang===LANG));
   if(VEND.loaded) renderVend();
-  if(CLI.loaded) renderCli();
+  if(CLI.loaded){renderCli();renderRel();}
 }
 document.getElementById('lang').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;LANG=b.dataset.lang;localStorage.setItem('sig_lang',LANG);applyLang();});
 
