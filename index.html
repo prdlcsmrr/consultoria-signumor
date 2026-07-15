@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070513';
+  var V='2026070514';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -65,8 +65,9 @@
   .userline .who{font-size:12px;color:#aeb6d4}
   .userline .who b{color:#fff;display:block;font-size:13px}
   .btn-out{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#dfe4f5;padding:8px 12px;border-radius:9px;font-family:inherit;font-size:12px;cursor:pointer;font-weight:bold}
-  .tabs{display:flex;gap:6px;margin-bottom:14px}
-  .tabs button{flex:1;border:0;background:rgba(255,255,255,.08);color:#c7cde0;font-family:inherit;font-size:13px;font-weight:bold;padding:11px;border-radius:11px;cursor:pointer;letter-spacing:.5px}
+  .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{flex:0 0 auto;white-space:nowrap;border:0;background:rgba(255,255,255,.08);color:#c7cde0;font-family:inherit;font-size:12.5px;font-weight:bold;padding:11px 14px;border-radius:11px;cursor:pointer;letter-spacing:.3px}
   .tabs button.active{background:var(--gold);color:var(--navy)}
   .pane-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
   .pane-head h2{font-size:18px;color:var(--navy);margin:0;letter-spacing:.5px}
@@ -186,7 +187,10 @@
     <div class="tabs">
       <button data-tab="cli" class="active" data-i="nav_cli">Clientes</button>
       <button data-tab="vend" data-i="nav_vend">Funcionários</button>
-      <button data-tab="rel" data-i="nav_rel">Relatórios</button>
+      <button data-tab="rel-a1" data-i="rel_a1_tab">Relatório A1</button>
+      <button data-tab="rel-a2" data-i="rel_a2_tab">Relatório A2</button>
+      <button data-tab="rel-a3" data-i="rel_a3_tab">Relatório A3</button>
+      <button data-tab="sal" data-i="nav_sal">Salários</button>
     </div>
 
     <!-- TAB CLIENTES -->
@@ -300,64 +304,79 @@
         <label class="chk"><input type="checkbox" id="vf-ativo" checked><span data-i="vend_active">Ativo</span></label>
         <label class="chk hide" id="vf-a3-wrap"><input type="checkbox" id="vf-atua-a3"><span data-i="vend_atua_a3">Também atua em A3</span></label>
         <div class="acts"><button class="btn" id="vf-save" data-i="vend_save">Salvar</button><button class="btn gold" id="vf-cancel" data-i="vend_cancel">Cancelar</button></div>
-        <div id="vf-pag-section" class="hide" style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
-          <div class="pane-head" style="margin-bottom:10px"><h3 style="font-size:14px;color:var(--navy);margin:0" data-i="pag_title">Folha de Pagamento</h3><button class="btn-mini" id="pag-new" data-i="pag_new">+ Novo mês</button></div>
-          <div id="pag-list"></div>
-          <div id="pag-form" class="hide" style="margin-top:10px;background:#f7f8fb;border:1px solid var(--line);border-radius:10px;padding:12px">
-            <input type="hidden" id="pf-id">
-            <div class="row2">
-              <label class="fld"><span class="lbl" data-i="pag_mes">Mês</span><select id="pf-mes"></select></label>
-              <label class="fld"><span class="lbl" data-i="pag_ano">Ano</span><input id="pf-ano" type="number" inputmode="numeric" placeholder="2026"></label>
-            </div>
-            <div class="row2">
-              <label class="fld"><span class="lbl" data-i="pag_desemp_rs">Desempenho (R$)</span><input id="pf-desempenho_rs" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-              <label class="fld"><span class="lbl" data-i="pag_desemp_usdt">Desempenho (USDT)</span><input id="pf-desempenho_usdt" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-            </div>
-            <div class="row2">
-              <label class="fld"><span class="lbl" data-i="pag_comissao">Comissão</span><input id="pf-comissao" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-              <label class="fld"><span class="lbl" data-i="pag_salario_base">Salário base</span><input id="pf-salario_base" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-            </div>
-            <div class="row2">
-              <label class="fld"><span class="lbl" data-i="pag_dias">Dias presentes</span><input id="pf-dias_presentes" type="number" inputmode="numeric" placeholder="0"></label>
-              <label class="fld"><span class="lbl" data-i="pag_presenca_valor">Valor da presença</span><input id="pf-presenca-preview" disabled></label>
-            </div>
-            <div class="row2">
-              <label class="fld"><span class="lbl" data-i="pag_comissao_ind">Comissão por indicação</span><input id="pf-comissao_indicacao" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-              <label class="fld"><span class="lbl" data-i="pag_bonus_sup">Bônus de supervisão</span><input id="pf-bonus_supervisao" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-            </div>
-            <div class="row2">
-              <label class="fld"><span class="lbl" data-i="pag_bonus_assid">Bônus de assiduidade</span><input id="pf-bonus_assiduidade" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-              <label class="fld"><span class="lbl" data-i="pag_adiantamento">Adiantamento</span><input id="pf-adiantamento" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-            </div>
-            <label class="fld" style="margin-bottom:8px"><span class="lbl" data-i="pag_multa">Multa</span><input id="pf-multa" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-            <div class="totbox"><span class="tl" data-i="pag_resumo">Resumo do salário</span><span class="tv" id="pf-resumo-preview">0.00</span></div>
-            <div class="acts" style="margin-top:10px"><button class="btn" id="pf-save" data-i="vend_save">Salvar</button><button class="btn gold" id="pf-cancel" data-i="vend_cancel">Cancelar</button></div>
-            <div id="pf-msg" class="msg"></div>
-          </div>
-        </div>
       </div>
       <div id="v-msg" class="msg"></div>
       <div id="v-list"><div class="empty" data-i="loading">Carregando…</div></div>
     </div>
 
-    <!-- TAB RELATÓRIOS -->
-    <div id="tab-rel" class="card hide">
-      <div class="pane-head"><h2 data-i="rel_title">Relatórios</h2></div>
-      <div class="sec-t" data-i="rel_a1">A1 — Captação</div>
+    <!-- TAB RELATÓRIO A1 -->
+    <div id="tab-rel-a1" class="card hide">
+      <div class="pane-head"><h2 data-i="rel_a1">A1 — Captação</h2></div>
       <div id="rel-a1" class="reltab-wrap"></div>
-      <div class="sec-t" style="margin-top:16px" data-i="rel_a2">A2 — Gestão</div>
+    </div>
+
+    <!-- TAB RELATÓRIO A2 -->
+    <div id="tab-rel-a2" class="card hide">
+      <div class="pane-head"><h2 data-i="rel_a2">A2 — Gestão</h2></div>
       <div id="rel-a2" class="reltab-wrap"></div>
-      <div class="sec-t" style="margin-top:16px" data-i="rel_a3">A3 — Resgate</div>
+    </div>
+
+    <!-- TAB RELATÓRIO A3 -->
+    <div id="tab-rel-a3" class="card hide">
+      <div class="pane-head"><h2 data-i="rel_a3">A3 — Resgate</h2></div>
       <div id="rel-a3" class="reltab-wrap"></div>
     </div>
+
+    <!-- TAB SALÁRIOS -->
+    <div id="tab-sal" class="card hide">
+      <div class="pane-head"><h2 data-i="nav_sal">Salários</h2></div>
+      <div id="sal-emp-list"></div>
+      <div id="sal-pag-view" class="hide">
+        <button class="btn-mini" id="sal-back">‹ <span data-i="sal_back">Voltar</span></button>
+        <div class="pane-head" style="margin-top:12px"><h3 id="sal-emp-title" style="font-size:15px;color:var(--navy);margin:0"></h3><button class="btn-mini" id="pag-new" data-i="pag_new">+ Novo mês</button></div>
+        <div id="pag-list"></div>
+        <div id="pag-form" class="hide" style="margin-top:10px;background:#f7f8fb;border:1px solid var(--line);border-radius:10px;padding:12px">
+          <input type="hidden" id="pf-id">
+          <div class="row2">
+            <label class="fld"><span class="lbl" data-i="pag_mes">Mês</span><select id="pf-mes"></select></label>
+            <label class="fld"><span class="lbl" data-i="pag_ano">Ano</span><input id="pf-ano" type="number" inputmode="numeric" placeholder="2026"></label>
+          </div>
+          <div class="row2">
+            <label class="fld"><span class="lbl" data-i="pag_desemp_rs">Desempenho (R$)</span><input id="pf-desempenho_rs" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+            <label class="fld"><span class="lbl" data-i="pag_desemp_usdt">Desempenho (USDT)</span><input id="pf-desempenho_usdt" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          </div>
+          <div class="row2">
+            <label class="fld"><span class="lbl" data-i="pag_comissao">Comissão</span><input id="pf-comissao" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+            <label class="fld"><span class="lbl" data-i="pag_salario_base">Salário base</span><input id="pf-salario_base" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          </div>
+          <div class="row2">
+            <label class="fld"><span class="lbl" data-i="pag_dias">Dias presentes</span><input id="pf-dias_presentes" type="number" inputmode="numeric" placeholder="0"></label>
+            <label class="fld"><span class="lbl" data-i="pag_presenca_valor">Valor da presença</span><input id="pf-presenca-preview" disabled></label>
+          </div>
+          <div class="row2">
+            <label class="fld"><span class="lbl" data-i="pag_comissao_ind">Comissão por indicação</span><input id="pf-comissao_indicacao" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+            <label class="fld"><span class="lbl" data-i="pag_bonus_sup">Bônus de supervisão</span><input id="pf-bonus_supervisao" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          </div>
+          <div class="row2">
+            <label class="fld"><span class="lbl" data-i="pag_bonus_assid">Bônus de assiduidade</span><input id="pf-bonus_assiduidade" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+            <label class="fld"><span class="lbl" data-i="pag_adiantamento">Adiantamento</span><input id="pf-adiantamento" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          </div>
+          <label class="fld" style="margin-bottom:8px"><span class="lbl" data-i="pag_multa">Multa</span><input id="pf-multa" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <div class="totbox"><span class="tl" data-i="pag_resumo">Resumo do salário</span><span class="tv" id="pf-resumo-preview">0.00</span></div>
+          <div class="acts" style="margin-top:10px"><button class="btn" id="pf-save" data-i="vend_save">Salvar</button><button class="btn gold" id="pf-cancel" data-i="vend_cancel">Cancelar</button></div>
+          <div id="pf-msg" class="msg"></div>
+        </div>
+      </div>
+    </div>
   </div>
+
 
   <div class="foot">SIGNUMOR · ORION VALE</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070513';
+const APP_VERSION='2026070514';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -411,6 +430,7 @@ const I18N={
    pag_comissao_ind:'Comissão por indicação',pag_bonus_sup:'Bônus de supervisão',pag_bonus_assid:'Bônus de assiduidade',
    pag_adiantamento:'Adiantamento',pag_multa:'Multa',pag_resumo:'Resumo do salário',
    pag_empty:'Nenhum mês registrado ainda.',pag_dup:'Já existe um registro para esse mês/ano.',pag_del:'Excluir este registro de pagamento?',pag_ano_req:'Informe um ano válido.',
+   nav_sal:'Salários',sal_back:'Voltar',rel_a1_tab:'Relatório A1',rel_a2_tab:'Relatório A2',rel_a3_tab:'Relatório A3',
    none_opt:'—',generic:'Algo deu errado. Tente novamente.',
    fill:'Preencha e-mail e senha.',invalid:'E-mail ou senha incorretos.',
    signup_ok:'Conta criada! Verifique seu e-mail para confirmar e depois faça login.',signup_exists:'Este e-mail já está cadastrado. Faça login.',weakpass:'A senha precisa ter ao menos 6 caracteres.'},
@@ -443,6 +463,7 @@ const I18N={
    pag_comissao_ind:'Referral commission',pag_bonus_sup:'Supervision bonus',pag_bonus_assid:'Attendance bonus',
    pag_adiantamento:'Advance',pag_multa:'Penalty',pag_resumo:'Salary summary',
    pag_empty:'No months recorded yet.',pag_dup:'A record for this month/year already exists.',pag_del:'Delete this payroll record?',pag_ano_req:'Enter a valid year.',
+   nav_sal:'Salaries',sal_back:'Back',rel_a1_tab:'Report A1',rel_a2_tab:'Report A2',rel_a3_tab:'Report A3',
    none_opt:'—',generic:'Something went wrong. Please try again.',
    fill:'Enter e-mail and password.',invalid:'Wrong e-mail or password.',
    signup_ok:'Account created! Check your e-mail to confirm, then sign in.',signup_exists:'This e-mail is already registered. Please sign in.',weakpass:'Password must be at least 6 characters.'},
@@ -475,6 +496,7 @@ const I18N={
    pag_comissao_ind:'介紹佣金',pag_bonus_sup:'督導獎金',pag_bonus_assid:'全勤獎金',
    pag_adiantamento:'預支',pag_multa:'罰款',pag_resumo:'薪資總結',
    pag_empty:'尚無月份紀錄。',pag_dup:'該月份/年份的紀錄已存在。',pag_del:'確定刪除此薪資紀錄？',pag_ano_req:'請輸入有效年份。',
+   nav_sal:'薪資',sal_back:'返回',rel_a1_tab:'A1報表',rel_a2_tab:'A2報表',rel_a3_tab:'A3報表',
    none_opt:'—',generic:'發生錯誤，請再試一次。',
    fill:'請輸入電子郵件與密碼。',invalid:'電子郵件或密碼錯誤。',
    signup_ok:'帳號已建立！請查收電子郵件確認後再登入。',signup_exists:'此電子郵件已註冊，請直接登入。',weakpass:'密碼至少需 6 個字元。'}
@@ -529,8 +551,12 @@ document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.cl
   document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));
   document.getElementById('tab-cli').classList.toggle('hide',b.dataset.tab!=='cli');
   document.getElementById('tab-vend').classList.toggle('hide',b.dataset.tab!=='vend');
-  document.getElementById('tab-rel').classList.toggle('hide',b.dataset.tab!=='rel');
-  if(b.dataset.tab==='rel')renderRel();
+  document.getElementById('tab-rel-a1').classList.toggle('hide',b.dataset.tab!=='rel-a1');
+  document.getElementById('tab-rel-a2').classList.toggle('hide',b.dataset.tab!=='rel-a2');
+  document.getElementById('tab-rel-a3').classList.toggle('hide',b.dataset.tab!=='rel-a3');
+  document.getElementById('tab-sal').classList.toggle('hide',b.dataset.tab!=='sal');
+  if(['rel-a1','rel-a2','rel-a3'].includes(b.dataset.tab))renderRel();
+  if(b.dataset.tab==='sal'){document.getElementById('sal-pag-view').classList.add('hide');document.getElementById('sal-emp-list').classList.remove('hide');if(!VEND.loaded)loadVend();else renderSalEmpList();}
 });
 
 /* ===== VENDEDORES ===== */
@@ -540,6 +566,7 @@ async function loadVend(){
   const {data,error}=await sb.from('vendedores').select('*').order('codigo');
   if(error){document.getElementById('v-list').innerHTML='<div class="empty">'+t('generic')+'</div>';return;}
   VEND.list=data||[];VEND.loaded=true;renderVend();fillVendSelects();
+  if(document.getElementById('sal-emp-list'))renderSalEmpList();
 }
 function renderVend(){
   const box=document.getElementById('v-list');
@@ -568,9 +595,6 @@ function openVForm(v){
   document.getElementById('vf-ativo').checked=v?!!v.ativo:true;
   document.getElementById('vf-atua-a3').checked=v?!!v.atua_a3:false;
   document.getElementById('vf-a3-wrap').classList.toggle('hide',document.getElementById('vf-canal').value!=='A2');
-  document.getElementById('pag-form').classList.add('hide');
-  if(v&&v.id){document.getElementById('vf-pag-section').classList.remove('hide');loadPag(v.id,v.codigo);}
-  else{document.getElementById('vf-pag-section').classList.add('hide');}
   msg('v-msg');vform.classList.remove('hide');document.getElementById('vf-code').focus();
 }
 document.getElementById('vf-canal').addEventListener('change',e=>{
@@ -601,6 +625,35 @@ document.getElementById('vf-save').onclick=async function(){
   vform.classList.add('hide');msg('v-msg','ok',t('v_saved'));await loadVend();setTimeout(()=>msg('v-msg'),1600);
 };
 async function delVend(id){if(!confirm(t('v_del')))return;const {error}=await sb.from('vendedores').delete().eq('id',id);if(error){msg('v-msg','err',error.message||t('generic'));return;}await loadVend();}
+
+/* ===== SALÁRIOS (lista de funcionários) ===== */
+function renderSalEmpList(){
+  const box=document.getElementById('sal-emp-list');if(!box)return;
+  if(!VEND.list.length){box.innerHTML='<div class="empty">'+t('v_empty')+'</div>';return;}
+  let html='';
+  CANAIS.forEach(([c,color])=>{
+    const arr=c==='A3'?VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)):VEND.list.filter(v=>v.canal===c);
+    html+='<div class="grp"><div class="grp-h"><span class="dot" style="background:'+color+'"></span><b>'+c+'</b><span class="cnt">'+arr.length+'</span></div>';
+    if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
+    else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
+      html+='<div class="vitem" data-sal="'+v.id+'" data-cod="'+esc(v.codigo)+'" style="cursor:pointer"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
+        +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):'•')+'</span></div>';});
+    html+='</div>';
+  });
+  box.innerHTML=html;
+}
+document.getElementById('sal-emp-list').addEventListener('click',e=>{
+  const it=e.target.closest('[data-sal]');if(!it)return;
+  document.getElementById('sal-emp-title').textContent=it.dataset.cod;
+  document.getElementById('sal-emp-list').classList.add('hide');
+  document.getElementById('sal-pag-view').classList.remove('hide');
+  document.getElementById('pag-form').classList.add('hide');
+  loadPag(it.dataset.sal,it.dataset.cod);
+});
+document.getElementById('sal-back').onclick=()=>{
+  document.getElementById('sal-pag-view').classList.add('hide');
+  document.getElementById('sal-emp-list').classList.remove('hide');
+};
 
 /* ===== FOLHA DE PAGAMENTO ===== */
 const MESES={pt:['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
