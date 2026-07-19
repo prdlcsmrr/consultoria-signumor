@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070514';
+  var V='2026070515';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -30,6 +30,14 @@
     background:radial-gradient(1200px 600px at 50% -10%,#1c2a5e 0%,transparent 60%),linear-gradient(160deg,#0f1530 0%,#131b3d 100%);
     color:var(--ink);min-height:100vh;-webkit-text-size-adjust:100%;overflow-x:hidden}
   .wrap{max-width:500px;margin:0 auto;padding:22px 16px 60px}
+  @media (min-width:860px){
+    .wrap{max-width:1200px;padding:36px 40px 70px}
+    .card{padding:32px 36px}
+    .tabs{overflow-x:visible;flex-wrap:wrap}
+    .tabs button{font-size:13.5px;padding:12px 20px}
+    .brand .name b{font-size:20px}
+    input,select,textarea{font-size:14.5px}
+  }
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px}
   .brand{display:flex;align-items:center;gap:10px;color:#fff}
   .brand .emblem{width:40px;height:40px;border-radius:50%;
@@ -147,6 +155,15 @@
   .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
   @keyframes sp{to{transform:rotate(360deg)}}
   .boot{color:#c7cde0;text-align:center;padding:80px 20px;font-size:14px}
+@media (min-width:860px){
+  #v-list .grp, #sal-emp-list .grp{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;align-items:start}
+  #v-list .grp-h, #sal-emp-list .grp-h{grid-column:1/-1}
+  #v-list .empty, #sal-emp-list .empty{grid-column:1/-1}
+  #v-list .vitem, #sal-emp-list .vitem{margin:0}
+  #c-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+  #c-list .citem{margin-bottom:0}
+  .rel-group .citem{margin-bottom:0}
+}
 </style>
 </head>
 <body>
@@ -376,7 +393,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070514';
+const APP_VERSION='2026070515';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -406,7 +423,7 @@ const I18N={
    first_access:'Primeiro acesso? Criar conta',signup_title:'Criar conta',signup_sub:'Apenas gerentes autorizados',
    signup_btn:'Criar conta',back_login:'← Voltar ao login',logged_as:'Conectado como',logout:'Sair',
    nav_vend:'Funcionários',nav_cli:'Clientes',
-   vend_title:'Funcionários',vend_new:'+ Novo',vend_code:'Código',vend_channel:'Canal',vend_name:'Nome (opcional)',vend_active:'Ativo',vend_atua_a3:'Também atua em A3',vend_save:'Salvar',vend_cancel:'Cancelar',
+   vend_title:'Funcionários',vend_new:'+ Novo',vend_code:'Código',vend_channel:'Canal',vend_name:'Nome (opcional)',vend_active:'Ativo',vend_inactive:'Desativado',vend_atua_a3:'Também atua em A3',vend_save:'Salvar',vend_cancel:'Cancelar',
    cli_title:'Clientes',cli_new:'+ Novo',cli_pnome:'Primeiro nome',cli_snome:'Segundo nome',
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',
    cli_dtentrada:'Entrada',cli_dtentregue:'Entregue',cli_situacao:'Situação',
@@ -439,7 +456,7 @@ const I18N={
    first_access:'First time? Create account',signup_title:'Create account',signup_sub:'Authorized managers only',
    signup_btn:'Create account',back_login:'← Back to sign in',logged_as:'Signed in as',logout:'Sign out',
    nav_vend:'Employees',nav_cli:'Clients',
-   vend_title:'Employees',vend_new:'+ New',vend_code:'Code',vend_channel:'Channel',vend_name:'Name (optional)',vend_active:'Active',vend_atua_a3:'Also works in A3',vend_save:'Save',vend_cancel:'Cancel',
+   vend_title:'Employees',vend_new:'+ New',vend_code:'Code',vend_channel:'Channel',vend_name:'Name (optional)',vend_active:'Active',vend_inactive:'Inactive',vend_atua_a3:'Also works in A3',vend_save:'Save',vend_cancel:'Cancel',
    cli_title:'Clients',cli_new:'+ New',cli_pnome:'First name',cli_snome:'Second name',
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',
    cli_dtentrada:'Entered',cli_dtentregue:'Delivered',cli_situacao:'Status',
@@ -472,7 +489,7 @@ const I18N={
    first_access:'首次使用？建立帳號',signup_title:'建立帳號',signup_sub:'僅限授權經理',
    signup_btn:'建立帳號',back_login:'← 返回登入',logged_as:'登入身分',logout:'登出',
    nav_vend:'員工',nav_cli:'客戶',
-   vend_title:'員工',vend_new:'+ 新增',vend_code:'代碼',vend_channel:'通路',vend_name:'姓名（選填）',vend_active:'啟用',vend_atua_a3:'同時支援A3',vend_save:'儲存',vend_cancel:'取消',
+   vend_title:'員工',vend_new:'+ 新增',vend_code:'代碼',vend_channel:'通路',vend_name:'姓名（選填）',vend_active:'啟用',vend_inactive:'已停用',vend_atua_a3:'同時支援A3',vend_save:'儲存',vend_cancel:'取消',
    cli_title:'客戶',cli_new:'+ 新增',cli_pnome:'名',cli_snome:'第二名',
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',
    cli_dtentrada:'進入',cli_dtentregue:'交付',cli_situacao:'狀態',
@@ -580,7 +597,7 @@ function renderVend(){
       const dual=c==='A3'&&v.canal==='A2';
       html+='<div class="vitem"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
         +(dual?'<span class="badge a3tag">A2+A3</span>':'')
-        +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):'•')+'</span>'
+        +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):t('vend_inactive'))+'</span>'
         +'<button class="iconbtn" data-edit="'+v.id+'">✏️</button><button class="iconbtn" data-del="'+v.id+'">🗑️</button></div>';});
     html+='</div>';
   });
@@ -637,7 +654,7 @@ function renderSalEmpList(){
     if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
     else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
       html+='<div class="vitem" data-sal="'+v.id+'" data-cod="'+esc(v.codigo)+'" style="cursor:pointer"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
-        +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):'•')+'</span></div>';});
+        +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):t('vend_inactive'))+'</span></div>';});
     html+='</div>';
   });
   box.innerHTML=html;
