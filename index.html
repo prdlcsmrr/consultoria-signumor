@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070516';
+  var V='2026070517';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -198,8 +198,8 @@
     <div class="userline"><div class="who"><span data-i="logged_as">Conectado como</span><b id="d-email">—</b></div>
       <button class="btn-out" id="btn-logout" data-i="logout">Sair</button></div>
     <div class="tabs">
-      <button data-tab="cli" class="active" data-i="nav_cli">Clientes</button>
-      <button data-tab="vend" data-i="nav_vend">Funcionários</button>
+      <button data-tab="vend" class="active" data-i="nav_vend">Funcionários</button>
+      <button data-tab="cli" data-i="nav_cli">Clientes</button>
       <button data-tab="rel-a1" data-i="rel_a1_tab">Relatório A1</button>
       <button data-tab="rel-a2" data-i="rel_a2_tab">Relatório A2</button>
       <button data-tab="rel-a3" data-i="rel_a3_tab">Relatório A3</button>
@@ -207,7 +207,7 @@
     </div>
 
     <!-- TAB CLIENTES -->
-    <div id="tab-cli" class="card">
+    <div id="tab-cli" class="card hide">
       <div class="pane-head"><h2 data-i="cli_title">Clientes</h2><button class="btn-mini" id="c-new" data-i="cli_new">+ Novo</button></div>
 
       <!-- FICHA -->
@@ -303,7 +303,7 @@
     </div>
 
     <!-- TAB VENDEDORES -->
-    <div id="tab-vend" class="card hide">
+    <div id="tab-vend" class="card">
       <div class="pane-head"><h2 data-i="vend_title">Funcionários</h2><button class="btn-mini" id="v-new" data-i="vend_new">+ Novo</button></div>
       <div class="funnel">A1 → A2 → A3</div>
       <div id="v-form" class="vform hide">
@@ -389,7 +389,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070516';
+const APP_VERSION='2026070517';
 (function(){
   let checking=false;
   async function checkVersion(){
