@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070527';
+  var V='2026070528';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -176,6 +176,7 @@
 #report-overlay{position:absolute;inset:0;background:rgba(11,20,46,.72)}
 #report-sheet{position:relative;max-width:520px;margin:24px auto;background:#fff;border-radius:14px;max-height:calc(100vh - 48px);overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
 #report-close{position:sticky;top:10px;float:right;margin-right:10px;width:32px;height:32px;border-radius:50%;border:none;background:var(--navy);color:#fff;font-size:15px;cursor:pointer;z-index:2}
+#report-edit{position:sticky;top:10px;float:left;margin-left:16px;z-index:2}
 #report-body{padding:24px 24px 30px;font-family:Georgia,'Times New Roman',serif;color:var(--navy)}
 .rpt-title{text-align:center;font-weight:bold;letter-spacing:1px;font-size:16px;margin-bottom:14px;color:var(--navy)}
 .rpt-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
@@ -441,13 +442,14 @@
   <div id="report-overlay"></div>
   <div id="report-sheet">
     <button id="report-close">✕</button>
+    <button id="report-edit" class="btn-mini" data-i="rpt_editar">✏️ Editar</button>
     <div id="report-body"></div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070527';
+const APP_VERSION='2026070528';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -482,7 +484,7 @@ const I18N={
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',sec_a3rel:'Relatório de Atendimento A3',
    a3_data_rel:'Data do relatório',a3_agenda:'Agenda diária',a3_valor_est:'Valor estimado total',a3_dinheiro_conta:'Dinheiro em conta',a3_dinheiro_gasto:'Dinheiro gasto',
    a3_trocado_usdt:'Já trocado por USDT',a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',
-   cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',
+   cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
    f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
@@ -519,7 +521,7 @@ const I18N={
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',sec_a3rel:'A3 Attendance Report',
    a3_data_rel:'Report date',a3_agenda:'Daily agenda',a3_valor_est:'Total estimated value',a3_dinheiro_conta:'Money in account',a3_dinheiro_gasto:'Money spent',
    a3_trocado_usdt:'Already converted to USDT',a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',
-   cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',
+   cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
    f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
@@ -556,7 +558,7 @@ const I18N={
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',sec_a3rel:'A3服務報告',
    a3_data_rel:'報告日期',a3_agenda:'每日行程',a3_valor_est:'預估總值',a3_dinheiro_conta:'帳戶內金額',a3_dinheiro_gasto:'已花費金額',
    a3_trocado_usdt:'已兌換USDT',a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',
-   cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',
+   cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
    f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
@@ -884,10 +886,12 @@ function renderRel(){
     +listA3.map(r=>'<tr data-report="'+r.id+'" style="cursor:pointer"><td>'+esc(r.nome||'—')+'</td><td>'+esc(r.func||'—')+'</td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td></tr>').join('')
     +'</tbody></table>';
 }
+const REPORT={current:null};
 function rptRow(labelPt,labelZh,val){
   return '<div class="rpt-row"><span class="rl">'+labelPt+' | '+labelZh+'</span><span class="rv">'+val+'</span></div>';
 }
 function openReport(c){
+  REPORT.current=c;
   const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
   const l2=c.vendedor_a2?(c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):esc(c.vendedor_a2)):'—';
   const entregue=c.data_entrada_a3?(LANG==='zh'?'是':'Sim')+' ('+fmtDt(c.data_entrada_a3)+')':(LANG==='zh'?'否':'Não');
@@ -919,6 +923,13 @@ function openReport(c){
 }
 document.getElementById('report-close').onclick=()=>document.getElementById('report-modal').classList.add('hide');
 document.getElementById('report-overlay').onclick=()=>document.getElementById('report-modal').classList.add('hide');
+document.getElementById('report-edit').onclick=()=>{
+  if(!REPORT.current)return;
+  document.getElementById('report-modal').classList.add('hide');
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='cli'));
+  ['tab-cli','tab-vend','tab-rel-a1','tab-rel-a2','tab-rel-a3','tab-sal'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!=='tab-cli'));
+  openCForm(REPORT.current);
+};
 function relReportClick(e){
   const it=e.target.closest('[data-report]');if(!it)return;
   const c=CLI.list.find(x=>x.id===it.dataset.report);if(!c)return;
@@ -996,15 +1007,18 @@ function renderCli(){
   if(!arr.length){box.innerHTML='<div class="empty">'+t('c_none')+'</div>';return;}
   let html='<div class="reltab-wrap"><table class="reltab"><thead><tr>'
     +'<th>'+t('cli_col_entrada')+'</th><th>'+t('cli_col_nome')+'</th><th>'+t('cli_col_saida')+'</th>'
-    +'<th>'+t('cli_col_atend')+'</th><th>'+t('cli_col_tempo')+'</th><th>'+t('cli_col_resg')+'</th><th>'+t('cli_col_sit')+'</th>'
+    +'<th>A1</th><th>A2</th><th>A3</th><th>'+t('cli_col_tempo')+'</th><th>'+t('cli_col_resg')+'</th><th>'+t('cli_col_sit')+'</th>'
     +'</tr></thead><tbody>';
   arr.forEach(c=>{
     const nome=esc(c.primeiro_nome||'')+(c.segundo_nome?' '+esc(c.segundo_nome):'');
-    html+='<tr data-edit="'+c.id+'" style="cursor:pointer">'
+    const a2txt=c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):(c.vendedor_a2?esc(c.vendedor_a2):'—');
+    html+='<tr data-report="'+c.id+'" style="cursor:pointer">'
       +'<td>'+fmtDt(c.data_entrada)+'</td>'
       +'<td>'+(nome||'—')+'</td>'
       +'<td>'+fmtDt(c.data_entrada_a3)+'</td>'
-      +'<td>'+atendCell(c)+'</td>'
+      +'<td>'+(c.vendedor_a1?'<b>'+esc(c.vendedor_a1)+'</b>':'—')+'</td>'
+      +'<td>'+(c.vendedor_a2?'<b>'+a2txt+'</b>':'—')+'</td>'
+      +'<td>'+(c.vendedor_a3?'<b>'+esc(c.vendedor_a3)+'</b>':'—')+'</td>'
       +'<td>'+stageTime(c)+'</td>'
       +'<td>'+fmtMoney(c.saldo_resgatavel)+'</td>'
       +'<td>'+stBadge(c.situacao)+'</td>'
@@ -1058,7 +1072,7 @@ function openCForm(c){
 }
 document.getElementById('c-new').onclick=()=>openCForm(null);
 document.getElementById('cf-cancel').onclick=()=>{cform.classList.add('hide');cbrowse.classList.remove('hide');msg('c-msg');};
-document.getElementById('c-list').addEventListener('click',e=>{const it=e.target.closest('[data-edit]');if(!it)return;const c=CLI.list.find(x=>x.id===it.dataset.edit);if(c)openCForm(c);});
+document.getElementById('c-list').addEventListener('click',e=>{const it=e.target.closest('[data-report]');if(!it)return;const c=CLI.list.find(x=>x.id===it.dataset.report);if(c)openReport(c);});
 document.querySelectorAll('.fin').forEach(el=>el.addEventListener('input',calcTotal));
 document.getElementById('cf-dtentrada').addEventListener('change',calcPrazos);
 document.getElementById('cf-dtentregue').addEventListener('change',calcPrazos);
