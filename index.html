@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070524';
+  var V='2026070525';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -168,6 +168,19 @@
 @media (min-width:860px){
   .rel-group .citem{margin-bottom:0}
 }
+#report-modal{position:fixed;inset:0;z-index:200}
+#report-modal.hide{display:none}
+#report-overlay{position:absolute;inset:0;background:rgba(11,20,46,.72)}
+#report-sheet{position:relative;max-width:520px;margin:24px auto;background:#fff;border-radius:14px;max-height:calc(100vh - 48px);overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+#report-close{position:sticky;top:10px;float:right;margin-right:10px;width:32px;height:32px;border-radius:50%;border:none;background:var(--navy);color:#fff;font-size:15px;cursor:pointer;z-index:2}
+#report-body{padding:24px 24px 30px;font-family:Georgia,'Times New Roman',serif;color:var(--navy)}
+.rpt-title{text-align:center;font-weight:bold;letter-spacing:1px;font-size:16px;margin-bottom:14px;color:var(--navy)}
+.rpt-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.rpt-row .rl{color:var(--muted);flex:0 0 auto}
+.rpt-row .rv{font-weight:bold;text-align:right}
+.rpt-sec{margin-top:16px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);font-weight:bold;border-top:1.5px solid var(--gold);padding-top:8px}
+.rpt-obs{font-size:13px;margin-top:6px;white-space:pre-wrap;line-height:1.5}
+@media (min-width:860px){#report-sheet{max-width:640px}#report-body{font-size:15px}.rpt-row{font-size:14.5px}}
 </style>
 </head>
 <body>
@@ -420,9 +433,17 @@
   <div class="foot">SIGNUMOR · ORION VALE</div>
 </div>
 
+<div id="report-modal" class="hide">
+  <div id="report-overlay"></div>
+  <div id="report-sheet">
+    <button id="report-close">✕</button>
+    <div id="report-body"></div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070524';
+const APP_VERSION='2026070525';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -810,7 +831,7 @@ function relBuild(){
     const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
     if(c.vendedor_a1){const k=c.vendedor_a1;mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
       mapA1[k].receb++;
-      if(c.vendedor_a2)mapA1[k].transferidos.push({nome:nome||'—',valor:Number(c.valor_total)||0});}
+      if(c.vendedor_a2)mapA1[k].transferidos.push({id:c.id,nome:nome||'—',valor:Number(c.valor_total)||0});}
     if(c.vendedor_a2){const k=c.vendedor_a2;
       mapA2[k]=mapA2[k]||{ativos:0,valadm:0,enva3:0,valenva3:0,clientes:[]};
       mapA2[k].clientes.push(c);
@@ -819,6 +840,7 @@ function relBuild(){
     }
   });
   const listA3=CLI.list.filter(c=>c.vendedor_a3).map(c=>({
+    id:c.id,
     nome:(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''),
     func:c.vendedor_a3,
     dias:days(c.data_entrada_a3,today()),
@@ -830,7 +852,7 @@ function relBuild(){
 function relClientCard(c){
   const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
   const vd=[c.vendedor_a1,c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,c.vendedor_a3].map(x=>x?'<b>'+esc(x)+'</b>':'·').join(' › ');
-  return '<div class="citem" data-edit="'+c.id+'"><div class="c1"><span class="cnome">'+(nome||'—')+'</span>'
+  return '<div class="citem" data-report="'+c.id+'"><div class="c1"><span class="cnome">'+(nome||'—')+'</span>'
     +'<span class="cval">'+fmtMoney(c.valor_total)+'</span></div>'
     +'<div class="c2"><span class="cvend">'+vd+'</span>'+stBadge(c.situacao)+'</div></div>';
 }
@@ -840,7 +862,7 @@ function renderRel(){
   const k1=Object.keys(mapA1).sort();
   document.getElementById('rel-a1').innerHTML=!k1.length?'<div class="empty">'+t('rel_empty')+'</div>':
     k1.map(k=>{const r=mapA1[k];
-      const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub"><span>'+esc(x.nome)+'</span><span>'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
+      const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span>'+esc(x.nome)+'</span><span>'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
       return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.receb+' '+t('rel_col_receb')+' · '+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
     }).join('');
   const k2=Object.keys(mapA2).sort();
@@ -851,15 +873,52 @@ function renderRel(){
     }).join('');
   document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
     '<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>'+t('rel_col_func')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th></tr></thead><tbody>'
-    +listA3.map(r=>'<tr><td>'+esc(r.nome||'—')+'</td><td>'+esc(r.func||'—')+'</td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td></tr>').join('')
+    +listA3.map(r=>'<tr data-report="'+r.id+'" style="cursor:pointer"><td>'+esc(r.nome||'—')+'</td><td>'+esc(r.func||'—')+'</td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td></tr>').join('')
     +'</tbody></table>';
 }
-document.getElementById('rel-a2').addEventListener('click',e=>{const it=e.target.closest('[data-edit]');if(!it)return;
-  const c=CLI.list.find(x=>x.id===it.dataset.edit);if(!c)return;
-  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='cli'));
-  document.getElementById('tab-cli').classList.remove('hide');document.getElementById('tab-vend').classList.add('hide');document.getElementById('tab-rel').classList.add('hide');
-  openCForm(c);
-});
+function rptRow(labelPt,labelZh,val){
+  return '<div class="rpt-row"><span class="rl">'+labelPt+' | '+labelZh+'</span><span class="rv">'+val+'</span></div>';
+}
+function openReport(c){
+  const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
+  const l2=c.vendedor_a2?(c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):esc(c.vendedor_a2)):'—';
+  const entregue=c.data_entrada_a3?(LANG==='zh'?'是':'Sim')+' ('+fmtDt(c.data_entrada_a3)+')':(LANG==='zh'?'否':'Não');
+  let html='<div class="rpt-title">📋 RELATÓRIO | 報告</div>';
+  html+=rptRow('📅 DATA','日期',fmtDt(today()));
+  html+=rptRow('✅ ENTREGUE','已交付',entregue);
+  html+=rptRow('👤 NOME','名稱',nome||'—');
+  html+=rptRow('📍 L1','第1行',c.vendedor_a1?esc(c.vendedor_a1):'—');
+  html+=rptRow('📍 L2','第2行',l2);
+  html+=rptRow('📍 L3','第3行',c.vendedor_a3?esc(c.vendedor_a3):'—');
+  html+=rptRow('📊 SITUAÇÃO ATUAL','目前狀況',stBadge(c.situacao));
+  html+='<div class="rpt-sec">🔧 PROCEDIMENTOS | 步骤</div><div class="rpt-obs">—</div>';
+  html+='<div class="rpt-sec">💰 FINANCEIRO | 財務</div>';
+  html+=rptRow('💰 SALDO ESTIMADO','預估餘額',fmtMoney(c.saldo_estimado));
+  html+=rptRow('🏦 CONTA CORRENTE','活期',fmtMoney(c.conta_corrente));
+  html+=rptRow('💵 DEPÓSITO A PRAZO','定期',fmtMoney(c.deposito_prazo));
+  html+=rptRow('📈 INVESTIMENTOS','理財',fmtMoney(c.investimentos));
+  html+=rptRow('📊 AÇÕES','股票',fmtMoney(c.acoes));
+  html+=rptRow('🪙 CRIPTOMOEDAS','加密貨幣',fmtMoney(c.criptomoedas));
+  html+=rptRow('🏠 IMÓVEIS','不動產',fmtMoney(c.imoveis));
+  html+=rptRow('🥇 OURO','黃金',fmtMoney(c.ouro));
+  html+=rptRow('💵 DINHEIRO','現金',fmtMoney(c.dinheiro));
+  html+=rptRow('🤝 CONTA CONJUNTA','共同账户',fmtMoney(c.conta_conjunta));
+  html+=rptRow('💰 VALOR TOTAL','總金額',fmtMoney(c.valor_total));
+  html+=rptRow('💎 SALDO TOTAL RESGATÁVEL','可贖回總餘額',fmtMoney(c.saldo_resgatavel));
+  html+='<div class="rpt-sec">📝 OBSERVAÇÕES | 備註</div><div class="rpt-obs">'+(esc(c.observacoes||'')||'—')+'</div>';
+  document.getElementById('report-body').innerHTML=html;
+  document.getElementById('report-modal').classList.remove('hide');
+}
+document.getElementById('report-close').onclick=()=>document.getElementById('report-modal').classList.add('hide');
+document.getElementById('report-overlay').onclick=()=>document.getElementById('report-modal').classList.add('hide');
+function relReportClick(e){
+  const it=e.target.closest('[data-report]');if(!it)return;
+  const c=CLI.list.find(x=>x.id===it.dataset.report);if(!c)return;
+  openReport(c);
+}
+document.getElementById('rel-a1').addEventListener('click',relReportClick);
+document.getElementById('rel-a2').addEventListener('click',relReportClick);
+document.getElementById('rel-a3').addEventListener('click',relReportClick);
 
 /* ===== CLIENTES ===== */
 const CLI={list:[],loaded:false,filtro:'ALL'};
@@ -928,15 +987,15 @@ function renderCli(){
   if(!CLI.list.length){box.innerHTML='<div class="empty">'+t('c_empty')+'</div>';return;}
   if(!arr.length){box.innerHTML='<div class="empty">'+t('c_none')+'</div>';return;}
   let html='<div class="reltab-wrap"><table class="reltab"><thead><tr>'
-    +'<th>'+t('cli_col_nome')+'</th><th>'+t('cli_col_entrada')+'</th><th>'+t('cli_col_saida')+'</th>'
+    +'<th>'+t('cli_col_entrada')+'</th><th>'+t('cli_col_nome')+'</th><th>'+t('cli_col_saida')+'</th>'
     +'<th>'+t('cli_col_atend')+'</th><th>'+t('cli_col_tempo')+'</th><th>'+t('cli_col_resg')+'</th><th>'+t('cli_col_sit')+'</th>'
     +'</tr></thead><tbody>';
   arr.forEach(c=>{
     const nome=esc(c.primeiro_nome||'')+(c.segundo_nome?' '+esc(c.segundo_nome):'');
     const vd=[c.vendedor_a1,c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,c.vendedor_a3].map(x=>x?'<b>'+esc(x)+'</b>':'·').join(' › ');
     html+='<tr data-edit="'+c.id+'" style="cursor:pointer">'
-      +'<td>'+(nome||'—')+'</td>'
       +'<td>'+fmtDt(c.data_entrada)+'</td>'
+      +'<td>'+(nome||'—')+'</td>'
       +'<td>'+fmtDt(c.data_entrada_a3)+'</td>'
       +'<td>'+vd+'</td>'
       +'<td>'+stageTime(c)+'</td>'
