@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070517';
+  var V='2026070518';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -132,6 +132,7 @@
   .b-ATENCAO{background:#fef3e2;color:#b5781a}
   .b-FINALIZADO{background:#eaf6ee;color:var(--green)}
   .b-MORREU{background:#fdecec;color:var(--red)}
+  .b-REPORTANDO{background:#e8eefc;color:#2f5fc9}
   .grp{margin-bottom:16px}
   .grp-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
   .dot{width:10px;height:10px;border-radius:50%}
@@ -224,6 +225,7 @@
           <div class="row3">
             <label class="fld"><span class="lbl">A1</span><select id="cf-va1"></select></label>
             <label class="fld"><span class="lbl">A2</span><select id="cf-va2"></select></label>
+            <label class="fld"><span class="lbl" data-i="cli_va2b">A2 (2º)</span><select id="cf-va2b"></select></label>
             <label class="fld"><span class="lbl">A3</span><select id="cf-va3"></select></label>
           </div>
           <div class="row2">
@@ -240,6 +242,7 @@
               <option value="FINALIZADO" data-i="st_FINALIZADO">FINALIZADO</option>
               <option value="MORREU A2" data-i="st_MORREU A2">MORREU A2</option>
               <option value="MORREU A3" data-i="st_MORREU A3">MORREU A3</option>
+              <option value="REPORTANDO" data-i="st_REPORTANDO">REPORTANDO</option>
             </select></label>
           <div class="row2">
             <label class="fld"><span class="lbl" data-i="cli_dia1">Dia 1</span><input id="cf-dia1" maxlength="40"></label>
@@ -295,6 +298,7 @@
         <div class="filtros" id="c-filtros">
           <button data-f="ALL" class="active" data-i="f_all">Todos</button>
           <button data-f="ATENCAO" data-i="st_ATENCAO">Atenção</button>
+          <button data-f="REPORTANDO" data-i="st_REPORTANDO">Reportando</button>
           <button data-f="FINALIZADO" data-i="st_FINALIZADO">Finalizado</button>
           <button data-f="MORTO" data-i="st_morto">Morreu</button>
         </div>
@@ -389,7 +393,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070517';
+const APP_VERSION='2026070518';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -428,7 +432,7 @@ const I18N={
    f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',resg_title:'Resgates por categoria',
    cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',
    f_all:'Todos',st_morto:'Morreu',
-   st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu A2','st_MORREU A3':'Morreu A3',
+   st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu A2','st_MORREU A3':'Morreu A3',st_REPORTANDO:'Reportando',cli_va2b:'A2 (2º)',
    pz_funil:'dias no funil',pz_entrega:'p/ entregar',pz_a3:'dias em A3',
    c_pnome_req:'Informe o primeiro nome.',c_saved:'Cliente salvo.',c_del:'Excluir este cliente?',c_empty:'Nenhum cliente cadastrado. Toque em “+ Novo”.',c_none:'Nenhum cliente neste filtro.',
    v_code_req:'Informe o código.',v_dup:'Já existe um funcionário com esse código.',v_saved:'Funcionário salvo.',v_del:'Excluir este funcionário?',v_none:'Nenhum funcionário neste canal.',v_empty:'Nenhum funcionário cadastrado. Toque em “+ Novo”.',
@@ -461,7 +465,7 @@ const I18N={
    f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',resg_title:'Redemptions by category',
    cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',
    f_all:'All',st_morto:'Lost',
-   st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost A2','st_MORREU A3':'Lost A3',
+   st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost A2','st_MORREU A3':'Lost A3',st_REPORTANDO:'Reporting',cli_va2b:'A2 (2nd)',
    pz_funil:'days in funnel',pz_entrega:'to deliver',pz_a3:'days in A3',
    c_pnome_req:'Enter the first name.',c_saved:'Client saved.',c_del:'Delete this client?',c_empty:'No clients yet. Tap “+ New”.',c_none:'No clients in this filter.',
    v_code_req:'Enter the code.',v_dup:'An employee with this code already exists.',v_saved:'Employee saved.',v_del:'Delete this employee?',v_none:'No employees in this channel.',v_empty:'No employees yet. Tap “+ New”.',
@@ -494,7 +498,7 @@ const I18N={
    f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',resg_title:'分類贖回設定',
    cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',
    f_all:'全部',st_morto:'流失',
-   st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'A2流失','st_MORREU A3':'A3流失',
+   st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'A2流失','st_MORREU A3':'A3流失',st_REPORTANDO:'報告中',cli_va2b:'A2（第二位）',
    pz_funil:'漏斗天數',pz_entrega:'待交付',pz_a3:'A3天數',
    c_pnome_req:'請輸入名。',c_saved:'已儲存客戶。',c_del:'確定刪除此客戶？',c_empty:'尚無客戶，請點「+ 新增」。',c_none:'此篩選無客戶。',
    v_code_req:'請輸入代碼。',v_dup:'此代碼已存在。',v_saved:'已儲存員工。',v_del:'確定刪除此員工？',v_none:'此通路尚無員工。',v_empty:'尚無員工，請點「+ 新增」。',
@@ -760,15 +764,18 @@ async function delPag(id){if(!confirm(t('pag_del')))return;const {error}=await s
 /* ===== RELATÓRIOS ===== */
 function relBuild(){
   const mapA1={},mapA2={};
+  const isAtivo=c=>c.situacao&&!['FINALIZADO','MORREU A2','MORREU A3'].includes(c.situacao);
   CLI.list.forEach(c=>{
     const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
     if(c.vendedor_a1){const k=c.vendedor_a1;mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
       mapA1[k].receb++;
       if(c.vendedor_a2)mapA1[k].transferidos.push({nome:nome||'—',valor:Number(c.valor_total)||0});}
-    if(c.vendedor_a2){const k=c.vendedor_a2;mapA2[k]=mapA2[k]||{ativos:0,valadm:0,enva3:0,valenva3:0,clientes:[]};
+    [c.vendedor_a2,c.vendedor_a2b].filter(Boolean).forEach(k=>{
+      mapA2[k]=mapA2[k]||{ativos:0,valadm:0,enva3:0,valenva3:0,clientes:[]};
       mapA2[k].clientes.push(c);
-      if(c.situacao==='ATENCAO'){mapA2[k].ativos++;mapA2[k].valadm+=Number(c.valor_total)||0;}
-      if(c.vendedor_a3){mapA2[k].enva3++;mapA2[k].valenva3+=Number(c.valor_total)||0;}}
+      if(isAtivo(c)){mapA2[k].ativos++;mapA2[k].valadm+=Number(c.valor_total)||0;}
+      if(c.vendedor_a3){mapA2[k].enva3++;mapA2[k].valenva3+=Number(c.valor_total)||0;}
+    });
   });
   const listA3=CLI.list.filter(c=>c.vendedor_a3).map(c=>({
     nome:(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''),
@@ -781,7 +788,7 @@ function relBuild(){
 }
 function relClientCard(c){
   const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
-  const vd=[c.vendedor_a1,c.vendedor_a2,c.vendedor_a3].map(x=>x?'<b>'+esc(x)+'</b>':'·').join(' › ');
+  const vd=[c.vendedor_a1,c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,c.vendedor_a3].map(x=>x?'<b>'+esc(x)+'</b>':'·').join(' › ');
   return '<div class="citem" data-edit="'+c.id+'"><div class="c1"><span class="cnome">'+(nome||'—')+'</span>'
     +'<span class="cval">'+fmtMoney(c.valor_total)+'</span></div>'
     +'<div class="c2"><span class="cvend">'+vd+'</span>'+stBadge(c.situacao)+'</div></div>';
@@ -847,6 +854,10 @@ function fillVendSelects(){
     VEND.list.filter(v=>v.canal===canal).forEach(v=>{html+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+'</option>';});
     sel.innerHTML=html;if(cur)sel.value=cur;
   });
+  const sel2b=document.getElementById('cf-va2b');const cur2b=sel2b.value;
+  let html2b='<option value="">'+t('none_opt')+'</option>';
+  VEND.list.filter(v=>v.canal==='A2').forEach(v=>{html2b+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+'</option>';});
+  sel2b.innerHTML=html2b;if(cur2b)sel2b.value=cur2b;
   const sel3=document.getElementById('cf-va3');const cur3=sel3.value;
   let html3='<option value="">'+t('none_opt')+'</option>';
   VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)).forEach(v=>{html3+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+(v.canal==='A2'?' (A2+A3)':'')+'</option>';});
@@ -871,7 +882,7 @@ function renderCli(){
   let html='';
   arr.forEach(c=>{
     const nome=esc(c.primeiro_nome||'')+(c.segundo_nome?' '+esc(c.segundo_nome):'');
-    const vd=[c.vendedor_a1,c.vendedor_a2,c.vendedor_a3].map(x=>x?'<b>'+esc(x)+'</b>':'·').join(' › ');
+    const vd=[c.vendedor_a1,c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,c.vendedor_a3].map(x=>x?'<b>'+esc(x)+'</b>':'·').join(' › ');
     const dfun=days(c.data_entrada,today());
     const prazo=dfun!=null?(' · '+dfun+'d'):'';
     html+='<div class="citem" data-edit="'+c.id+'"><div class="c1"><span class="cnome">'+(nome||'—')+'</span>'
@@ -894,10 +905,10 @@ function openCForm(c){
   document.getElementById('cf-pnome').value=c?c.primeiro_nome||'':'';
   document.getElementById('cf-snome').value=c?c.segundo_nome||'':'';
   fillVendSelects();
-  ensureOpt('cf-va1',c?c.vendedor_a1:''); ensureOpt('cf-va2',c?c.vendedor_a2:'');
+  ensureOpt('cf-va1',c?c.vendedor_a1:''); ensureOpt('cf-va2',c?c.vendedor_a2:''); ensureOpt('cf-va2b',c?c.vendedor_a2b:'');
   const va2emp=c&&c.vendedor_a2?VEND.list.find(v=>v.codigo===c.vendedor_a2):null;
   ensureOpt('cf-va3', c ? (c.vendedor_a3 || ((va2emp&&va2emp.atua_a3)?c.vendedor_a2:'')) : '');
-  if(!c){document.getElementById('cf-va1').value='';document.getElementById('cf-va2').value='';document.getElementById('cf-va3').value='';}
+  if(!c){document.getElementById('cf-va1').value='';document.getElementById('cf-va2').value='';document.getElementById('cf-va2b').value='';document.getElementById('cf-va3').value='';}
   document.getElementById('cf-dtentrada').value=c&&c.data_entrada?c.data_entrada:'';
   document.getElementById('cf-dtentregue').value=c&&c.data_entregue?c.data_entregue:'';
   document.getElementById('cf-dtA3').value=c&&c.data_entrada_a3?c.data_entrada_a3:'';
@@ -946,6 +957,7 @@ document.getElementById('cf-save').onclick=async function(){
     data_entrada_a3:(va3&&!dtA3atual)?today():(dtA3atual||null),
     vendedor_a1:document.getElementById('cf-va1').value||null,
     vendedor_a2:document.getElementById('cf-va2').value||null,
+    vendedor_a2b:document.getElementById('cf-va2b').value||null,
     vendedor_a3:va3,
     situacao:document.getElementById('cf-situacao').value,
     dia1:document.getElementById('cf-dia1').value.trim()||null,
