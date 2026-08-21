@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070525';
+  var V='2026070526';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -112,6 +112,9 @@
   .reltab{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
   .reltab th{text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.4px;padding:6px 10px;border-bottom:1.5px solid var(--gold)}
   .reltab td{padding:8px 10px;border-bottom:1px solid var(--line);color:var(--navy)}
+  .atend-cell{display:flex;flex-direction:column;gap:2px}
+  .atend-labels{font-size:9px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+  .atend-codes{font-size:inherit}
   .reltab tr:last-child td{border-bottom:none}
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
   .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:9px 12px;font-size:12.5px}
@@ -443,7 +446,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070525';
+const APP_VERSION='2026070526';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -849,12 +852,16 @@ function relBuild(){
   }));
   return {mapA1,mapA2,listA3};
 }
+function atendCell(c){
+  const a2txt=c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):(c.vendedor_a2?esc(c.vendedor_a2):'·');
+  const codes=[c.vendedor_a1?esc(c.vendedor_a1):'·',a2txt,c.vendedor_a3?esc(c.vendedor_a3):'·'];
+  return '<div class="atend-cell"><div class="atend-labels">A1 · A2 · A3</div><div class="atend-codes"><b>'+codes[0]+'</b> · <b>'+codes[1]+'</b> · <b>'+codes[2]+'</b></div></div>';
+}
 function relClientCard(c){
   const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
-  const vd=[c.vendedor_a1,c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,c.vendedor_a3].map(x=>x?'<b>'+esc(x)+'</b>':'·').join(' › ');
   return '<div class="citem" data-report="'+c.id+'"><div class="c1"><span class="cnome">'+(nome||'—')+'</span>'
     +'<span class="cval">'+fmtMoney(c.valor_total)+'</span></div>'
-    +'<div class="c2"><span class="cvend">'+vd+'</span>'+stBadge(c.situacao)+'</div></div>';
+    +'<div class="c2">'+atendCell(c)+stBadge(c.situacao)+'</div></div>';
 }
 function renderRel(){
   if(!CLI.loaded)return;
@@ -992,12 +999,11 @@ function renderCli(){
     +'</tr></thead><tbody>';
   arr.forEach(c=>{
     const nome=esc(c.primeiro_nome||'')+(c.segundo_nome?' '+esc(c.segundo_nome):'');
-    const vd=[c.vendedor_a1,c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,c.vendedor_a3].map(x=>x?'<b>'+esc(x)+'</b>':'·').join(' › ');
     html+='<tr data-edit="'+c.id+'" style="cursor:pointer">'
       +'<td>'+fmtDt(c.data_entrada)+'</td>'
       +'<td>'+(nome||'—')+'</td>'
       +'<td>'+fmtDt(c.data_entrada_a3)+'</td>'
-      +'<td>'+vd+'</td>'
+      +'<td>'+atendCell(c)+'</td>'
       +'<td>'+stageTime(c)+'</td>'
       +'<td>'+fmtMoney(c.saldo_resgatavel)+'</td>'
       +'<td>'+stBadge(c.situacao)+'</td>'
