@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070522';
+  var V='2026070523';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -413,7 +413,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070522';
+const APP_VERSION='2026070523';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -802,12 +802,12 @@ function relBuild(){
     if(c.vendedor_a1){const k=c.vendedor_a1;mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
       mapA1[k].receb++;
       if(c.vendedor_a2)mapA1[k].transferidos.push({nome:nome||'—',valor:Number(c.valor_total)||0});}
-    [c.vendedor_a2,c.vendedor_a2b].filter(Boolean).forEach(k=>{
+    if(c.vendedor_a2){const k=c.vendedor_a2;
       mapA2[k]=mapA2[k]||{ativos:0,valadm:0,enva3:0,valenva3:0,clientes:[]};
       mapA2[k].clientes.push(c);
       if(isAtivo(c)){mapA2[k].ativos++;mapA2[k].valadm+=Number(c.valor_total)||0;}
       if(c.vendedor_a3){mapA2[k].enva3++;mapA2[k].valenva3+=Number(c.valor_total)||0;}
-    });
+    }
   });
   const listA3=CLI.list.filter(c=>c.vendedor_a3).map(c=>({
     nome:(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''),
