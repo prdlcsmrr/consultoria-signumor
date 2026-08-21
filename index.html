@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070526';
+  var V='2026070527';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -267,6 +267,7 @@
               <option value="MORREU A3" data-i="st_MORREU A3">MORREU A3</option>
               <option value="REPORTANDO" data-i="st_REPORTANDO">REPORTANDO</option>
             </select></label>
+          <label class="fld"><span class="lbl" data-i="cli_procedimentos">Procedimentos</span><textarea id="cf-procedimentos" maxlength="300" placeholder="—" style="min-height:60px"></textarea></label>
           <div class="row2">
             <label class="fld"><span class="lbl" data-i="cli_dia1">Dia 1</span><input id="cf-dia1" maxlength="40"></label>
             <label class="fld"><span class="lbl" data-i="cli_dia2">Dia 2</span><input id="cf-dia2" maxlength="40"></label>
@@ -446,7 +447,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070526';
+const APP_VERSION='2026070527';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -481,7 +482,7 @@ const I18N={
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',sec_a3rel:'Relatório de Atendimento A3',
    a3_data_rel:'Data do relatório',a3_agenda:'Agenda diária',a3_valor_est:'Valor estimado total',a3_dinheiro_conta:'Dinheiro em conta',a3_dinheiro_gasto:'Dinheiro gasto',
    a3_trocado_usdt:'Já trocado por USDT',a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',
-   cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',
+   cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
    f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
@@ -518,7 +519,7 @@ const I18N={
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',sec_a3rel:'A3 Attendance Report',
    a3_data_rel:'Report date',a3_agenda:'Daily agenda',a3_valor_est:'Total estimated value',a3_dinheiro_conta:'Money in account',a3_dinheiro_gasto:'Money spent',
    a3_trocado_usdt:'Already converted to USDT',a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',
-   cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',
+   cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
    f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
@@ -555,7 +556,7 @@ const I18N={
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',sec_a3rel:'A3服務報告',
    a3_data_rel:'報告日期',a3_agenda:'每日行程',a3_valor_est:'預估總值',a3_dinheiro_conta:'帳戶內金額',a3_dinheiro_gasto:'已花費金額',
    a3_trocado_usdt:'已兌換USDT',a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',
-   cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',
+   cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
    f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
@@ -898,7 +899,7 @@ function openReport(c){
   html+=rptRow('📍 L2','第2行',l2);
   html+=rptRow('📍 L3','第3行',c.vendedor_a3?esc(c.vendedor_a3):'—');
   html+=rptRow('📊 SITUAÇÃO ATUAL','目前狀況',stBadge(c.situacao));
-  html+='<div class="rpt-sec">🔧 PROCEDIMENTOS | 步骤</div><div class="rpt-obs">—</div>';
+  html+='<div class="rpt-sec">🔧 PROCEDIMENTOS | 步骤</div><div class="rpt-obs">'+(esc(c.procedimentos||'')||'—')+'</div>';
   html+='<div class="rpt-sec">💰 FINANCEIRO | 財務</div>';
   html+=rptRow('💰 SALDO ESTIMADO','預估餘額',fmtMoney(c.saldo_estimado));
   html+=rptRow('🏦 CONTA CORRENTE','活期',fmtMoney(c.conta_corrente));
@@ -1049,6 +1050,7 @@ function openCForm(c){
   document.getElementById('cf-a3-indisp').value=c&&c.indisponivel_resgate_a3!=null?c.indisponivel_resgate_a3:0;
   document.getElementById('cf-a3-motivo').value=c&&c.motivo_indisponibilidade_a3?c.motivo_indisponibilidade_a3:'';
   document.getElementById('cf-a3-endereco').value=c&&c.endereco_deposito_a3?c.endereco_deposito_a3:'';
+  document.getElementById('cf-procedimentos').value=c&&c.procedimentos?c.procedimentos:'';
   document.getElementById('cf-obs').value=c&&c.observacoes?c.observacoes:'';
   document.getElementById('cf-del').style.display=c?'inline':'none';
   msg('c-msg');calcTotal();calcPrazos();
@@ -1110,6 +1112,7 @@ document.getElementById('cf-save').onclick=async function(){
     motivo_indisponibilidade_a3:document.getElementById('cf-a3-motivo').value.trim()||null,
     endereco_deposito_a3:document.getElementById('cf-a3-endereco').value.trim()||null,
     resgates:collectResgates(),
+    procedimentos:document.getElementById('cf-procedimentos').value.trim()||null,
     observacoes:document.getElementById('cf-obs').value.trim()||null
   };
   FINF.forEach(k=>payload[k]=num('cf-'+k));
