@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070518';
+  var V='2026070519';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -272,6 +272,7 @@
             <label class="fld"><span class="lbl" data-i="f_di">Dinheiro</span><input class="fin" id="cf-dinheiro" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           </div>
           <label class="fld"><span class="lbl" data-i="f_cj">Conta conjunta</span><input class="fin" id="cf-conta_conjunta" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <div class="empty" style="text-align:left;padding:0;margin:-4px 0 8px;font-size:11px" data-i="f_excl_note">Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.</div>
           <div class="totbox"><span class="tl" data-i="f_total">Valor total</span><span class="tv" id="cf-total">0</span></div>
           <div class="row2" style="margin-top:12px">
             <label class="fld"><span class="lbl" data-i="f_est">Saldo estimado</span><input id="cf-saldo_estimado" type="number" inputmode="decimal" step="any" placeholder="0"></label>
@@ -393,7 +394,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070518';
+const APP_VERSION='2026070519';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -429,7 +430,7 @@ const I18N={
    cli_dtentrada:'Entrada',cli_dtentregue:'Entregue',cli_situacao:'Situação',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
-   f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',resg_title:'Resgates por categoria',
+   f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
    cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',
    f_all:'Todos',st_morto:'Morreu',
    st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu A2','st_MORREU A3':'Morreu A3',st_REPORTANDO:'Reportando',cli_va2b:'A2 (2º)',
@@ -462,7 +463,7 @@ const I18N={
    cli_dtentrada:'Entered',cli_dtentregue:'Delivered',cli_situacao:'Status',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
-   f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',resg_title:'Redemptions by category',
+   f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
    cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',
    f_all:'All',st_morto:'Lost',
    st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost A2','st_MORREU A3':'Lost A3',st_REPORTANDO:'Reporting',cli_va2b:'A2 (2nd)',
@@ -495,7 +496,7 @@ const I18N={
    cli_dtentrada:'進入',cli_dtentregue:'交付',cli_situacao:'狀態',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
-   f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',resg_title:'分類贖回設定',
+   f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
    cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',
    f_all:'全部',st_morto:'流失',
    st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'A2流失','st_MORREU A3':'A3流失',st_REPORTANDO:'報告中',cli_va2b:'A2（第二位）',
@@ -897,7 +898,7 @@ function calcPrazos(){
   const cell=(v,l)=>'<div class="prazo"><div class="pv">'+(v==null?'—':v)+'</div><div class="pl">'+l+'</div></div>';
   document.getElementById('cf-prazos').innerHTML=cell(f,t('pz_funil'))+cell(en,t('pz_entrega'))+cell(a3,t('pz_a3'));
 }
-function calcTotal(){let s=0;FINF.forEach(k=>{s+=num('cf-'+k);});document.getElementById('cf-total').textContent=fmtMoney(s);}
+function calcTotal(){let s=0;FINF.forEach(k=>{if(k!=='imoveis'&&k!=='conta_conjunta')s+=num('cf-'+k);});document.getElementById('cf-total').textContent=fmtMoney(s);}
 
 const cform=document.getElementById('c-form'), cbrowse=document.getElementById('c-browse');
 function openCForm(c){
