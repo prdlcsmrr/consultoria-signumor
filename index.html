@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070528';
+  var V='2026070529';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -119,10 +119,12 @@
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
   .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:9px 12px;font-size:12.5px}
   .rel-ghead b{letter-spacing:.3px}
-  .rel-ghead span{font-size:11px;color:#c7cde0}
+  .rel-ghead span{font-size:13px;font-weight:bold;color:#fff}
   .rel-sub{display:flex;justify-content:space-between;padding:8px 12px;font-size:12.5px;color:var(--navy);border-bottom:1px solid var(--line)}
   .rel-sub:last-child{border-bottom:none}
   .rel-sub.muted{color:var(--muted);font-style:italic}
+  .rel-sub .rs-info{display:flex;flex-direction:column}
+  .rel-sub .rs-renda{font-size:10.5px;color:var(--muted)}
   .rel-group .citem{border-radius:0;border:none;border-bottom:1px solid var(--line)}
   .rel-group .citem:last-child{border-bottom:none}
   .prazos{display:flex;gap:6px;margin-top:8px}
@@ -303,6 +305,7 @@
             <label class="fld"><span class="lbl" data-i="f_est">Saldo estimado</span><input id="cf-saldo_estimado" type="number" inputmode="decimal" step="any" placeholder="0"></label>
             <label class="fld"><span class="lbl" data-i="f_res">Saldo resgatável</span><input id="cf-saldo_resgatavel" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           </div>
+          <label class="fld"><span class="lbl" data-i="f_renda">Renda mensal</span><input id="cf-renda_mensal" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           <div class="sec-t" style="margin-top:14px;font-size:12px" data-i="resg_title">Resgates por categoria</div>
           <div id="cf-resgates"></div>
         </div>
@@ -449,7 +452,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070528';
+const APP_VERSION='2026070529';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -487,7 +490,7 @@ const I18N={
    cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
-   f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
+   f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',f_renda:'Renda mensal',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
    cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',
    f_all:'Todos',st_morto:'Morreu',
    st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu A2','st_MORREU A3':'Morreu A3',st_REPORTANDO:'Reportando',cli_va2b:'A2 (2º)',
@@ -497,7 +500,7 @@ const I18N={
    c_pnome_req:'Informe o primeiro nome.',c_saved:'Cliente salvo.',c_del:'Excluir este cliente?',c_empty:'Nenhum cliente cadastrado. Toque em “+ Novo”.',c_none:'Nenhum cliente neste filtro.',
    v_code_req:'Informe o código.',v_dup:'Já existe um funcionário com esse código.',v_saved:'Funcionário salvo.',v_del:'Excluir este funcionário?',v_none:'Nenhum funcionário neste canal.',v_empty:'Nenhum funcionário cadastrado. Toque em “+ Novo”.',
    nav_rel:'Relatórios',rel_title:'Relatórios',rel_a1:'A1 — Captação',rel_a2:'A2 — Gestão',rel_a3:'A3 — Resgate',
-   rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',
+   rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',rel_col_renda:'Renda mensal',
    rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ A3',rel_col_valenva3:'Valor enviado A3',
    rel_col_cliente:'Cliente',rel_col_diasa3:'Dias em A3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
    rel_empty:'Sem dados.',
@@ -524,7 +527,7 @@ const I18N={
    cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
-   f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
+   f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',f_renda:'Monthly income',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
    cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',
    f_all:'All',st_morto:'Lost',
    st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost A2','st_MORREU A3':'Lost A3',st_REPORTANDO:'Reporting',cli_va2b:'A2 (2nd)',
@@ -534,7 +537,7 @@ const I18N={
    c_pnome_req:'Enter the first name.',c_saved:'Client saved.',c_del:'Delete this client?',c_empty:'No clients yet. Tap “+ New”.',c_none:'No clients in this filter.',
    v_code_req:'Enter the code.',v_dup:'An employee with this code already exists.',v_saved:'Employee saved.',v_del:'Delete this employee?',v_none:'No employees in this channel.',v_empty:'No employees yet. Tap “+ New”.',
    nav_rel:'Reports',rel_title:'Reports',rel_a1:'A1 — Acquisition',rel_a2:'A2 — Management',rel_a3:'A3 — Redemption',
-   rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',
+   rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',rel_col_renda:'Monthly income',
    rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to A3',rel_col_valenva3:'Value sent to A3',
    rel_col_cliente:'Client',rel_col_diasa3:'Days in A3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
    rel_empty:'No data.',
@@ -561,7 +564,7 @@ const I18N={
    cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
-   f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
+   f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',f_renda:'月收入',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
    cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',
    f_all:'全部',st_morto:'流失',
    st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'A2流失','st_MORREU A3':'A3流失',st_REPORTANDO:'報告中',cli_va2b:'A2（第二位）',
@@ -571,7 +574,7 @@ const I18N={
    c_pnome_req:'請輸入名。',c_saved:'已儲存客戶。',c_del:'確定刪除此客戶？',c_empty:'尚無客戶，請點「+ 新增」。',c_none:'此篩選無客戶。',
    v_code_req:'請輸入代碼。',v_dup:'此代碼已存在。',v_saved:'已儲存員工。',v_del:'確定刪除此員工？',v_none:'此通路尚無員工。',v_empty:'尚無員工，請點「+ 新增」。',
    nav_rel:'報表',rel_title:'報表',rel_a1:'A1 — 開發',rel_a2:'A2 — 管理',rel_a3:'A3 — 贖回',
-   rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',
+   rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',rel_col_renda:'月收入',
    rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入A3',rel_col_valenva3:'轉入A3金額',
    rel_col_cliente:'客戶',rel_col_diasa3:'在A3天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
    rel_empty:'無資料。',
@@ -837,7 +840,7 @@ function relBuild(){
     const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
     if(c.vendedor_a1){const k=c.vendedor_a1;mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
       mapA1[k].receb++;
-      if(c.vendedor_a2)mapA1[k].transferidos.push({id:c.id,nome:nome||'—',valor:Number(c.valor_total)||0});}
+      if(c.vendedor_a2)mapA1[k].transferidos.push({id:c.id,nome:nome||'—',valor:Number(c.valor_total)||0,renda:Number(c.renda_mensal)||0,data:c.data_entrada});}
     if(c.vendedor_a2){const k=c.vendedor_a2;
       mapA2[k]=mapA2[k]||{ativos:0,valadm:0,enva3:0,valenva3:0,clientes:[]};
       mapA2[k].clientes.push(c);
@@ -862,7 +865,7 @@ function atendCell(c){
 }
 function relClientCard(c){
   const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
-  return '<div class="citem" data-report="'+c.id+'"><div class="c1"><span class="cnome">'+(nome||'—')+'</span>'
+  return '<div class="citem" data-report="'+c.id+'"><div class="c1"><span class="cnome">'+(nome||'—')+' <small style="font-weight:normal;color:var(--muted)">· '+fmtDt(c.data_entrada)+'</small></span>'
     +'<span class="cval">'+fmtMoney(c.valor_total)+'</span></div>'
     +'<div class="c2">'+atendCell(c)+stBadge(c.situacao)+'</div></div>';
 }
@@ -872,7 +875,7 @@ function renderRel(){
   const k1=Object.keys(mapA1).sort();
   document.getElementById('rel-a1').innerHTML=!k1.length?'<div class="empty">'+t('rel_empty')+'</div>':
     k1.map(k=>{const r=mapA1[k];
-      const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span>'+esc(x.nome)+'</span><span>'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
+      const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span class="rs-info">'+esc(x.nome)+'<span class="rs-renda">'+fmtDt(x.data)+' · '+t('rel_col_renda')+': '+fmtMoney(x.renda)+'</span></span><span>'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
       return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.receb+' '+t('rel_col_receb')+' · '+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
     }).join('');
   const k2=Object.keys(mapA2).sort();
@@ -917,6 +920,7 @@ function openReport(c){
   html+=rptRow('🤝 CONTA CONJUNTA','共同账户',fmtMoney(c.conta_conjunta));
   html+=rptRow('💰 VALOR TOTAL','總金額',fmtMoney(c.valor_total));
   html+=rptRow('💎 SALDO TOTAL RESGATÁVEL','可贖回總餘額',fmtMoney(c.saldo_resgatavel));
+  html+=rptRow('💵 RENDA MENSAL','月收入',fmtMoney(c.renda_mensal));
   html+='<div class="rpt-sec">📝 OBSERVAÇÕES | 備註</div><div class="rpt-obs">'+(esc(c.observacoes||'')||'—')+'</div>';
   document.getElementById('report-body').innerHTML=html;
   document.getElementById('report-modal').classList.remove('hide');
@@ -986,7 +990,7 @@ function ensureOpt(id,val){ if(!val)return;const sel=document.getElementById(id)
   if(!Array.from(sel.options).some(o=>o.value===val)){const o=document.createElement('option');o.value=val;o.textContent=val;sel.appendChild(o);} sel.value=val; }
 
 async function loadCli(){
-  const {data,error}=await sb.from('clientes').select('*').order('data_entrada',{ascending:false,nullsFirst:false}).order('primeiro_nome');
+  const {data,error}=await sb.from('clientes').select('*').order('data_entrada',{ascending:true,nullsFirst:false}).order('primeiro_nome');
   if(error){document.getElementById('c-list').innerHTML='<div class="empty">'+t('generic')+'</div>';return;}
   CLI.list=data||[];CLI.loaded=true;renderCli();
 }
@@ -1054,6 +1058,7 @@ function openCForm(c){
   renderResgList(c?c.resgates:null);
   document.getElementById('cf-saldo_estimado').value=c&&c.saldo_estimado!=null?c.saldo_estimado:'';
   document.getElementById('cf-saldo_resgatavel').value=c&&c.saldo_resgatavel!=null?c.saldo_resgatavel:'';
+  document.getElementById('cf-renda_mensal').value=c&&c.renda_mensal!=null?c.renda_mensal:'';
   document.getElementById('cf-a3-data').value=c&&c.data_relatorio_a3?c.data_relatorio_a3:'';
   document.getElementById('cf-a3-agenda').value=c&&c.agenda_diaria_a3?c.agenda_diaria_a3:'';
   document.getElementById('cf-a3-valorest').value=c&&c.valor_estimado_total_a3!=null?c.valor_estimado_total_a3:0;
@@ -1115,6 +1120,7 @@ document.getElementById('cf-save').onclick=async function(){
     dia4:document.getElementById('cf-dia4').value.trim()||null,
     saldo_estimado:num('cf-saldo_estimado'),
     saldo_resgatavel:num('cf-saldo_resgatavel'),
+    renda_mensal:num('cf-renda_mensal'),
     data_relatorio_a3:document.getElementById('cf-a3-data').value||null,
     agenda_diaria_a3:document.getElementById('cf-a3-agenda').value.trim()||null,
     valor_estimado_total_a3:num('cf-a3-valorest'),
