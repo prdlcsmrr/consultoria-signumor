@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070523';
+  var V='2026070524';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -37,6 +37,15 @@
     .tabs button{font-size:13.5px;padding:12px 20px}
     .brand .name b{font-size:20px}
     input,select,textarea{font-size:14.5px}
+    .reltab{font-size:15px}
+    .reltab th{font-size:12.5px;padding:10px 14px}
+    .reltab td{padding:14px;font-size:15px}
+    .vitem{font-size:14px;padding:12px}
+    .vitem .vc{font-size:15px}
+    .grp-h{font-size:14px;padding:11px 14px}
+    .grp-h b{font-size:15px}
+    .pane-head h2{font-size:22px}
+    .badge{font-size:11.5px;padding:4px 10px}
   }
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px}
   .brand{display:flex;align-items:center;gap:10px;color:#fff}
@@ -413,7 +422,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070523';
+const APP_VERSION='2026070524';
 (function(){
   let checking=false;
   async function checkVersion(){
