@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070530';
+  var V='2026070531';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -125,6 +125,8 @@
   .rel-sub.muted{color:var(--muted);font-style:italic}
   .rel-sub .rs-info{display:flex;flex-direction:column}
   .rel-sub .rs-renda{font-size:10.5px;color:var(--muted)}
+  .rel-edit-cell{padding:4px 6px}
+  select.rel-edit{font-family:inherit;font-size:12px;padding:5px 6px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--navy);font-weight:bold;max-width:110px}
   .rel-group .citem{border-radius:0;border:none;border-bottom:1px solid var(--line)}
   .rel-group .citem:last-child{border-bottom:none}
   .prazos{display:flex;gap:6px;margin-top:8px}
@@ -235,7 +237,7 @@
 
     <!-- TAB CLIENTES -->
     <div id="tab-cli" class="card hide">
-      <div class="pane-head"><h2 data-i="cli_title">Clientes</h2><button class="btn-mini" id="c-new" data-i="cli_new">+ Novo</button></div>
+      <div class="pane-head"><h2 data-i="cli_title">Clientes</h2></div>
 
       <!-- FICHA -->
       <div id="c-form" class="vform hide">
@@ -455,7 +457,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070530';
+const APP_VERSION='2026070531';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -490,6 +492,7 @@ const I18N={
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',sec_a3rel:'Relatório de Atendimento A3',
    a3_data_rel:'Data do relatório',a3_agenda:'Agenda diária',a3_valor_est:'Valor estimado total',a3_dinheiro_conta:'Dinheiro em conta',a3_dinheiro_gasto:'Dinheiro gasto',
    a3_trocado_usdt:'Já trocado por USDT',a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',
+   rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 L1',rpt_l2:'📍 L2',rpt_l3:'📍 L3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
    cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
@@ -527,6 +530,7 @@ const I18N={
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',sec_a3rel:'A3 Attendance Report',
    a3_data_rel:'Report date',a3_agenda:'Daily agenda',a3_valor_est:'Total estimated value',a3_dinheiro_conta:'Money in account',a3_dinheiro_gasto:'Money spent',
    a3_trocado_usdt:'Already converted to USDT',a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',
+   rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 L1',rpt_l2:'📍 L2',rpt_l3:'📍 L3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
    cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
@@ -564,6 +568,7 @@ const I18N={
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',sec_a3rel:'A3服務報告',
    a3_data_rel:'報告日期',a3_agenda:'每日行程',a3_valor_est:'預估總值',a3_dinheiro_conta:'帳戶內金額',a3_dinheiro_gasto:'已花費金額',
    a3_trocado_usdt:'已兌換USDT',a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',
+   rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第1行',rpt_l2:'📍 第2行',rpt_l3:'📍 第3行',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
    cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
@@ -862,15 +867,32 @@ function relBuild(){
   }));
   return {mapA1,mapA2,listA3};
 }
+function inlineVendSelect(list,cur,cid,field){
+  let html='<select class="rel-edit" data-cid="'+cid+'" data-field="'+field+'"><option value="">—</option>';
+  list.forEach(v=>{html+='<option value="'+esc(v.codigo)+'"'+(v.codigo===cur?' selected':'')+'>'+esc(v.codigo)+'</option>';});
+  html+='</select>';
+  return html;
+}
+function inlineSituacaoSelect(cur,cid){
+  const opts=['ATENCAO','REPORTANDO','FINALIZADO','MORREU A2','MORREU A3'];
+  let html='<select class="rel-edit" data-cid="'+cid+'" data-field="situacao">';
+  opts.forEach(o=>{html+='<option value="'+o+'"'+(o===cur?' selected':'')+'>'+t('st_'+o)+'</option>';});
+  html+='</select>';
+  return html;
+}
 function relRow(c){
   const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
-  const a2txt=c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):(c.vendedor_a2?esc(c.vendedor_a2):'—');
-  return '<tr data-report="'+c.id+'" style="cursor:pointer">'
-    +'<td>'+(nome||'—')+'</td><td>'+fmtDt(c.data_entrada)+'</td>'
-    +'<td>'+(c.vendedor_a1?'<b>'+esc(c.vendedor_a1)+'</b>':'—')+'</td>'
-    +'<td>'+(c.vendedor_a2?'<b>'+a2txt+'</b>':'—')+'</td>'
-    +'<td>'+(c.vendedor_a3?'<b>'+esc(c.vendedor_a3)+'</b>':'—')+'</td>'
-    +'<td>'+fmtMoney(c.valor_total)+'</td><td>'+stBadge(c.situacao)+'</td></tr>';
+  const a1List=VEND.list.filter(v=>v.canal==='A1');
+  const a2List=VEND.list.filter(v=>v.canal==='A2');
+  const a3List=VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3));
+  return '<tr data-report="'+c.id+'">'
+    +'<td>'+fmtDt(c.data_entrada)+'</td>'
+    +'<td>'+(nome||'—')+'</td>'
+    +'<td class="rel-edit-cell">'+inlineVendSelect(a1List,c.vendedor_a1,c.id,'vendedor_a1')+'</td>'
+    +'<td class="rel-edit-cell">'+inlineVendSelect(a2List,c.vendedor_a2,c.id,'vendedor_a2')+'</td>'
+    +'<td class="rel-edit-cell">'+inlineVendSelect(a3List,c.vendedor_a3,c.id,'vendedor_a3')+'</td>'
+    +'<td>'+fmtMoney(c.valor_total)+'</td>'
+    +'<td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id)+'</td></tr>';
 }
 function renderRel(){
   if(!CLI.loaded)return;
@@ -878,10 +900,10 @@ function renderRel(){
   const k1=Object.keys(mapA1).sort();
   document.getElementById('rel-a1').innerHTML=!k1.length?'<div class="empty">'+t('rel_empty')+'</div>':
     k1.map(k=>{const r=mapA1[k];
-      const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span class="rs-info">'+esc(x.nome)+'<span class="rs-renda">'+fmtDt(x.data)+' · '+t('rel_col_renda')+': '+fmtMoney(x.renda)+'</span></span><span>'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
+      const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span class="rs-info"><b>'+fmtDt(x.data)+'</b> · '+esc(x.nome)+' <span class="rs-renda">('+t('rel_col_renda')+': '+fmtMoney(x.renda)+')</span></span><span>'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
       return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.receb+' '+t('rel_col_receb')+' · '+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
     }).join('');
-  const relHeadRow='<tr><th>'+t('rel_col_cliente')+'</th><th>'+t('cli_col_entrada')+'</th><th>A1</th><th>A2</th><th>A3</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
+  const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>A1</th><th>A2</th><th>A3</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
   const k2=Object.keys(mapA2).sort();
   document.getElementById('rel-a2').innerHTML=!k2.length?'<div class="empty">'+t('rel_empty')+'</div>':
     k2.map(k=>{const r=mapA2[k];
@@ -894,38 +916,38 @@ function renderRel(){
     +'</tbody></table>';
 }
 const REPORT={current:null};
-function rptRow(labelPt,labelZh,val){
-  return '<div class="rpt-row"><span class="rl">'+labelPt+' | '+labelZh+'</span><span class="rv">'+val+'</span></div>';
+function rptRow(label,val){
+  return '<div class="rpt-row"><span class="rl">'+label+'</span><span class="rv">'+val+'</span></div>';
 }
 function openReport(c){
   REPORT.current=c;
   const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
   const l2=c.vendedor_a2?(c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):esc(c.vendedor_a2)):'—';
-  const entregue=c.data_entrada_a3?(LANG==='zh'?'是':'Sim')+' ('+fmtDt(c.data_entrada_a3)+')':(LANG==='zh'?'否':'Não');
-  let html='<div class="rpt-title">📋 RELATÓRIO | 報告</div>';
-  html+=rptRow('📅 DATA','日期',fmtDt(today()));
-  html+=rptRow('✅ ENTREGUE','已交付',entregue);
-  html+=rptRow('👤 NOME','名稱',nome||'—');
-  html+=rptRow('📍 L1','第1行',c.vendedor_a1?esc(c.vendedor_a1):'—');
-  html+=rptRow('📍 L2','第2行',l2);
-  html+=rptRow('📍 L3','第3行',c.vendedor_a3?esc(c.vendedor_a3):'—');
-  html+=rptRow('📊 SITUAÇÃO ATUAL','目前狀況',stBadge(c.situacao));
-  html+='<div class="rpt-sec">🔧 PROCEDIMENTOS | 步骤</div><div class="rpt-obs">'+(esc(c.procedimentos||'')||'—')+'</div>';
-  html+='<div class="rpt-sec">💰 FINANCEIRO | 財務</div>';
-  html+=rptRow('💰 SALDO ESTIMADO','預估餘額',fmtMoney(c.saldo_estimado));
-  html+=rptRow('🏦 CONTA CORRENTE','活期',fmtMoney(c.conta_corrente));
-  html+=rptRow('💵 DEPÓSITO A PRAZO','定期',fmtMoney(c.deposito_prazo));
-  html+=rptRow('📈 INVESTIMENTOS','理財',fmtMoney(c.investimentos));
-  html+=rptRow('📊 AÇÕES','股票',fmtMoney(c.acoes));
-  html+=rptRow('🪙 CRIPTOMOEDAS','加密貨幣',fmtMoney(c.criptomoedas));
-  html+=rptRow('🏠 IMÓVEIS','不動產',fmtMoney(c.imoveis));
-  html+=rptRow('🥇 OURO','黃金',fmtMoney(c.ouro));
-  html+=rptRow('💵 DINHEIRO','現金',fmtMoney(c.dinheiro));
-  html+=rptRow('🤝 CONTA CONJUNTA','共同账户',fmtMoney(c.conta_conjunta));
-  html+=rptRow('💰 VALOR TOTAL','總金額',fmtMoney(c.valor_total));
-  html+=rptRow('💎 SALDO TOTAL RESGATÁVEL','可贖回總餘額',fmtMoney(c.saldo_resgatavel));
-  html+=rptRow('💵 RENDA MENSAL','月收入',fmtMoney(c.renda_mensal));
-  html+='<div class="rpt-sec">📝 OBSERVAÇÕES | 備註</div><div class="rpt-obs">'+(esc(c.observacoes||'')||'—')+'</div>';
+  const entregue=c.data_entrada_a3?t('rpt_sim')+' ('+fmtDt(c.data_entrada_a3)+')':t('rpt_nao');
+  let html='<div class="rpt-title">'+t('rpt_title')+'</div>';
+  html+=rptRow(t('rpt_data'),fmtDt(today()));
+  html+=rptRow(t('rpt_entregue'),entregue);
+  html+=rptRow(t('rpt_nome'),nome||'—');
+  html+=rptRow(t('rpt_l1'),c.vendedor_a1?esc(c.vendedor_a1):'—');
+  html+=rptRow(t('rpt_l2'),l2);
+  html+=rptRow(t('rpt_l3'),c.vendedor_a3?esc(c.vendedor_a3):'—');
+  html+=rptRow(t('rpt_situacao'),stBadge(c.situacao));
+  html+='<div class="rpt-sec">'+t('cli_procedimentos')+'</div><div class="rpt-obs">'+(esc(c.procedimentos||'')||'—')+'</div>';
+  html+='<div class="rpt-sec">'+t('rpt_financeiro')+'</div>';
+  html+=rptRow(t('f_est'),fmtMoney(c.saldo_estimado));
+  html+=rptRow(t('f_cc'),fmtMoney(c.conta_corrente));
+  html+=rptRow(t('f_dp'),fmtMoney(c.deposito_prazo));
+  html+=rptRow(t('f_inv'),fmtMoney(c.investimentos));
+  html+=rptRow(t('f_ac'),fmtMoney(c.acoes));
+  html+=rptRow(t('f_cr'),fmtMoney(c.criptomoedas));
+  html+=rptRow(t('f_im'),fmtMoney(c.imoveis));
+  html+=rptRow(t('f_ou'),fmtMoney(c.ouro));
+  html+=rptRow(t('f_di'),fmtMoney(c.dinheiro));
+  html+=rptRow(t('f_cj'),fmtMoney(c.conta_conjunta));
+  html+=rptRow(t('f_total'),fmtMoney(c.valor_total));
+  html+=rptRow(t('f_res'),fmtMoney(c.saldo_resgatavel));
+  html+=rptRow(t('f_renda'),fmtMoney(c.renda_mensal));
+  html+='<div class="rpt-sec">'+t('sec_obs')+'</div><div class="rpt-obs">'+(esc(c.observacoes||'')||'—')+'</div>';
   document.getElementById('report-body').innerHTML=html;
   document.getElementById('report-modal').classList.remove('hide');
 }
@@ -939,12 +961,21 @@ document.getElementById('report-edit').onclick=()=>{
   openCForm(REPORT.current);
 };
 function relReportClick(e){
+  if(e.target.closest('.rel-edit-cell'))return;
   const it=e.target.closest('[data-report]');if(!it)return;
   const c=CLI.list.find(x=>x.id===it.dataset.report);if(!c)return;
   openReport(c);
 }
 document.getElementById('rel-a1').addEventListener('click',relReportClick);
 document.getElementById('rel-a2').addEventListener('click',relReportClick);
+document.getElementById('rel-a2').addEventListener('change',async e=>{
+  const sel=e.target.closest('.rel-edit');if(!sel)return;
+  const cid=sel.dataset.cid,field=sel.dataset.field,val=sel.value||null;
+  const payload={};payload[field]=val;
+  const {error}=await sb.from('clientes').update(payload).eq('id',cid);
+  if(error){alert(error.message||t('generic'));return;}
+  await loadCli();renderRel();
+});
 document.getElementById('rel-a3').addEventListener('click',e=>{
   const it=e.target.closest('[data-a3edit]');if(!it)return;
   const c=CLI.list.find(x=>x.id===it.dataset.a3edit);if(c)openA3Form(c);
@@ -1128,7 +1159,6 @@ function openCForm(c){
   msg('c-msg');calcTotal();calcPrazos();
   cbrowse.classList.add('hide');cform.classList.remove('hide');window.scrollTo(0,0);
 }
-document.getElementById('c-new').onclick=()=>openCForm(null);
 document.getElementById('cf-cancel').onclick=()=>{cform.classList.add('hide');cbrowse.classList.remove('hide');msg('c-msg');};
 document.getElementById('c-list').addEventListener('click',e=>{const it=e.target.closest('[data-report]');if(!it)return;const c=CLI.list.find(x=>x.id===it.dataset.report);if(c)openReport(c);});
 document.querySelectorAll('.fin').forEach(el=>el.addEventListener('input',calcTotal));
