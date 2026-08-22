@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070531';
+  var V='2026070532';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -120,12 +120,18 @@
   .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:9px 12px;font-size:12.5px}
   .rel-ghead b{letter-spacing:.3px}
   .rel-ghead span{font-size:13px;font-weight:bold;color:#fff}
-  .rel-sub{display:flex;justify-content:space-between;padding:8px 12px;font-size:12.5px;color:var(--navy);border-bottom:1px solid var(--line)}
+  .rel-sub{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-size:13px;color:var(--navy);border-bottom:1px solid var(--line);gap:10px}
   .rel-sub:last-child{border-bottom:none}
   .rel-sub.muted{color:var(--muted);font-style:italic}
-  .rel-sub .rs-info{display:flex;flex-direction:column}
-  .rel-sub .rs-renda{font-size:10.5px;color:var(--muted)}
+  .rel-sub .rs-date{display:inline-block;min-width:76px;color:var(--muted);font-size:11px;font-weight:bold}
+  .rel-sub .rs-nome{font-weight:bold}
+  .rel-sub .rs-info{display:flex;flex-direction:column;gap:2px}
+  .rel-sub .rs-renda{font-size:11px;color:var(--muted);font-weight:normal}
   .rel-edit-cell{padding:4px 6px}
+  .proc-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .proc-chk{display:flex;align-items:center;gap:6px;background:#f2f4f9;border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-size:12.5px;color:var(--navy);cursor:pointer}
+  .proc-chk input{width:15px;height:15px}
+  .proc-chk.on{background:var(--navy);color:#fff;border-color:var(--navy)}
   select.rel-edit{font-family:inherit;font-size:12px;padding:5px 6px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--navy);font-weight:bold;max-width:110px}
   .rel-group .citem{border-radius:0;border:none;border-bottom:1px solid var(--line)}
   .rel-group .citem:last-child{border-bottom:none}
@@ -272,7 +278,7 @@
               <option value="MORREU A3" data-i="st_MORREU A3">MORREU A3</option>
               <option value="REPORTANDO" data-i="st_REPORTANDO">REPORTANDO</option>
             </select></label>
-          <label class="fld"><span class="lbl" data-i="cli_procedimentos">Procedimentos</span><textarea id="cf-procedimentos" maxlength="300" placeholder="—" style="min-height:60px"></textarea></label>
+          <div class="fld"><span class="lbl" data-i="cli_procedimentos">Procedimentos</span><div id="cf-proc-list" class="proc-list"></div></div>
           <div class="row2">
             <label class="fld"><span class="lbl" data-i="cli_dia1">Dia 1</span><input id="cf-dia1" maxlength="40"></label>
             <label class="fld"><span class="lbl" data-i="cli_dia2">Dia 2</span><input id="cf-dia2" maxlength="40"></label>
@@ -457,7 +463,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070531';
+const APP_VERSION='2026070532';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -493,6 +499,7 @@ const I18N={
    a3_data_rel:'Data do relatório',a3_agenda:'Agenda diária',a3_valor_est:'Valor estimado total',a3_dinheiro_conta:'Dinheiro em conta',a3_dinheiro_gasto:'Dinheiro gasto',
    a3_trocado_usdt:'Já trocado por USDT',a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',
    rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 L1',rpt_l2:'📍 L2',rpt_l3:'📍 L3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
+   proc_interceptacao:'Interceptação',proc_formulario:'Formulário',proc_termo:'Termo',proc_vizinhos:'Vizinhos',proc_relatorio:'Relatório',proc_carta:'Carta de Autodeclaração',
    cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
@@ -531,6 +538,7 @@ const I18N={
    a3_data_rel:'Report date',a3_agenda:'Daily agenda',a3_valor_est:'Total estimated value',a3_dinheiro_conta:'Money in account',a3_dinheiro_gasto:'Money spent',
    a3_trocado_usdt:'Already converted to USDT',a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',
    rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 L1',rpt_l2:'📍 L2',rpt_l3:'📍 L3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
+   proc_interceptacao:'Interception',proc_formulario:'Form',proc_termo:'Terms',proc_vizinhos:'Neighbors',proc_relatorio:'Report',proc_carta:'Self-declaration letter',
    cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
@@ -569,6 +577,7 @@ const I18N={
    a3_data_rel:'報告日期',a3_agenda:'每日行程',a3_valor_est:'預估總值',a3_dinheiro_conta:'帳戶內金額',a3_dinheiro_gasto:'已花費金額',
    a3_trocado_usdt:'已兌換USDT',a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',
    rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第1行',rpt_l2:'📍 第2行',rpt_l3:'📍 第3行',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
+   proc_interceptacao:'攔截',proc_formulario:'表格',proc_termo:'條款',proc_vizinhos:'鄰居',proc_relatorio:'報告',proc_carta:'自我聲明書',
    cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
@@ -868,8 +877,10 @@ function relBuild(){
   return {mapA1,mapA2,listA3};
 }
 function inlineVendSelect(list,cur,cid,field){
+  const codes=list.map(v=>v.codigo);
+  if(cur&&!codes.includes(cur))codes.unshift(cur);
   let html='<select class="rel-edit" data-cid="'+cid+'" data-field="'+field+'"><option value="">—</option>';
-  list.forEach(v=>{html+='<option value="'+esc(v.codigo)+'"'+(v.codigo===cur?' selected':'')+'>'+esc(v.codigo)+'</option>';});
+  codes.forEach(code=>{html+='<option value="'+esc(code)+'"'+(code===cur?' selected':'')+'>'+esc(code)+'</option>';});
   html+='</select>';
   return html;
 }
@@ -890,6 +901,7 @@ function relRow(c){
     +'<td>'+(nome||'—')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a1List,c.vendedor_a1,c.id,'vendedor_a1')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a2List,c.vendedor_a2,c.id,'vendedor_a2')+'</td>'
+    +'<td class="rel-edit-cell">'+inlineVendSelect(a2List,c.vendedor_a2b,c.id,'vendedor_a2b')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a3List,c.vendedor_a3,c.id,'vendedor_a3')+'</td>'
     +'<td>'+fmtMoney(c.valor_total)+'</td>'
     +'<td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id)+'</td></tr>';
@@ -900,10 +912,10 @@ function renderRel(){
   const k1=Object.keys(mapA1).sort();
   document.getElementById('rel-a1').innerHTML=!k1.length?'<div class="empty">'+t('rel_empty')+'</div>':
     k1.map(k=>{const r=mapA1[k];
-      const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span class="rs-info"><b>'+fmtDt(x.data)+'</b> · '+esc(x.nome)+' <span class="rs-renda">('+t('rel_col_renda')+': '+fmtMoney(x.renda)+')</span></span><span>'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
+      const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span class="rs-date">'+fmtDt(x.data)+'</span><span class="rs-info"><span class="rs-nome">'+esc(x.nome)+'</span><span class="rs-renda">'+t('rel_col_renda')+': '+fmtMoney(x.renda)+'</span></span><span>'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
       return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.receb+' '+t('rel_col_receb')+' · '+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
     }).join('');
-  const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>A1</th><th>A2</th><th>A3</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
+  const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>A1</th><th>A2</th><th>A2 (2º)</th><th>A3</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
   const k2=Object.keys(mapA2).sort();
   document.getElementById('rel-a2').innerHTML=!k2.length?'<div class="empty">'+t('rel_empty')+'</div>':
     k2.map(k=>{const r=mapA2[k];
@@ -932,7 +944,8 @@ function openReport(c){
   html+=rptRow(t('rpt_l2'),l2);
   html+=rptRow(t('rpt_l3'),c.vendedor_a3?esc(c.vendedor_a3):'—');
   html+=rptRow(t('rpt_situacao'),stBadge(c.situacao));
-  html+='<div class="rpt-sec">'+t('cli_procedimentos')+'</div><div class="rpt-obs">'+(esc(c.procedimentos||'')||'—')+'</div>';
+  const procTxt=(c.procedimentos_lista&&c.procedimentos_lista.length)?c.procedimentos_lista.map(k=>t('proc_'+k)).join(', '):'—';
+  html+='<div class="rpt-sec">'+t('cli_procedimentos')+'</div><div class="rpt-obs">'+esc(procTxt)+'</div>';
   html+='<div class="rpt-sec">'+t('rpt_financeiro')+'</div>';
   html+=rptRow(t('f_est'),fmtMoney(c.saldo_estimado));
   html+=rptRow(t('f_cc'),fmtMoney(c.conta_corrente));
@@ -1132,6 +1145,18 @@ function calcPrazos(){
   document.getElementById('cf-prazos').innerHTML=cell(f,t('pz_funil'))+cell(en,t('pz_entrega'))+cell(a3,t('pz_a3'));
 }
 function calcTotal(){let s=0;FINF.forEach(k=>{if(k!=='imoveis'&&k!=='conta_conjunta')s+=num('cf-'+k);});document.getElementById('cf-total').textContent=fmtMoney(s);}
+const PROC_OPTS=['interceptacao','formulario','termo','vizinhos','relatorio','carta'];
+function renderProcList(sel){
+  const box=document.getElementById('cf-proc-list');
+  sel=sel||[];
+  box.innerHTML=PROC_OPTS.map(k=>'<label class="proc-chk'+(sel.includes(k)?' on':'')+'"><input type="checkbox" data-k="'+k+'" '+(sel.includes(k)?'checked':'')+'>'+t('proc_'+k)+'</label>').join('');
+  box.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',e=>{
+    e.target.closest('.proc-chk').classList.toggle('on',e.target.checked);
+  }));
+}
+function collectProcList(){
+  return Array.from(document.querySelectorAll('#cf-proc-list input[type=checkbox]:checked')).map(cb=>cb.dataset.k);
+}
 
 const cform=document.getElementById('c-form'), cbrowse=document.getElementById('c-browse');
 function openCForm(c){
@@ -1153,7 +1178,7 @@ function openCForm(c){
   document.getElementById('cf-saldo_estimado').value=c&&c.saldo_estimado!=null?c.saldo_estimado:'';
   document.getElementById('cf-saldo_resgatavel').value=c&&c.saldo_resgatavel!=null?c.saldo_resgatavel:'';
   document.getElementById('cf-renda_mensal').value=c&&c.renda_mensal!=null?c.renda_mensal:'';
-  document.getElementById('cf-procedimentos').value=c&&c.procedimentos?c.procedimentos:'';
+  renderProcList(c&&c.procedimentos_lista?c.procedimentos_lista:[]);
   document.getElementById('cf-obs').value=c&&c.observacoes?c.observacoes:'';
   document.getElementById('cf-del').style.display=c?'inline':'none';
   msg('c-msg');calcTotal();calcPrazos();
@@ -1205,7 +1230,7 @@ document.getElementById('cf-save').onclick=async function(){
     saldo_resgatavel:num('cf-saldo_resgatavel'),
     renda_mensal:num('cf-renda_mensal'),
     resgates:collectResgates(),
-    procedimentos:document.getElementById('cf-procedimentos').value.trim()||null,
+    procedimentos_lista:collectProcList(),
     observacoes:document.getElementById('cf-obs').value.trim()||null
   };
   FINF.forEach(k=>payload[k]=num('cf-'+k));
