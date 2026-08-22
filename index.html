@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070533';
+  var V='2026070534';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -466,7 +466,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070533';
+const APP_VERSION='2026070534';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -873,6 +873,7 @@ function relBuild(){
     nome:(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''),
     a1:c.vendedor_a1,a2:c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,
     func:c.vendedor_a3,
+    situacao:c.situacao,
     dias:days(c.data_entrada_a3,today()),
     resg:c.saldo_resgatavel,
     cats:FINF.filter(k=>c.resgates&&c.resgates[k]&&c.resgates[k].marcado).map(k=>t(FINLBL[k])+(c.resgates[k].data?' ('+c.resgates[k].data+')':''))
@@ -887,9 +888,10 @@ function inlineVendSelect(list,cur,cid,field){
   html+='</select>';
   return html;
 }
-function inlineSituacaoSelect(cur,cid){
-  const opts=['ATENCAO','REPORTANDO','FINALIZADO','MORREU A2','MORREU A3'];
+function inlineSituacaoSelect(cur,cid,stage){
+  const opts=['ATENCAO','REPORTANDO','FINALIZADO',stage==='a3'?'MORREU A3':'MORREU A2'];
   let html='<select class="rel-edit" data-cid="'+cid+'" data-field="situacao">';
+  if(cur&&!opts.includes(cur))opts.unshift(cur);
   opts.forEach(o=>{html+='<option value="'+o+'"'+(o===cur?' selected':'')+'>'+t('st_'+o)+'</option>';});
   html+='</select>';
   return html;
@@ -907,7 +909,7 @@ function relRow(c){
     +'<td class="rel-edit-cell">'+inlineVendSelect(a2List,c.vendedor_a2b,c.id,'vendedor_a2b')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a3List,c.vendedor_a3,c.id,'vendedor_a3')+'</td>'
     +'<td>'+fmtMoney(c.valor_total)+'</td>'
-    +'<td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id)+'</td></tr>';
+    +'<td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id,'a2')+'</td></tr>';
 }
 function renderRel(){
   if(!CLI.loaded)return;
@@ -926,8 +928,8 @@ function renderRel(){
         +'<table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div>';
     }).join('');
   document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
-    '<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>A1</th><th>A2</th><th>A3</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th></tr></thead><tbody>'
-    +listA3.map(r=>'<tr data-report="'+r.id+'" style="cursor:pointer"><td>'+esc(r.nome||'—')+'</td><td><b>'+esc(r.a1||'—')+'</b></td><td><b>'+esc(r.a2||'—')+'</b></td><td><b>'+esc(r.func||'—')+'</b></td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td></tr>').join('')
+    '<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>A1</th><th>A2</th><th>A3</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th></tr></thead><tbody>'
+    +listA3.map(r=>'<tr data-report="'+r.id+'"><td style="cursor:pointer" data-reportcell>'+esc(r.nome||'—')+'</td><td><b>'+esc(r.a1||'—')+'</b></td><td><b>'+esc(r.a2||'—')+'</b></td><td><b>'+esc(r.func||'—')+'</b></td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(r.situacao,r.id,'a3')+'</td></tr>').join('')
     +'</tbody></table>';
 }
 const REPORT={current:null};
