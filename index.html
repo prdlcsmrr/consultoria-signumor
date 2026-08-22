@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070532';
+  var V='2026070533';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -187,6 +187,7 @@
 #report-sheet{position:relative;max-width:520px;margin:24px auto;background:#fff;border-radius:14px;max-height:calc(100vh - 48px);overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
 #report-close{position:sticky;top:10px;float:right;margin-right:10px;width:32px;height:32px;border-radius:50%;border:none;background:var(--navy);color:#fff;font-size:15px;cursor:pointer;z-index:2}
 #report-edit{position:sticky;top:10px;float:left;margin-left:16px;z-index:2}
+#report-edit-a3{position:sticky;top:10px;float:left;margin-left:8px;z-index:2}
 #report-body{padding:24px 24px 30px;font-family:Georgia,'Times New Roman',serif;color:var(--navy)}
 .rpt-title{text-align:center;font-weight:bold;letter-spacing:1px;font-size:16px;margin-bottom:14px;color:var(--navy)}
 .rpt-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
@@ -249,7 +250,12 @@
       <div id="c-form" class="vform hide">
         <input type="hidden" id="cf-id">
         <input type="hidden" id="cf-dtA2">
+
         <div class="sec-t" data-i="sec_ident">Identidade</div>
+        <div class="row2">
+          <label class="fld"><span class="lbl" data-i="cli_dtentrada">Entrada</span><input id="cf-dtentrada" type="date"></label>
+          <label class="fld"><span class="lbl" data-i="cli_dtentregue">Saída</span><input id="cf-dtentregue" type="date"></label>
+        </div>
         <div class="row2">
           <label class="fld"><span class="lbl" data-i="cli_pnome">Primeiro nome</span><input id="cf-pnome" maxlength="40" placeholder="—"></label>
           <label class="fld"><span class="lbl" data-i="cli_snome">Segundo nome</span><input id="cf-snome" maxlength="40" placeholder="—"></label>
@@ -261,10 +267,6 @@
             <label class="fld"><span class="lbl">A2</span><select id="cf-va2"></select></label>
             <label class="fld"><span class="lbl" data-i="cli_va2b">A2 (2º)</span><select id="cf-va2b"></select></label>
             <label class="fld"><span class="lbl">A3</span><select id="cf-va3"></select></label>
-          </div>
-          <div class="row2">
-            <label class="fld"><span class="lbl" data-i="cli_dtentrada">Entrada</span><input id="cf-dtentrada" type="date"></label>
-            <label class="fld"><span class="lbl" data-i="cli_dtentregue">Saída</span><input id="cf-dtentregue" type="date"></label>
           </div>
           <div class="prazos" id="cf-prazos"></div>
         </div>
@@ -290,6 +292,8 @@
         </div>
 
         <div class="sec"><div class="sec-t" data-i="sec_carteira">Carteira financeira</div>
+          <label class="fld"><span class="lbl" data-i="f_renda">Renda mensal</span><input id="cf-renda_mensal" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <label class="fld"><span class="lbl" data-i="f_est">Saldo estimado</span><input id="cf-saldo_estimado" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           <div class="row2">
             <label class="fld"><span class="lbl" data-i="f_cc">Conta corrente</span><input class="fin" id="cf-conta_corrente" type="number" inputmode="decimal" step="any" placeholder="0"></label>
             <label class="fld"><span class="lbl" data-i="f_dp">Depósito a prazo</span><input class="fin" id="cf-deposito_prazo" type="number" inputmode="decimal" step="any" placeholder="0"></label>
@@ -309,11 +313,8 @@
           <label class="fld"><span class="lbl" data-i="f_cj">Conta conjunta</span><input class="fin" id="cf-conta_conjunta" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           <div class="empty" style="text-align:left;padding:0;margin:-4px 0 8px;font-size:11px" data-i="f_excl_note">Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.</div>
           <div class="totbox"><span class="tl" data-i="f_total">Valor total</span><span class="tv" id="cf-total">0</span></div>
-          <div class="row2" style="margin-top:12px">
-            <label class="fld"><span class="lbl" data-i="f_est">Saldo estimado</span><input id="cf-saldo_estimado" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-            <label class="fld"><span class="lbl" data-i="f_res">Saldo resgatável</span><input id="cf-saldo_resgatavel" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-          </div>
-          <label class="fld"><span class="lbl" data-i="f_renda">Renda mensal</span><input id="cf-renda_mensal" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <label class="fld" style="margin-top:12px"><span class="lbl" data-i="f_res">Saldo resgatável</span><input id="cf-saldo_resgatavel" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <label class="fld"><span class="lbl" data-i="f_depositado">Valor depositado</span><input id="cf-valor_depositado" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           <div class="sec-t" style="margin-top:14px;font-size:12px" data-i="resg_title">Resgates por categoria</div>
           <div id="cf-resgates"></div>
         </div>
@@ -400,6 +401,7 @@
         </div>
         <label class="fld"><span class="lbl" data-i="a3_motivo">Motivo da indisponibilidade</span><input id="a3f-motivo" maxlength="200" placeholder="—"></label>
         <label class="fld"><span class="lbl" data-i="a3_endereco">Endereço de depósito</span><input id="a3f-endereco" maxlength="200" placeholder="—"></label>
+        <label class="fld"><span class="lbl" data-i="f_depositado">Valor depositado</span><input id="a3f-depositado" type="number" inputmode="decimal" step="any" placeholder="0"></label>
         <div class="acts"><button class="btn" id="a3f-save" data-i="vend_save">Salvar</button><button class="btn gold" id="a3f-cancel" data-i="vend_cancel">Cancelar</button></div>
         <div id="a3f-msg" class="msg"></div>
       </div>
@@ -457,13 +459,14 @@
   <div id="report-sheet">
     <button id="report-close">✕</button>
     <button id="report-edit" class="btn-mini" data-i="rpt_editar">✏️ Editar</button>
+    <button id="report-edit-a3" class="btn-mini hide" data-i="rpt_editar_a3">✏️ Editar A3</button>
     <div id="report-body"></div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070532';
+const APP_VERSION='2026070533';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -500,10 +503,10 @@ const I18N={
    a3_trocado_usdt:'Já trocado por USDT',a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',
    rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 L1',rpt_l2:'📍 L2',rpt_l3:'📍 L3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
    proc_interceptacao:'Interceptação',proc_formulario:'Formulário',proc_termo:'Termo',proc_vizinhos:'Vizinhos',proc_relatorio:'Relatório',proc_carta:'Carta de Autodeclaração',
-   cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',
+   cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',rpt_editar_a3:'✏️ Editar A3',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
-   f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',f_renda:'Renda mensal',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
+   f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',f_renda:'Renda mensal',f_depositado:'Valor depositado',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
    cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',
    f_all:'Todos',st_morto:'Morreu',
    st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu A2','st_MORREU A3':'Morreu A3',st_REPORTANDO:'Reportando',cli_va2b:'A2 (2º)',
@@ -539,10 +542,10 @@ const I18N={
    a3_trocado_usdt:'Already converted to USDT',a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',
    rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 L1',rpt_l2:'📍 L2',rpt_l3:'📍 L3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
    proc_interceptacao:'Interception',proc_formulario:'Form',proc_termo:'Terms',proc_vizinhos:'Neighbors',proc_relatorio:'Report',proc_carta:'Self-declaration letter',
-   cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',
+   cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',rpt_editar_a3:'✏️ Edit A3',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
-   f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',f_renda:'Monthly income',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
+   f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',f_renda:'Monthly income',f_depositado:'Deposited value',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
    cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',
    f_all:'All',st_morto:'Lost',
    st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost A2','st_MORREU A3':'Lost A3',st_REPORTANDO:'Reporting',cli_va2b:'A2 (2nd)',
@@ -578,10 +581,10 @@ const I18N={
    a3_trocado_usdt:'已兌換USDT',a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',
    rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第1行',rpt_l2:'📍 第2行',rpt_l3:'📍 第3行',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
    proc_interceptacao:'攔截',proc_formulario:'表格',proc_termo:'條款',proc_vizinhos:'鄰居',proc_relatorio:'報告',proc_carta:'自我聲明書',
-   cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',
+   cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',rpt_editar_a3:'✏️ 編輯A3',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
-   f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',f_renda:'月收入',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
+   f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',f_renda:'月收入',f_depositado:'已存入金額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
    cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',
    f_all:'全部',st_morto:'流失',
    st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'A2流失','st_MORREU A3':'A3流失',st_REPORTANDO:'報告中',cli_va2b:'A2（第二位）',
@@ -924,7 +927,7 @@ function renderRel(){
     }).join('');
   document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
     '<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>A1</th><th>A2</th><th>A3</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th></tr></thead><tbody>'
-    +listA3.map(r=>'<tr data-a3edit="'+r.id+'" style="cursor:pointer"><td>'+esc(r.nome||'—')+'</td><td><b>'+esc(r.a1||'—')+'</b></td><td><b>'+esc(r.a2||'—')+'</b></td><td><b>'+esc(r.func||'—')+'</b></td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td></tr>').join('')
+    +listA3.map(r=>'<tr data-report="'+r.id+'" style="cursor:pointer"><td>'+esc(r.nome||'—')+'</td><td><b>'+esc(r.a1||'—')+'</b></td><td><b>'+esc(r.a2||'—')+'</b></td><td><b>'+esc(r.func||'—')+'</b></td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td></tr>').join('')
     +'</tbody></table>';
 }
 const REPORT={current:null};
@@ -960,8 +963,23 @@ function openReport(c){
   html+=rptRow(t('f_total'),fmtMoney(c.valor_total));
   html+=rptRow(t('f_res'),fmtMoney(c.saldo_resgatavel));
   html+=rptRow(t('f_renda'),fmtMoney(c.renda_mensal));
+  html+=rptRow(t('f_depositado'),fmtMoney(c.valor_depositado));
+  if(c.vendedor_a3){
+    html+='<div class="rpt-sec">'+t('rel_a3_tab')+'</div>';
+    html+=rptRow(t('a3_data_rel'),fmtDt(c.data_relatorio_a3));
+    html+=rptRow(t('a3_agenda'),c.agenda_diaria_a3?esc(c.agenda_diaria_a3):'—');
+    html+=rptRow(t('a3_valor_est'),fmtMoney(c.valor_estimado_total_a3));
+    html+=rptRow(t('a3_dinheiro_conta'),fmtMoney(c.dinheiro_conta_a3));
+    html+=rptRow(t('a3_dinheiro_gasto'),fmtMoney(c.dinheiro_gasto_a3));
+    html+=rptRow(t('a3_trocado_usdt'),fmtMoney(c.trocado_usdt_a3));
+    html+=rptRow(t('a3_disponivel'),fmtMoney(c.disponivel_resgate_a3));
+    html+=rptRow(t('a3_indisponivel'),fmtMoney(c.indisponivel_resgate_a3));
+    html+=rptRow(t('a3_motivo'),c.motivo_indisponibilidade_a3?esc(c.motivo_indisponibilidade_a3):'—');
+    html+=rptRow(t('a3_endereco'),c.endereco_deposito_a3?esc(c.endereco_deposito_a3):'—');
+  }
   html+='<div class="rpt-sec">'+t('sec_obs')+'</div><div class="rpt-obs">'+(esc(c.observacoes||'')||'—')+'</div>';
   document.getElementById('report-body').innerHTML=html;
+  document.getElementById('report-edit-a3').classList.toggle('hide',!c.vendedor_a3);
   document.getElementById('report-modal').classList.remove('hide');
 }
 document.getElementById('report-close').onclick=()=>document.getElementById('report-modal').classList.add('hide');
@@ -972,6 +990,13 @@ document.getElementById('report-edit').onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='cli'));
   ['tab-cli','tab-vend','tab-rel-a1','tab-rel-a2','tab-rel-a3','tab-sal'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!=='tab-cli'));
   openCForm(REPORT.current);
+};
+document.getElementById('report-edit-a3').onclick=()=>{
+  if(!REPORT.current)return;
+  document.getElementById('report-modal').classList.add('hide');
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='rel-a3'));
+  ['tab-cli','tab-vend','tab-rel-a1','tab-rel-a2','tab-rel-a3','tab-sal'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!=='tab-rel-a3'));
+  openA3Form(REPORT.current);
 };
 function relReportClick(e){
   if(e.target.closest('.rel-edit-cell'))return;
@@ -989,10 +1014,7 @@ document.getElementById('rel-a2').addEventListener('change',async e=>{
   if(error){alert(error.message||t('generic'));return;}
   await loadCli();renderRel();
 });
-document.getElementById('rel-a3').addEventListener('click',e=>{
-  const it=e.target.closest('[data-a3edit]');if(!it)return;
-  const c=CLI.list.find(x=>x.id===it.dataset.a3edit);if(c)openA3Form(c);
-});
+document.getElementById('rel-a3').addEventListener('click',relReportClick);
 
 /* ===== FORMULÁRIO RELATÓRIO A3 ===== */
 const A3F={clienteId:null};
@@ -1018,6 +1040,7 @@ function openA3Form(c){
   document.getElementById('a3f-indisp').value=c&&c.indisponivel_resgate_a3!=null?c.indisponivel_resgate_a3:0;
   document.getElementById('a3f-motivo').value=c&&c.motivo_indisponibilidade_a3?c.motivo_indisponibilidade_a3:'';
   document.getElementById('a3f-endereco').value=c&&c.endereco_deposito_a3?c.endereco_deposito_a3:'';
+  document.getElementById('a3f-depositado').value=c&&c.valor_depositado!=null?c.valor_depositado:0;
   msg('a3f-msg');document.getElementById('a3-form').classList.remove('hide');
 }
 document.getElementById('rel-a3-new').onclick=()=>openA3Form(null);
@@ -1035,7 +1058,8 @@ document.getElementById('a3f-save').onclick=async function(){
     disponivel_resgate_a3:num('a3f-disp'),
     indisponivel_resgate_a3:num('a3f-indisp'),
     motivo_indisponibilidade_a3:document.getElementById('a3f-motivo').value.trim()||null,
-    endereco_deposito_a3:document.getElementById('a3f-endereco').value.trim()||null
+    endereco_deposito_a3:document.getElementById('a3f-endereco').value.trim()||null,
+    valor_depositado:num('a3f-depositado')
   };
   this.disabled=true;const o=this.textContent;this.innerHTML='<span class="spin"></span>';
   const {error}=await sb.from('clientes').update(payload).eq('id',cid);
@@ -1177,6 +1201,7 @@ function openCForm(c){
   renderResgList(c?c.resgates:null);
   document.getElementById('cf-saldo_estimado').value=c&&c.saldo_estimado!=null?c.saldo_estimado:'';
   document.getElementById('cf-saldo_resgatavel').value=c&&c.saldo_resgatavel!=null?c.saldo_resgatavel:'';
+  document.getElementById('cf-valor_depositado').value=c&&c.valor_depositado!=null?c.valor_depositado:'';
   document.getElementById('cf-renda_mensal').value=c&&c.renda_mensal!=null?c.renda_mensal:'';
   renderProcList(c&&c.procedimentos_lista?c.procedimentos_lista:[]);
   document.getElementById('cf-obs').value=c&&c.observacoes?c.observacoes:'';
@@ -1228,6 +1253,7 @@ document.getElementById('cf-save').onclick=async function(){
     dia4:document.getElementById('cf-dia4').value.trim()||null,
     saldo_estimado:num('cf-saldo_estimado'),
     saldo_resgatavel:num('cf-saldo_resgatavel'),
+    valor_depositado:num('cf-valor_depositado'),
     renda_mensal:num('cf-renda_mensal'),
     resgates:collectResgates(),
     procedimentos_lista:collectProcList(),
