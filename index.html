@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070544';
+  var V='2026070545';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -117,7 +117,10 @@
   .cli-name-cell{max-width:150px;overflow:hidden;text-overflow:ellipsis;font-weight:bold}
   .rel-total{font-size:13px;font-weight:bold;color:var(--navy);background:#fdf3e3;border:1px solid var(--gold);border-radius:8px;padding:8px 14px;margin-bottom:12px;display:inline-block}
   .cli-totals{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-  .cli-tot-item{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;padding:8px 14px;min-width:78px;text-align:center}
+  .cli-tot-item{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;padding:8px 14px;min-width:78px;text-align:center;cursor:pointer;border:2px solid transparent;transition:transform .1s}
+  .cli-tot-item:hover{filter:brightness(0.96)}
+  .cli-tot-item:active{transform:scale(0.96)}
+  .cli-tot-item.active{border-color:var(--navy);box-shadow:0 0 0 2px rgba(11,20,46,.15)}
   .cli-tot-item .ct-val{font-size:19px;font-weight:bold;line-height:1.1}
   .cli-tot-item .ct-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
   .ct-neutral{background:#f0f0f3;color:var(--muted)}
@@ -490,7 +493,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070544';
+const APP_VERSION='2026070545';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1190,15 +1193,15 @@ function cliTotalsBar(){
   const totFinalizado=cnt('FINALIZADO');
   const totMorreu2=cnt('MORREU A2');
   const totMorreu3=cnt('MORREU A3');
-  const item=(label,val,cls)=>'<div class="cli-tot-item '+cls+'"><span class="ct-val">'+val+'</span><span class="ct-lbl">'+label+'</span></div>';
+  const item=(label,val,cls,filtro)=>'<div class="cli-tot-item '+cls+(CLI.filtro===filtro?' active':'')+'" data-filtro="'+filtro+'"><span class="ct-val">'+val+'</span><span class="ct-lbl">'+label+'</span></div>';
   return '<div class="cli-totals">'
-    +item(t('tot_atencao'),totAtencao,'ct-yellow')
-    +item(t('tot_reportando'),totReportando,'ct-neutral')
-    +item(t('tot_pronto3'),totProntoN3,'ct-neutral')
-    +item(t('tot_report3'),totReportN3,'ct-green')
-    +item(t('tot_finalizado'),totFinalizado,'ct-darkblue')
-    +item(t('tot_morreu2'),totMorreu2,'ct-red1')
-    +item(t('tot_morreu3'),totMorreu3,'ct-red2')
+    +item(t('tot_atencao'),totAtencao,'ct-yellow','ATENCAO')
+    +item(t('tot_reportando'),totReportando,'ct-neutral','REPORTANDO')
+    +item(t('tot_pronto3'),totProntoN3,'ct-neutral','REPORTANDO A2')
+    +item(t('tot_report3'),totReportN3,'ct-green','REPORTANDO A3')
+    +item(t('tot_finalizado'),totFinalizado,'ct-darkblue','FINALIZADO')
+    +item(t('tot_morreu2'),totMorreu2,'ct-red1','MORREU A2')
+    +item(t('tot_morreu3'),totMorreu3,'ct-red2','MORREU A3')
     +'</div>';
 }
 function renderCli(){
@@ -1279,7 +1282,10 @@ function openCForm(c){
   cbrowse.classList.add('hide');cform.classList.remove('hide');window.scrollTo(0,0);
 }
 document.getElementById('cf-cancel').onclick=()=>{cform.classList.add('hide');cbrowse.classList.remove('hide');msg('c-msg');};
-document.getElementById('c-list').addEventListener('click',e=>{const it=e.target.closest('[data-report]');if(!it)return;const c=CLI.list.find(x=>x.id===it.dataset.report);if(c)openReport(c);});
+document.getElementById('c-list').addEventListener('click',e=>{
+  const totItem=e.target.closest('.cli-tot-item');
+  if(totItem){CLI.filtro=(CLI.filtro===totItem.dataset.filtro)?'ALL':totItem.dataset.filtro;renderCli();return;}
+  const it=e.target.closest('[data-report]');if(!it)return;const c=CLI.list.find(x=>x.id===it.dataset.report);if(c)openReport(c);});
 document.querySelectorAll('.fin').forEach(el=>el.addEventListener('input',calcTotal));
 document.getElementById('cf-dtentrada').addEventListener('change',calcPrazos);
 document.getElementById('cf-dtentregue').addEventListener('change',calcPrazos);
