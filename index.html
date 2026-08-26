@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070542';
+  var V='2026070543';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -362,15 +362,8 @@
         <div style="text-align:center;margin-top:12px"><a id="cf-del" data-i="cli_delete" style="color:var(--red);cursor:pointer;font-size:13px;text-decoration:underline;display:none">Excluir cliente</a></div>
       </div>
 
-      <!-- FILTROS + LISTA -->
+      <!-- LISTA -->
       <div id="c-browse">
-        <div class="filtros" id="c-filtros">
-          <button data-f="ALL" class="active" data-i="f_all">Todos</button>
-          <button data-f="ATENCAO" data-i="st_ATENCAO">Atenção</button>
-          <button data-f="REPORTANDO" data-i="st_REPORTANDO">Reportando</button>
-          <button data-f="FINALIZADO" data-i="st_FINALIZADO">Finalizado</button>
-          <button data-f="MORTO" data-i="st_morto">Morreu</button>
-        </div>
         <div id="c-list"><div class="empty" data-i="loading">Carregando…</div></div>
       </div>
     </div>
@@ -497,7 +490,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070542';
+const APP_VERSION='2026070543';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1298,8 +1291,6 @@ document.getElementById('cf-va2').addEventListener('input',e=>{
   const emp=val?VEND.list.find(v=>v.codigo===val):null;
   if(emp&&emp.atua_a3){ensureOpt('cf-va3',val);}
 });
-document.getElementById('c-filtros').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  CLI.filtro=b.dataset.f;document.querySelectorAll('#c-filtros button').forEach(x=>x.classList.toggle('active',x===b));renderCli();});
 
 document.getElementById('cf-save').onclick=async function(){
   const id=document.getElementById('cf-id').value;
