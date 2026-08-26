@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070537';
+  var V='2026070538';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -116,6 +116,12 @@
   .atend-labels{font-size:9px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
   .atend-codes{font-size:inherit}
   .reltab tr:last-child td{border-bottom:none}
+  .reltab tr.row-morreu2{background:#fde2e2}
+  .reltab tr.row-morreu2 td{color:#7a1f1f}
+  .reltab tr.row-morreu3{background:#f8b4b4}
+  .reltab tr.row-morreu3 td{color:#5c0f0f}
+  .reltab tr.row-indo3{background:#e7f1fd}
+  .reltab tr.row-nivel3{background:#e3f6e9}
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
   .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:9px 12px;font-size:12.5px}
   .rel-ghead b{letter-spacing:.3px}
@@ -471,7 +477,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070537';
+const APP_VERSION='2026070538';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1144,6 +1150,14 @@ function stageTime(c){
   return '—';
 }
 function fmtDt(d){if(!d)return '—';const p=d.split('-');return p.length===3?(p[2]+'/'+p[1]+'/'+p[0]):d;}
+function cliRowClass(c){
+  const s=c.situacao||'';
+  if(s==='MORREU A3')return 'row-morreu3';
+  if(s==='MORREU A2')return 'row-morreu2';
+  if(c.vendedor_a3)return 'row-nivel3';
+  if(s==='FINALIZADO')return '';
+  return 'row-indo3';
+}
 function renderCli(){
   const box=document.getElementById('c-list');
   let arr=CLI.list.slice();
@@ -1159,7 +1173,7 @@ function renderCli(){
   arr.forEach(c=>{
     const nome=esc(c.primeiro_nome||'')+(c.segundo_nome?' '+esc(c.segundo_nome):'');
     const a2txt=c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):(c.vendedor_a2?esc(c.vendedor_a2):'—');
-    html+='<tr data-report="'+c.id+'" style="cursor:pointer">'
+    html+='<tr class="'+cliRowClass(c)+'" data-report="'+c.id+'" style="cursor:pointer">'
       +'<td>'+fmtDt(c.data_entrada)+'</td>'
       +'<td>'+(nome||'—')+'</td>'
       +'<td>'+fmtDt(c.data_entrada_a3)+'</td>'
