@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070545';
+  var V='2026070546';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -493,7 +493,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070545';
+const APP_VERSION='2026070546';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -538,7 +538,7 @@ const I18N={
    f_all:'Todos',st_morto:'Morreu',
    st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu Nível 2','st_MORREU A3':'Morreu Nível 3',st_REPORTANDO:'Reportando','st_REPORTANDO A2':'Reportando Nível 2','st_REPORTANDO A3':'Reportando Nível 3',cli_va2b:'Nível 2 (2º)',
    cli_col_nome:'Cliente',cli_col_entrada:'Entrada',cli_col_saida:'Saída',cli_col_atend:'Atendimento',cli_col_tempo:'Tempo na etapa',cli_col_resg:'Resgatável',cli_col_sit:'Situação',
-   cli_em_a1:'em A1',cli_em_a2:'em A2',cli_em_a3:'em A3',
+   cli_em_a1:'em Nível 1',cli_em_a2:'em Nível 2',cli_em_a3:'em Nível 3',
    pz_funil:'dias no funil',pz_entrega:'p/ entregar',pz_a3:'dias em A3',
    c_pnome_req:'Informe o primeiro nome.',c_saved:'Cliente salvo.',c_del:'Excluir este cliente?',c_empty:'Nenhum cliente cadastrado. Toque em “+ Novo”.',c_none:'Nenhum cliente neste filtro.',
    v_code_req:'Informe o código.',v_dup:'Já existe um funcionário com esse código.',v_saved:'Funcionário salvo.',v_del:'Excluir este funcionário?',v_none:'Nenhum funcionário neste canal.',v_empty:'Nenhum funcionário cadastrado. Toque em “+ Novo”.',
@@ -579,7 +579,7 @@ const I18N={
    f_all:'All',st_morto:'Lost',
    st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost Level 2','st_MORREU A3':'Lost Level 3',st_REPORTANDO:'Reporting','st_REPORTANDO A2':'Reporting Level 2','st_REPORTANDO A3':'Reporting Level 3',cli_va2b:'Level 2 (2nd)',
    cli_col_nome:'Client',cli_col_entrada:'Entry',cli_col_saida:'Exit',cli_col_atend:'Handled by',cli_col_tempo:'Time in stage',cli_col_resg:'Redeemable',cli_col_sit:'Status',
-   cli_em_a1:'in A1',cli_em_a2:'in A2',cli_em_a3:'in A3',
+   cli_em_a1:'in Level 1',cli_em_a2:'in Level 2',cli_em_a3:'in Level 3',
    pz_funil:'days in funnel',pz_entrega:'to deliver',pz_a3:'days in A3',
    c_pnome_req:'Enter the first name.',c_saved:'Client saved.',c_del:'Delete this client?',c_empty:'No clients yet. Tap “+ New”.',c_none:'No clients in this filter.',
    v_code_req:'Enter the code.',v_dup:'An employee with this code already exists.',v_saved:'Employee saved.',v_del:'Delete this employee?',v_none:'No employees in this channel.',v_empty:'No employees yet. Tap “+ New”.',
@@ -620,7 +620,7 @@ const I18N={
    f_all:'全部',st_morto:'流失',
    st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'第二級流失','st_MORREU A3':'第三級流失',st_REPORTANDO:'報告中','st_REPORTANDO A2':'第二級報告中','st_REPORTANDO A3':'第三級報告中',cli_va2b:'第二級（第二位）',
    cli_col_nome:'客戶',cli_col_entrada:'進入日',cli_col_saida:'離開日',cli_col_atend:'負責人',cli_col_tempo:'目前階段時間',cli_col_resg:'可贖回',cli_col_sit:'狀況',
-   cli_em_a1:'於A1',cli_em_a2:'於A2',cli_em_a3:'於A3',
+   cli_em_a1:'於第一級',cli_em_a2:'於第二級',cli_em_a3:'於第三級',
    pz_funil:'漏斗天數',pz_entrega:'待交付',pz_a3:'A3天數',
    c_pnome_req:'請輸入名。',c_saved:'已儲存客戶。',c_del:'確定刪除此客戶？',c_empty:'尚無客戶，請點「+ 新增」。',c_none:'此篩選無客戶。',
    v_code_req:'請輸入代碼。',v_dup:'此代碼已存在。',v_saved:'已儲存員工。',v_del:'確定刪除此員工？',v_none:'此通路尚無員工。',v_empty:'尚無員工，請點「+ 新增」。',
@@ -662,7 +662,7 @@ function msg(box,type,text){const el=document.getElementById(box);el.className='
 function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function num(id){const v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
 function fmtMoney(n){n=Number(n)||0;const loc=LANG==='zh'?'zh-Hant':(LANG==='en'?'en-US':'pt-BR');return n.toLocaleString(loc,{maximumFractionDigits:2});}
-function today(){return new Date().toISOString().slice(0,10);}
+function today(){const d=new Date();const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,'0');const day=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+day;}
 function days(a,b){if(!a||!b)return null;const d=Math.floor((new Date(b+'T00:00')-new Date(a+'T00:00'))/86400000);return d;}
 
 document.getElementById('go-signup').onclick=()=>{msg('msg-login');msg('msg-signup');show('signup');};
