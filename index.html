@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070541';
+  var V='2026070542';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -112,7 +112,7 @@
   .reltab{width:100%;border-collapse:collapse;font-size:13px;white-space:nowrap}
   .reltab th{text-align:left;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;padding:9px 12px;border-bottom:1.5px solid var(--gold);background:#fbfaf6}
   .reltab td{padding:11px 12px;border-bottom:1px solid var(--line);color:var(--navy);vertical-align:middle;line-height:1.3}
-  .reltab tbody tr:nth-child(even):not(.row-morreu2):not(.row-morreu3):not(.row-reportando2):not(.row-reportando3):not(.row-finalizado){background:#fbfbfd}
+  .reltab tbody tr:nth-child(even):not(.row-morreu2):not(.row-morreu3):not(.row-reportando3):not(.row-finalizado):not(.row-atencao){background:#fbfbfd}
   .reltab tbody tr:hover{filter:brightness(0.97)}
   .cli-name-cell{max-width:150px;overflow:hidden;text-overflow:ellipsis;font-weight:bold}
   .rel-total{font-size:13px;font-weight:bold;color:var(--navy);background:#fdf3e3;border:1px solid var(--gold);border-radius:8px;padding:8px 14px;margin-bottom:12px;display:inline-block}
@@ -120,7 +120,8 @@
   .cli-tot-item{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;padding:8px 14px;min-width:78px;text-align:center}
   .cli-tot-item .ct-val{font-size:19px;font-weight:bold;line-height:1.1}
   .cli-tot-item .ct-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
-  .ct-blue{background:#e7f1fd;color:#1a5fa8}
+  .ct-neutral{background:#f0f0f3;color:var(--muted)}
+  .ct-yellow{background:#fff3b0;color:#7a5c00}
   .ct-green{background:#e3f6e9;color:#1e7d3c}
   .ct-darkblue{background:#dce6fb;color:#1e3a8a}
   .ct-red1{background:#fddddd;color:#c0392b}
@@ -133,9 +134,10 @@
   .reltab tr.row-morreu2 td{color:#7a1f1f}
   .reltab tr.row-morreu3{background:#f5a3a3}
   .reltab tr.row-morreu3 td{color:#5c0f0f;font-weight:bold}
-  .reltab tr.row-reportando2{background:#e7f1fd}
   .reltab tr.row-reportando3{background:#e3f6e9}
   .reltab tr.row-finalizado{background:#dce6fb}
+  .reltab tr.row-atencao{background:#fff3b0}
+  .reltab tr.row-atencao td{color:#7a5c00}
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
   .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:9px 12px;font-size:12.5px}
   .rel-ghead b{letter-spacing:.3px}
@@ -174,11 +176,11 @@
   .citem .cvend{font-size:11px;color:var(--muted);letter-spacing:.3px}
   .citem .cvend b{color:var(--navy)}
   .badge{font-size:10px;font-weight:bold;padding:3px 8px;border-radius:20px;letter-spacing:.3px;white-space:nowrap}
-  .b-ATENCAO{background:#fef3e2;color:#b5781a}
+  .b-ATENCAO{background:#fff3b0;color:#7a5c00}
   .b-FINALIZADO{background:#dce6fb;color:#1e3a8a}
   .b-MORREU{background:#fdecec;color:var(--red)}
   .b-REPORTANDO{background:#e8eefc;color:#2f5fc9}
-  .b-REPORTANDO-A2{background:#d9ecfc;color:#1a5fa8}
+  .b-REPORTANDO-A2{background:#f0f0f3;color:var(--muted)}
   .b-REPORTANDO-A3{background:#dcf3e3;color:#1e7d3c}
   .b-MORREU-A2{background:#fddddd;color:#c0392b}
   .b-MORREU-A3{background:#f5a3a3;color:#7a0e0e;font-weight:bold}
@@ -495,7 +497,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070541';
+const APP_VERSION='2026070542';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -546,7 +548,7 @@ const I18N={
    v_code_req:'Informe o código.',v_dup:'Já existe um funcionário com esse código.',v_saved:'Funcionário salvo.',v_del:'Excluir este funcionário?',v_none:'Nenhum funcionário neste canal.',v_empty:'Nenhum funcionário cadastrado. Toque em “+ Novo”.',
    nav_rel:'Relatórios',rel_title:'Relatórios',rel_a1:'Nível 1 — Captação',rel_a2:'Nível 2 — Gestão',rel_a3:'Nível 3 — Depósito',
    rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',rel_col_renda:'Renda mensal',rel_total_clientes:'Total de clientes',
-   tot_reportando:'Reportando',tot_pronto3:'Prontos p/ Nível 3',tot_report3:'Reportando Nível 3',tot_finalizado:'Finalizados',tot_morreu2:'Morreu Nível 2',tot_morreu3:'Morreu Nível 3',
+   tot_atencao:'Atenção (atrasado)',tot_reportando:'Reportando',tot_pronto3:'Prontos p/ Nível 3',tot_report3:'Reportando Nível 3',tot_finalizado:'Finalizados',tot_morreu2:'Morreu Nível 2',tot_morreu3:'Morreu Nível 3',
    lvl1:'Nível 1',lvl2:'Nível 2',lvl3:'Nível 3',
    rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ A3',rel_col_valenva3:'Valor enviado A3',
    rel_col_cliente:'Cliente',rel_col_diasa3:'Dias em A3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
@@ -587,7 +589,7 @@ const I18N={
    v_code_req:'Enter the code.',v_dup:'An employee with this code already exists.',v_saved:'Employee saved.',v_del:'Delete this employee?',v_none:'No employees in this channel.',v_empty:'No employees yet. Tap “+ New”.',
    nav_rel:'Reports',rel_title:'Reports',rel_a1:'Level 1 — Acquisition',rel_a2:'Level 2 — Management',rel_a3:'Level 3 — Deposit',
    rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',rel_col_renda:'Monthly income',rel_total_clientes:'Total clients',
-   tot_reportando:'Reporting',tot_pronto3:'Ready for Level 3',tot_report3:'Reporting Level 3',tot_finalizado:'Finalized',tot_morreu2:'Lost Level 2',tot_morreu3:'Lost Level 3',
+   tot_atencao:'Attention (delayed)',tot_reportando:'Reporting',tot_pronto3:'Ready for Level 3',tot_report3:'Reporting Level 3',tot_finalizado:'Finalized',tot_morreu2:'Lost Level 2',tot_morreu3:'Lost Level 3',
    lvl1:'Level 1',lvl2:'Level 2',lvl3:'Level 3',
    rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to A3',rel_col_valenva3:'Value sent to A3',
    rel_col_cliente:'Client',rel_col_diasa3:'Days in A3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
@@ -628,7 +630,7 @@ const I18N={
    v_code_req:'請輸入代碼。',v_dup:'此代碼已存在。',v_saved:'已儲存員工。',v_del:'確定刪除此員工？',v_none:'此通路尚無員工。',v_empty:'尚無員工，請點「+ 新增」。',
    nav_rel:'報表',rel_title:'報表',rel_a1:'第一級 — 開發',rel_a2:'第二級 — 管理',rel_a3:'第三級 — 存款',
    rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',rel_col_renda:'月收入',rel_total_clientes:'客戶總數',
-   tot_reportando:'報告中',tot_pronto3:'準備進入第三級',tot_report3:'第三級報告中',tot_finalizado:'已完成',tot_morreu2:'第二級流失',tot_morreu3:'第三級流失',
+   tot_atencao:'注意（已延遲）',tot_reportando:'報告中',tot_pronto3:'準備進入第三級',tot_report3:'第三級報告中',tot_finalizado:'已完成',tot_morreu2:'第二級流失',tot_morreu3:'第三級流失',
    lvl1:'第一級',lvl2:'第二級',lvl3:'第三級',
    rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入A3',rel_col_valenva3:'轉入A3金額',
    rel_col_cliente:'客戶',rel_col_diasa3:'在A3天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
@@ -1180,12 +1182,13 @@ function cliRowClass(c){
   if(s==='MORREU A2')return 'row-morreu2';
   if(s==='REPORTANDO A3')return 'row-reportando3';
   if(s==='FINALIZADO')return 'row-finalizado';
-  if(s==='REPORTANDO A2')return 'row-reportando2';
+  if(s==='ATENCAO')return 'row-atencao';
   return '';
 }
 function cliTotalsBar(){
   const list=CLI.list;
   const cnt=s=>list.filter(c=>c.situacao===s).length;
+  const totAtencao=cnt('ATENCAO');
   const totReportando=cnt('REPORTANDO A2')+cnt('REPORTANDO A3');
   const totProntoN3=cnt('REPORTANDO A2');
   const totReportN3=cnt('REPORTANDO A3');
@@ -1194,8 +1197,9 @@ function cliTotalsBar(){
   const totMorreu3=cnt('MORREU A3');
   const item=(label,val,cls)=>'<div class="cli-tot-item '+cls+'"><span class="ct-val">'+val+'</span><span class="ct-lbl">'+label+'</span></div>';
   return '<div class="cli-totals">'
-    +item(t('tot_reportando'),totReportando,'ct-blue')
-    +item(t('tot_pronto3'),totProntoN3,'ct-blue')
+    +item(t('tot_atencao'),totAtencao,'ct-yellow')
+    +item(t('tot_reportando'),totReportando,'ct-neutral')
+    +item(t('tot_pronto3'),totProntoN3,'ct-neutral')
     +item(t('tot_report3'),totReportN3,'ct-green')
     +item(t('tot_finalizado'),totFinalizado,'ct-darkblue')
     +item(t('tot_morreu2'),totMorreu2,'ct-red1')
