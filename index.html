@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070539';
+  var V='2026070540';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -140,12 +140,12 @@
   .rel-sub .rs-val{text-align:right;font-weight:bold;white-space:nowrap}
   .rel-sub .rs-info{min-width:0}
   .rel-sub .rs-nome{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
-  .rel-edit-cell{padding:4px 6px}
+  .rel-edit-cell{padding:6px;white-space:nowrap}
   .proc-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
   .proc-chk{display:flex;align-items:center;gap:6px;background:#f2f4f9;border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-size:12.5px;color:var(--navy);cursor:pointer}
   .proc-chk input{width:15px;height:15px}
   .proc-chk.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-  select.rel-edit{font-family:inherit;font-size:12px;padding:5px 6px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--navy);font-weight:bold;max-width:110px}
+  select.rel-edit{font-family:inherit;font-size:12.5px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--navy);font-weight:bold;width:98px;flex:0 0 auto}
   .rel-group .citem{border-radius:0;border:none;border-bottom:1px solid var(--line)}
   .rel-group .citem:last-child{border-bottom:none}
   .prazos{display:flex;gap:6px;margin-top:8px}
@@ -481,7 +481,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070539';
+const APP_VERSION='2026070540';
 (function(){
   let checking=false;
   async function checkVersion(){
