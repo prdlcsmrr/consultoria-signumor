@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070543';
+  var V='2026070544';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -139,17 +139,17 @@
   .reltab tr.row-atencao{background:#fff3b0}
   .reltab tr.row-atencao td{color:#7a5c00}
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-  .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:9px 12px;font-size:12.5px}
-  .rel-ghead b{letter-spacing:.3px}
-  .rel-ghead span{font-size:13px;font-weight:bold;color:#fff}
-  .rel-sub{display:grid;grid-template-columns:72px 1fr auto;align-items:center;padding:10px 12px;font-size:13px;color:var(--navy);border-bottom:1px solid var(--line);gap:10px}
+  .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:11px 14px;font-size:14px}
+  .rel-ghead b{letter-spacing:.3px;font-size:15px}
+  .rel-ghead span{font-size:13.5px;font-weight:bold;color:#fff}
+  .rel-sub{display:grid;grid-template-columns:78px 1fr auto;align-items:center;padding:12px 14px;font-size:14.5px;color:var(--navy);border-bottom:1px solid var(--line);gap:10px}
   .rel-sub:last-child{border-bottom:none}
   .rel-sub.muted{color:var(--muted);font-style:italic}
-  .rel-sub .rs-date{display:inline-block;min-width:76px;color:var(--muted);font-size:11px;font-weight:bold}
-  .rel-sub .rs-nome{font-weight:bold}
-  .rel-sub .rs-info{display:flex;flex-direction:column;gap:2px}
-  .rel-sub .rs-renda{font-size:11px;color:var(--muted);font-weight:normal}
-  .rel-sub .rs-val{text-align:right;font-weight:bold;white-space:nowrap}
+  .rel-sub .rs-date{display:inline-block;min-width:78px;color:var(--muted);font-size:12.5px;font-weight:bold}
+  .rel-sub .rs-nome{font-weight:bold;font-size:15px}
+  .rel-sub .rs-info{display:flex;flex-direction:column;gap:3px}
+  .rel-sub .rs-renda{font-size:12px;color:var(--muted);font-weight:normal}
+  .rel-sub .rs-val{text-align:right;font-weight:bold;white-space:nowrap;font-size:15px}
   .rel-sub .rs-info{min-width:0}
   .rel-sub .rs-nome{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
   .rel-edit-cell{padding:6px;white-space:nowrap}
@@ -490,7 +490,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070543';
+const APP_VERSION='2026070544';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -946,10 +946,12 @@ function renderRel(){
   if(!CLI.loaded)return;
   const {mapA1,mapA2,listA3}=relBuild();
   const k1=Object.keys(mapA1).sort();
+  const totalA1=k1.reduce((s,k)=>s+mapA1[k].transferidos.length,0);
   document.getElementById('rel-a1').innerHTML=!k1.length?'<div class="empty">'+t('rel_empty')+'</div>':
-    k1.map(k=>{const r=mapA1[k];
+    '<div class="rel-total">'+t('rel_col_transf')+': <b>'+totalA1+'</b></div>'
+    +k1.map(k=>{const r=mapA1[k];
       const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span class="rs-date">'+fmtDt(x.data)+'</span><span class="rs-info"><span class="rs-nome">'+esc(x.nome)+'</span><span class="rs-renda">'+t('rel_col_renda')+': '+fmtMoney(x.renda)+'</span></span><span class="rs-val">'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
-      return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.receb+' '+t('rel_col_receb')+' · '+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
+      return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
     }).join('');
   const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('cli_va2b')+'</th><th>'+t('lvl3')+'</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
   const k2=Object.keys(mapA2).sort();
