@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070536';
+  var V='2026070537';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -266,10 +266,10 @@
 
         <div class="sec"><div class="sec-t" data-i="sec_funil">Funil</div>
           <div class="row3">
-            <label class="fld"><span class="lbl">A1</span><select id="cf-va1"></select></label>
-            <label class="fld"><span class="lbl">A2</span><select id="cf-va2"></select></label>
+            <label class="fld"><span class="lbl" data-i="lvl1">A1</span><select id="cf-va1"></select></label>
+            <label class="fld"><span class="lbl" data-i="lvl2">A2</span><select id="cf-va2"></select></label>
             <label class="fld"><span class="lbl" data-i="cli_va2b">A2 (2º)</span><select id="cf-va2b"></select></label>
-            <label class="fld"><span class="lbl">A3</span><select id="cf-va3"></select></label>
+            <label class="fld"><span class="lbl" data-i="lvl3">A3</span><select id="cf-va3"></select></label>
           </div>
           <div class="prazos" id="cf-prazos"></div>
         </div>
@@ -282,6 +282,8 @@
               <option value="MORREU A2" data-i="st_MORREU A2">MORREU A2</option>
               <option value="MORREU A3" data-i="st_MORREU A3">MORREU A3</option>
               <option value="REPORTANDO" data-i="st_REPORTANDO">REPORTANDO</option>
+              <option value="REPORTANDO A2" data-i="st_REPORTANDO A2">REPORTANDO A2</option>
+              <option value="REPORTANDO A3" data-i="st_REPORTANDO A3">REPORTANDO A3</option>
             </select></label>
           <div class="fld"><span class="lbl" data-i="cli_procedimentos">Procedimentos</span><div id="cf-proc-list" class="proc-list"></div></div>
           <div class="row2">
@@ -356,7 +358,7 @@
         <div class="row2">
           <label class="fld"><span class="lbl" data-i="vend_code">Código</span><input id="vf-code" maxlength="10" placeholder="B66"></label>
           <label class="fld"><span class="lbl" data-i="vend_channel">Canal</span>
-            <select id="vf-canal"><option value="A1">A1</option><option value="A2">A2</option><option value="A3">A3</option></select></label>
+            <select id="vf-canal"><option value="A1" data-i="lvl1">A1</option><option value="A2" data-i="lvl2">A2</option><option value="A3" data-i="lvl3">A3</option></select></label>
         </div>
         <label class="fld" style="margin-bottom:8px"><span class="lbl" data-i="vend_name">Nome (opcional)</span><input id="vf-nome" maxlength="60" placeholder="—"></label>
         <label class="chk"><input type="checkbox" id="vf-ativo" checked><span data-i="vend_active">Ativo</span></label>
@@ -469,7 +471,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070536';
+const APP_VERSION='2026070537';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -499,12 +501,12 @@ const I18N={
    first_access:'Primeiro acesso? Criar conta',signup_title:'Criar conta',signup_sub:'Apenas gerentes autorizados',
    signup_btn:'Criar conta',back_login:'← Voltar ao login',logged_as:'Conectado como',logout:'Sair',
    nav_vend:'Funcionários',nav_cli:'Clientes',
-   vend_title:'Funcionários',vend_new:'+ Novo',vend_code:'Código',vend_channel:'Canal',vend_name:'Nome (opcional)',vend_active:'Ativo',vend_inactive:'Desativado',vend_atua_a3:'Também atua em A3',vend_save:'Salvar',vend_cancel:'Cancelar',
+   vend_title:'Funcionários',vend_new:'+ Novo',vend_code:'Código',vend_channel:'Canal',vend_name:'Nome (opcional)',vend_active:'Ativo',vend_inactive:'Desativado',vend_atua_a3:'Também atua no Nível 3',vend_save:'Salvar',vend_cancel:'Cancelar',
    cli_title:'Clientes',cli_new:'+ Novo',cli_pnome:'Primeiro nome',cli_snome:'Segundo nome',
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',sec_a3rel:'Relatório de Atendimento A3',
    a3_data_rel:'Data do relatório',a3_agenda:'Agenda diária',a3_valor_est:'Valor estimado total',a3_dinheiro_conta:'Dinheiro em conta',a3_dinheiro_gasto:'Dinheiro gasto',
    a3_trocado_usdt:'Já trocado por USDT',a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',
-   rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 L1',rpt_l2:'📍 L2',rpt_l3:'📍 L3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
+   rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 Nível 1',rpt_l2:'📍 Nível 2',rpt_l3:'📍 Nível 3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
    proc_interceptacao:'Interceptação',proc_formulario:'Formulário',proc_termo:'Termo',proc_vizinhos:'Vizinhos',proc_relatorio:'Relatório',proc_carta:'Carta de Autodeclaração',proc_procedimentos_iniciais:'Procedimentos Iniciais',proc_lista:'Lista',
    cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',rpt_editar_a3:'✏️ Editar A3',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
@@ -512,14 +514,15 @@ const I18N={
    f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',f_renda:'Renda mensal',f_depositado:'Valor depositado',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
    cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',
    f_all:'Todos',st_morto:'Morreu',
-   st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu A2','st_MORREU A3':'Morreu A3',st_REPORTANDO:'Reportando',cli_va2b:'A2 (2º)',
+   st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu Nível 2','st_MORREU A3':'Morreu Nível 3',st_REPORTANDO:'Reportando','st_REPORTANDO A2':'Reportando Nível 2','st_REPORTANDO A3':'Reportando Nível 3',cli_va2b:'Nível 2 (2º)',
    cli_col_nome:'Cliente',cli_col_entrada:'Entrada',cli_col_saida:'Saída',cli_col_atend:'Atendimento',cli_col_tempo:'Tempo na etapa',cli_col_resg:'Resgatável',cli_col_sit:'Situação',
    cli_em_a1:'em A1',cli_em_a2:'em A2',cli_em_a3:'em A3',
    pz_funil:'dias no funil',pz_entrega:'p/ entregar',pz_a3:'dias em A3',
    c_pnome_req:'Informe o primeiro nome.',c_saved:'Cliente salvo.',c_del:'Excluir este cliente?',c_empty:'Nenhum cliente cadastrado. Toque em “+ Novo”.',c_none:'Nenhum cliente neste filtro.',
    v_code_req:'Informe o código.',v_dup:'Já existe um funcionário com esse código.',v_saved:'Funcionário salvo.',v_del:'Excluir este funcionário?',v_none:'Nenhum funcionário neste canal.',v_empty:'Nenhum funcionário cadastrado. Toque em “+ Novo”.',
-   nav_rel:'Relatórios',rel_title:'Relatórios',rel_a1:'A1 — Captação',rel_a2:'A2 — Gestão',rel_a3:'A3 — Resgate',
+   nav_rel:'Relatórios',rel_title:'Relatórios',rel_a1:'Nível 1 — Captação',rel_a2:'Nível 2 — Gestão',rel_a3:'Nível 3 — Depósito',
    rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',rel_col_renda:'Renda mensal',
+   lvl1:'Nível 1',lvl2:'Nível 2',lvl3:'Nível 3',
    rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ A3',rel_col_valenva3:'Valor enviado A3',
    rel_col_cliente:'Cliente',rel_col_diasa3:'Dias em A3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
    rel_empty:'Sem dados.',
@@ -529,7 +532,7 @@ const I18N={
    pag_comissao_ind:'Comissão por indicação',pag_bonus_sup:'Bônus de supervisão',pag_bonus_assid:'Bônus de assiduidade',
    pag_adiantamento:'Adiantamento',pag_multa:'Multa',pag_resumo:'Resumo do salário',
    pag_empty:'Nenhum mês registrado ainda.',pag_dup:'Já existe um registro para esse mês/ano.',pag_del:'Excluir este registro de pagamento?',pag_ano_req:'Informe um ano válido.',
-   nav_sal:'Salários',sal_back:'Voltar',rel_a1_tab:'Relatório A1',rel_a2_tab:'Relatório A2',rel_a3_tab:'Relatório A3',
+   nav_sal:'Salários',sal_back:'Voltar',rel_a1_tab:'Relatório Nível 1',rel_a2_tab:'Relatório Nível 2',rel_a3_tab:'Relatório Nível 3',
    none_opt:'—',generic:'Algo deu errado. Tente novamente.',
    fill:'Preencha e-mail e senha.',invalid:'E-mail ou senha incorretos.',
    signup_ok:'Conta criada! Verifique seu e-mail para confirmar e depois faça login.',signup_exists:'Este e-mail já está cadastrado. Faça login.',weakpass:'A senha precisa ter ao menos 6 caracteres.'},
@@ -538,12 +541,12 @@ const I18N={
    first_access:'First time? Create account',signup_title:'Create account',signup_sub:'Authorized managers only',
    signup_btn:'Create account',back_login:'← Back to sign in',logged_as:'Signed in as',logout:'Sign out',
    nav_vend:'Employees',nav_cli:'Clients',
-   vend_title:'Employees',vend_new:'+ New',vend_code:'Code',vend_channel:'Channel',vend_name:'Name (optional)',vend_active:'Active',vend_inactive:'Inactive',vend_atua_a3:'Also works in A3',vend_save:'Save',vend_cancel:'Cancel',
+   vend_title:'Employees',vend_new:'+ New',vend_code:'Code',vend_channel:'Channel',vend_name:'Name (optional)',vend_active:'Active',vend_inactive:'Inactive',vend_atua_a3:'Also works in Level 3',vend_save:'Save',vend_cancel:'Cancel',
    cli_title:'Clients',cli_new:'+ New',cli_pnome:'First name',cli_snome:'Second name',
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',sec_a3rel:'A3 Attendance Report',
    a3_data_rel:'Report date',a3_agenda:'Daily agenda',a3_valor_est:'Total estimated value',a3_dinheiro_conta:'Money in account',a3_dinheiro_gasto:'Money spent',
    a3_trocado_usdt:'Already converted to USDT',a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',
-   rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 L1',rpt_l2:'📍 L2',rpt_l3:'📍 L3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
+   rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 Level 1',rpt_l2:'📍 Level 2',rpt_l3:'📍 Level 3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
    proc_interceptacao:'Interception',proc_formulario:'Form',proc_termo:'Terms',proc_vizinhos:'Neighbors',proc_relatorio:'Report',proc_carta:'Self-declaration letter',proc_procedimentos_iniciais:'Initial procedures',proc_lista:'List',
    cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',rpt_editar_a3:'✏️ Edit A3',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
@@ -551,14 +554,15 @@ const I18N={
    f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',f_renda:'Monthly income',f_depositado:'Deposited value',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
    cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',
    f_all:'All',st_morto:'Lost',
-   st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost A2','st_MORREU A3':'Lost A3',st_REPORTANDO:'Reporting',cli_va2b:'A2 (2nd)',
+   st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost Level 2','st_MORREU A3':'Lost Level 3',st_REPORTANDO:'Reporting','st_REPORTANDO A2':'Reporting Level 2','st_REPORTANDO A3':'Reporting Level 3',cli_va2b:'Level 2 (2nd)',
    cli_col_nome:'Client',cli_col_entrada:'Entry',cli_col_saida:'Exit',cli_col_atend:'Handled by',cli_col_tempo:'Time in stage',cli_col_resg:'Redeemable',cli_col_sit:'Status',
    cli_em_a1:'in A1',cli_em_a2:'in A2',cli_em_a3:'in A3',
    pz_funil:'days in funnel',pz_entrega:'to deliver',pz_a3:'days in A3',
    c_pnome_req:'Enter the first name.',c_saved:'Client saved.',c_del:'Delete this client?',c_empty:'No clients yet. Tap “+ New”.',c_none:'No clients in this filter.',
    v_code_req:'Enter the code.',v_dup:'An employee with this code already exists.',v_saved:'Employee saved.',v_del:'Delete this employee?',v_none:'No employees in this channel.',v_empty:'No employees yet. Tap “+ New”.',
-   nav_rel:'Reports',rel_title:'Reports',rel_a1:'A1 — Acquisition',rel_a2:'A2 — Management',rel_a3:'A3 — Redemption',
+   nav_rel:'Reports',rel_title:'Reports',rel_a1:'Level 1 — Acquisition',rel_a2:'Level 2 — Management',rel_a3:'Level 3 — Deposit',
    rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',rel_col_renda:'Monthly income',
+   lvl1:'Level 1',lvl2:'Level 2',lvl3:'Level 3',
    rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to A3',rel_col_valenva3:'Value sent to A3',
    rel_col_cliente:'Client',rel_col_diasa3:'Days in A3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
    rel_empty:'No data.',
@@ -568,7 +572,7 @@ const I18N={
    pag_comissao_ind:'Referral commission',pag_bonus_sup:'Supervision bonus',pag_bonus_assid:'Attendance bonus',
    pag_adiantamento:'Advance',pag_multa:'Penalty',pag_resumo:'Salary summary',
    pag_empty:'No months recorded yet.',pag_dup:'A record for this month/year already exists.',pag_del:'Delete this payroll record?',pag_ano_req:'Enter a valid year.',
-   nav_sal:'Salaries',sal_back:'Back',rel_a1_tab:'Report A1',rel_a2_tab:'Report A2',rel_a3_tab:'Report A3',
+   nav_sal:'Salaries',sal_back:'Back',rel_a1_tab:'Level 1 Report',rel_a2_tab:'Level 2 Report',rel_a3_tab:'Level 3 Report',
    none_opt:'—',generic:'Something went wrong. Please try again.',
    fill:'Enter e-mail and password.',invalid:'Wrong e-mail or password.',
    signup_ok:'Account created! Check your e-mail to confirm, then sign in.',signup_exists:'This e-mail is already registered. Please sign in.',weakpass:'Password must be at least 6 characters.'},
@@ -577,12 +581,12 @@ const I18N={
    first_access:'首次使用？建立帳號',signup_title:'建立帳號',signup_sub:'僅限授權經理',
    signup_btn:'建立帳號',back_login:'← 返回登入',logged_as:'登入身分',logout:'登出',
    nav_vend:'員工',nav_cli:'客戶',
-   vend_title:'員工',vend_new:'+ 新增',vend_code:'代碼',vend_channel:'通路',vend_name:'姓名（選填）',vend_active:'啟用',vend_inactive:'已停用',vend_atua_a3:'同時支援A3',vend_save:'儲存',vend_cancel:'取消',
+   vend_title:'員工',vend_new:'+ 新增',vend_code:'代碼',vend_channel:'通路',vend_name:'姓名（選填）',vend_active:'啟用',vend_inactive:'已停用',vend_atua_a3:'同時支援第三級',vend_save:'儲存',vend_cancel:'取消',
    cli_title:'客戶',cli_new:'+ 新增',cli_pnome:'名',cli_snome:'第二名',
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',sec_a3rel:'A3服務報告',
    a3_data_rel:'報告日期',a3_agenda:'每日行程',a3_valor_est:'預估總值',a3_dinheiro_conta:'帳戶內金額',a3_dinheiro_gasto:'已花費金額',
    a3_trocado_usdt:'已兌換USDT',a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',
-   rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第1行',rpt_l2:'📍 第2行',rpt_l3:'📍 第3行',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
+   rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第一級',rpt_l2:'📍 第二級',rpt_l3:'📍 第三級',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
    proc_interceptacao:'攔截',proc_formulario:'表格',proc_termo:'條款',proc_vizinhos:'鄰居',proc_relatorio:'報告',proc_carta:'自我聲明書',proc_procedimentos_iniciais:'初步程序',proc_lista:'清單',
    cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',rpt_editar_a3:'✏️ 編輯A3',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
@@ -590,14 +594,15 @@ const I18N={
    f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',f_renda:'月收入',f_depositado:'已存入金額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
    cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',
    f_all:'全部',st_morto:'流失',
-   st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'A2流失','st_MORREU A3':'A3流失',st_REPORTANDO:'報告中',cli_va2b:'A2（第二位）',
+   st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'第二級流失','st_MORREU A3':'第三級流失',st_REPORTANDO:'報告中','st_REPORTANDO A2':'第二級報告中','st_REPORTANDO A3':'第三級報告中',cli_va2b:'第二級（第二位）',
    cli_col_nome:'客戶',cli_col_entrada:'進入日',cli_col_saida:'離開日',cli_col_atend:'負責人',cli_col_tempo:'目前階段時間',cli_col_resg:'可贖回',cli_col_sit:'狀況',
    cli_em_a1:'於A1',cli_em_a2:'於A2',cli_em_a3:'於A3',
    pz_funil:'漏斗天數',pz_entrega:'待交付',pz_a3:'A3天數',
    c_pnome_req:'請輸入名。',c_saved:'已儲存客戶。',c_del:'確定刪除此客戶？',c_empty:'尚無客戶，請點「+ 新增」。',c_none:'此篩選無客戶。',
    v_code_req:'請輸入代碼。',v_dup:'此代碼已存在。',v_saved:'已儲存員工。',v_del:'確定刪除此員工？',v_none:'此通路尚無員工。',v_empty:'尚無員工，請點「+ 新增」。',
-   nav_rel:'報表',rel_title:'報表',rel_a1:'A1 — 開發',rel_a2:'A2 — 管理',rel_a3:'A3 — 贖回',
+   nav_rel:'報表',rel_title:'報表',rel_a1:'第一級 — 開發',rel_a2:'第二級 — 管理',rel_a3:'第三級 — 存款',
    rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',rel_col_renda:'月收入',
+   lvl1:'第一級',lvl2:'第二級',lvl3:'第三級',
    rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入A3',rel_col_valenva3:'轉入A3金額',
    rel_col_cliente:'客戶',rel_col_diasa3:'在A3天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
    rel_empty:'無資料。',
@@ -607,7 +612,7 @@ const I18N={
    pag_comissao_ind:'介紹佣金',pag_bonus_sup:'督導獎金',pag_bonus_assid:'全勤獎金',
    pag_adiantamento:'預支',pag_multa:'罰款',pag_resumo:'薪資總結',
    pag_empty:'尚無月份紀錄。',pag_dup:'該月份/年份的紀錄已存在。',pag_del:'確定刪除此薪資紀錄？',pag_ano_req:'請輸入有效年份。',
-   nav_sal:'薪資',sal_back:'返回',rel_a1_tab:'A1報表',rel_a2_tab:'A2報表',rel_a3_tab:'A3報表',
+   nav_sal:'薪資',sal_back:'返回',rel_a1_tab:'第一級報表',rel_a2_tab:'第二級報表',rel_a3_tab:'第三級報表',
    none_opt:'—',generic:'發生錯誤，請再試一次。',
    fill:'請輸入電子郵件與密碼。',invalid:'電子郵件或密碼錯誤。',
    signup_ok:'帳號已建立！請查收電子郵件確認後再登入。',signup_exists:'此電子郵件已註冊，請直接登入。',weakpass:'密碼至少需 6 個字元。'}
@@ -673,6 +678,7 @@ document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.cl
 /* ===== VENDEDORES ===== */
 const VEND={list:[],loaded:false};
 const CANAIS=[['A1','var(--a1)'],['A2','var(--a2)'],['A3','var(--a3)']];
+function lvlLabel(c){return c==='A1'?t('lvl1'):c==='A2'?t('lvl2'):c==='A3'?t('lvl3'):c;}
 async function loadVend(){
   const {data,error}=await sb.from('vendedores').select('*').order('codigo');
   if(error){document.getElementById('v-list').innerHTML='<div class="empty">'+t('generic')+'</div>';return;}
@@ -685,12 +691,12 @@ function renderVend(){
   let html='';
   CANAIS.forEach(([c,color])=>{
     const arr=c==='A3'?VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)):VEND.list.filter(v=>v.canal===c);
-    html+='<div class="grp"><div class="grp-h"><span class="dot" style="background:'+color+'"></span><b>'+c+'</b><span class="cnt">'+arr.length+'</span></div>';
+    html+='<div class="grp"><div class="grp-h"><span class="dot" style="background:'+color+'"></span><b>'+lvlLabel(c)+'</b><span class="cnt">'+arr.length+'</span></div>';
     if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
     else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
       const dual=c==='A3'&&v.canal==='A2';
       html+='<div class="vitem"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
-        +(dual?'<span class="badge a3tag">A2+A3</span>':'')
+        +(dual?'<span class="badge a3tag">'+t('lvl2')+'+'+t('lvl3')+'</span>':'')
         +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):t('vend_inactive'))+'</span>'
         +'<button class="iconbtn" data-edit="'+v.id+'">✏️</button><button class="iconbtn" data-del="'+v.id+'">🗑️</button></div>';});
     html+='</div>';
@@ -744,7 +750,7 @@ function renderSalEmpList(){
   let html='';
   CANAIS.forEach(([c,color])=>{
     const arr=c==='A3'?VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)):VEND.list.filter(v=>v.canal===c);
-    html+='<div class="grp"><div class="grp-h"><span class="dot" style="background:'+color+'"></span><b>'+c+'</b><span class="cnt">'+arr.length+'</span></div>';
+    html+='<div class="grp"><div class="grp-h"><span class="dot" style="background:'+color+'"></span><b>'+lvlLabel(c)+'</b><span class="cnt">'+arr.length+'</span></div>';
     if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
     else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
       html+='<div class="vitem" data-sal="'+v.id+'" data-cod="'+esc(v.codigo)+'" style="cursor:pointer"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
@@ -892,7 +898,7 @@ function inlineVendSelect(list,cur,cid,field){
   return html;
 }
 function inlineSituacaoSelect(cur,cid,stage){
-  const opts=['ATENCAO','REPORTANDO','FINALIZADO',stage==='a3'?'MORREU A3':'MORREU A2'];
+  const opts=['ATENCAO',stage==='a3'?'REPORTANDO A3':'REPORTANDO A2','FINALIZADO',stage==='a3'?'MORREU A3':'MORREU A2'];
   let html='<select class="rel-edit" data-cid="'+cid+'" data-field="situacao">';
   if(cur&&!opts.includes(cur))opts.unshift(cur);
   opts.forEach(o=>{html+='<option value="'+o+'"'+(o===cur?' selected':'')+'>'+t('st_'+o)+'</option>';});
@@ -923,7 +929,7 @@ function renderRel(){
       const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span class="rs-date">'+fmtDt(x.data)+'</span><span class="rs-info"><span class="rs-nome">'+esc(x.nome)+'</span><span class="rs-renda">'+t('rel_col_renda')+': '+fmtMoney(x.renda)+'</span></span><span class="rs-val">'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
       return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.receb+' '+t('rel_col_receb')+' · '+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
     }).join('');
-  const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>A1</th><th>A2</th><th>A2 (2º)</th><th>A3</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
+  const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('cli_va2b')+'</th><th>'+t('lvl3')+'</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
   const k2=Object.keys(mapA2).sort();
   document.getElementById('rel-a2').innerHTML=!k2.length?'<div class="empty">'+t('rel_empty')+'</div>':
     k2.map(k=>{const r=mapA2[k];
@@ -931,7 +937,7 @@ function renderRel(){
         +'<table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div>';
     }).join('');
   document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
-    '<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>A1</th><th>A2</th><th>A3</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th></tr></thead><tbody>'
+    '<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('lvl3')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th></tr></thead><tbody>'
     +listA3.map(r=>'<tr data-report="'+r.id+'"><td style="cursor:pointer" data-reportcell>'+esc(r.nome||'—')+'</td><td><b>'+esc(r.a1||'—')+'</b></td><td><b>'+esc(r.a2||'—')+'</b></td><td><b>'+esc(r.func||'—')+'</b></td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(r.situacao,r.id,'a3')+'</td></tr>').join('')
     +'</tbody></table>';
 }
@@ -1119,7 +1125,7 @@ function fillVendSelects(){
   sel2b.innerHTML=html2b;if(cur2b)sel2b.value=cur2b;
   const sel3=document.getElementById('cf-va3');const cur3=sel3.value;
   let html3='<option value="">'+t('none_opt')+'</option>';
-  VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)).forEach(v=>{html3+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+(v.canal==='A2'?' (A2+A3)':'')+'</option>';});
+  VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)).forEach(v=>{html3+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+(v.canal==='A2'?' ('+t('lvl2')+'+'+t('lvl3')+')':'')+'</option>';});
   sel3.innerHTML=html3;if(cur3)sel3.value=cur3;
 }
 function ensureOpt(id,val){ if(!val)return;const sel=document.getElementById(id);
@@ -1130,7 +1136,7 @@ async function loadCli(){
   if(error){document.getElementById('c-list').innerHTML='<div class="empty">'+t('generic')+'</div>';return;}
   CLI.list=data||[];CLI.loaded=true;renderCli();
 }
-function stBadge(s){const cls=s&&s.indexOf('MORREU')===0?'MORREU':(s||'ATENCAO');return '<span class="badge b-'+cls+'">'+t('st_'+(s||'ATENCAO'))+'</span>';}
+function stBadge(s){let cls=s||'ATENCAO';if(cls.indexOf('MORREU')===0)cls='MORREU';else if(cls.indexOf('REPORTANDO')===0)cls='REPORTANDO';return '<span class="badge b-'+cls+'">'+t('st_'+(s||'ATENCAO'))+'</span>';}
 function stageTime(c){
   if(c.data_entrada_a3){const d=days(c.data_entrada_a3,today());return d==null?'—':d+'d · '+t('cli_em_a3');}
   if(c.data_entrada_a2){const d=days(c.data_entrada_a2,today());return d==null?'—':d+'d · '+t('cli_em_a2');}
@@ -1142,12 +1148,13 @@ function renderCli(){
   const box=document.getElementById('c-list');
   let arr=CLI.list.slice();
   if(CLI.filtro==='MORTO')arr=arr.filter(c=>(c.situacao||'').indexOf('MORREU')===0);
+  else if(CLI.filtro==='REPORTANDO')arr=arr.filter(c=>(c.situacao||'').indexOf('REPORTANDO')===0);
   else if(CLI.filtro!=='ALL')arr=arr.filter(c=>c.situacao===CLI.filtro);
   if(!CLI.list.length){box.innerHTML='<div class="empty">'+t('c_empty')+'</div>';return;}
   if(!arr.length){box.innerHTML='<div class="empty">'+t('c_none')+'</div>';return;}
   let html='<div class="reltab-wrap"><table class="reltab"><thead><tr>'
     +'<th>'+t('cli_col_entrada')+'</th><th>'+t('cli_col_nome')+'</th><th>'+t('cli_col_saida')+'</th>'
-    +'<th>A1</th><th>A2</th><th>A3</th><th>'+t('cli_col_tempo')+'</th><th>'+t('cli_col_resg')+'</th><th>'+t('cli_col_sit')+'</th>'
+    +'<th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('lvl3')+'</th><th>'+t('cli_col_tempo')+'</th><th>'+t('cli_col_resg')+'</th><th>'+t('cli_col_sit')+'</th>'
     +'</tr></thead><tbody>';
   arr.forEach(c=>{
     const nome=esc(c.primeiro_nome||'')+(c.segundo_nome?' '+esc(c.segundo_nome):'');
