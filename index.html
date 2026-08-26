@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070538';
+  var V='2026070539';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -109,9 +109,13 @@
   .resg-date{width:140px;font-size:12.5px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-family:inherit}
   .resg-date:disabled{background:#f2f2f2;color:#aaa}
   .reltab-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:4px}
-  .reltab{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
-  .reltab th{text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.4px;padding:6px 10px;border-bottom:1.5px solid var(--gold)}
-  .reltab td{padding:8px 10px;border-bottom:1px solid var(--line);color:var(--navy)}
+  .reltab{width:100%;border-collapse:collapse;font-size:13px;white-space:nowrap}
+  .reltab th{text-align:left;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;padding:9px 12px;border-bottom:1.5px solid var(--gold);background:#fbfaf6}
+  .reltab td{padding:11px 12px;border-bottom:1px solid var(--line);color:var(--navy);vertical-align:middle;line-height:1.3}
+  .reltab tbody tr:nth-child(even):not(.row-morreu2):not(.row-morreu3):not(.row-indo3):not(.row-nivel3){background:#fbfbfd}
+  .reltab tbody tr:hover{filter:brightness(0.97)}
+  .cli-name-cell{max-width:150px;overflow:hidden;text-overflow:ellipsis;font-weight:bold}
+  .rel-total{font-size:13px;font-weight:bold;color:var(--navy);background:#fdf3e3;border:1px solid var(--gold);border-radius:8px;padding:8px 14px;margin-bottom:12px;display:inline-block}
   .atend-cell{display:flex;flex-direction:column;gap:2px}
   .atend-labels{font-size:9px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
   .atend-codes{font-size:inherit}
@@ -477,7 +481,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070538';
+const APP_VERSION='2026070539';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -527,7 +531,7 @@ const I18N={
    c_pnome_req:'Informe o primeiro nome.',c_saved:'Cliente salvo.',c_del:'Excluir este cliente?',c_empty:'Nenhum cliente cadastrado. Toque em “+ Novo”.',c_none:'Nenhum cliente neste filtro.',
    v_code_req:'Informe o código.',v_dup:'Já existe um funcionário com esse código.',v_saved:'Funcionário salvo.',v_del:'Excluir este funcionário?',v_none:'Nenhum funcionário neste canal.',v_empty:'Nenhum funcionário cadastrado. Toque em “+ Novo”.',
    nav_rel:'Relatórios',rel_title:'Relatórios',rel_a1:'Nível 1 — Captação',rel_a2:'Nível 2 — Gestão',rel_a3:'Nível 3 — Depósito',
-   rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',rel_col_renda:'Renda mensal',
+   rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',rel_col_renda:'Renda mensal',rel_total_clientes:'Total de clientes',
    lvl1:'Nível 1',lvl2:'Nível 2',lvl3:'Nível 3',
    rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ A3',rel_col_valenva3:'Valor enviado A3',
    rel_col_cliente:'Cliente',rel_col_diasa3:'Dias em A3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
@@ -567,7 +571,7 @@ const I18N={
    c_pnome_req:'Enter the first name.',c_saved:'Client saved.',c_del:'Delete this client?',c_empty:'No clients yet. Tap “+ New”.',c_none:'No clients in this filter.',
    v_code_req:'Enter the code.',v_dup:'An employee with this code already exists.',v_saved:'Employee saved.',v_del:'Delete this employee?',v_none:'No employees in this channel.',v_empty:'No employees yet. Tap “+ New”.',
    nav_rel:'Reports',rel_title:'Reports',rel_a1:'Level 1 — Acquisition',rel_a2:'Level 2 — Management',rel_a3:'Level 3 — Deposit',
-   rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',rel_col_renda:'Monthly income',
+   rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',rel_col_renda:'Monthly income',rel_total_clientes:'Total clients',
    lvl1:'Level 1',lvl2:'Level 2',lvl3:'Level 3',
    rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to A3',rel_col_valenva3:'Value sent to A3',
    rel_col_cliente:'Client',rel_col_diasa3:'Days in A3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
@@ -607,7 +611,7 @@ const I18N={
    c_pnome_req:'請輸入名。',c_saved:'已儲存客戶。',c_del:'確定刪除此客戶？',c_empty:'尚無客戶，請點「+ 新增」。',c_none:'此篩選無客戶。',
    v_code_req:'請輸入代碼。',v_dup:'此代碼已存在。',v_saved:'已儲存員工。',v_del:'確定刪除此員工？',v_none:'此通路尚無員工。',v_empty:'尚無員工，請點「+ 新增」。',
    nav_rel:'報表',rel_title:'報表',rel_a1:'第一級 — 開發',rel_a2:'第二級 — 管理',rel_a3:'第三級 — 存款',
-   rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',rel_col_renda:'月收入',
+   rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',rel_col_renda:'月收入',rel_total_clientes:'客戶總數',
    lvl1:'第一級',lvl2:'第二級',lvl3:'第三級',
    rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入A3',rel_col_valenva3:'轉入A3金額',
    rel_col_cliente:'客戶',rel_col_diasa3:'在A3天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
@@ -918,7 +922,7 @@ function relRow(c){
   const a3List=VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3));
   return '<tr data-report="'+c.id+'">'
     +'<td>'+fmtDt(c.data_entrada)+'</td>'
-    +'<td>'+(nome||'—')+'</td>'
+    +'<td class="cli-name-cell" title="'+nome+'">'+(nome||'—')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a1List,c.vendedor_a1,c.id,'vendedor_a1')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a2List,c.vendedor_a2,c.id,'vendedor_a2')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a2List,c.vendedor_a2b,c.id,'vendedor_a2b')+'</td>'
@@ -937,14 +941,17 @@ function renderRel(){
     }).join('');
   const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('cli_va2b')+'</th><th>'+t('lvl3')+'</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
   const k2=Object.keys(mapA2).sort();
+  const totalA2=k2.reduce((s,k)=>s+mapA2[k].clientes.length,0);
   document.getElementById('rel-a2').innerHTML=!k2.length?'<div class="empty">'+t('rel_empty')+'</div>':
-    k2.map(k=>{const r=mapA2[k];
+    '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+totalA2+'</b></div>'
+    +k2.map(k=>{const r=mapA2[k];
       return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.ativos+' '+t('rel_col_ativos')+' · '+fmtMoney(r.valadm)+' · '+r.enva3+' '+t('rel_col_enva3')+' ('+fmtMoney(r.valenva3)+')</span></div>'
         +'<table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div>';
     }).join('');
   document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
-    '<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('lvl3')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th></tr></thead><tbody>'
-    +listA3.map(r=>'<tr data-report="'+r.id+'"><td style="cursor:pointer" data-reportcell>'+esc(r.nome||'—')+'</td><td><b>'+esc(r.a1||'—')+'</b></td><td><b>'+esc(r.a2||'—')+'</b></td><td><b>'+esc(r.func||'—')+'</b></td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(r.situacao,r.id,'a3')+'</td></tr>').join('')
+    '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+listA3.length+'</b></div>'
+    +'<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('lvl3')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th></tr></thead><tbody>'
+    +listA3.map(r=>'<tr data-report="'+r.id+'"><td class="cli-name-cell" style="cursor:pointer" data-reportcell title="'+esc(r.nome||'')+'">'+esc(r.nome||'—')+'</td><td><b>'+esc(r.a1||'—')+'</b></td><td><b>'+esc(r.a2||'—')+'</b></td><td><b>'+esc(r.func||'—')+'</b></td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(r.situacao,r.id,'a3')+'</td></tr>').join('')
     +'</tbody></table>';
 }
 const REPORT={current:null};
