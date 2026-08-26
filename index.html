@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070548';
+  var V='2026070549';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -143,11 +143,11 @@
   .reltab tr.row-atencao td{color:#7a5c00}
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
   .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:11px 14px;font-size:14px}
-  .rel-gstats{display:flex;flex-wrap:wrap;gap:0;background:#f7f8fb;border-bottom:1px solid var(--line)}
-  .gstat{flex:1 1 0;min-width:90px;text-align:center;padding:9px 6px;border-right:1px solid var(--line)}
+  .rel-gstats{display:flex;flex-wrap:wrap;gap:0;background:#16255a;border-bottom:2px solid var(--gold)}
+  .gstat{flex:1 1 0;min-width:90px;text-align:center;padding:9px 6px;border-right:1px solid rgba(255,255,255,.15)}
   .gstat:last-child{border-right:none}
-  .gstat .gs-val{display:block;font-size:15px;font-weight:bold;color:var(--navy)}
-  .gstat .gs-lbl{display:block;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+  .gstat .gs-val{display:block;font-size:15px;font-weight:bold;color:var(--gold-l)}
+  .gstat .gs-lbl{display:block;font-size:9.5px;color:#c7cde0;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
   .rel-ghead b{letter-spacing:.3px;font-size:15px}
   .rel-ghead span{font-size:13.5px;font-weight:bold;color:#fff}
   .rel-sub{display:grid;grid-template-columns:78px 1fr auto;align-items:center;padding:12px 14px;font-size:14.5px;color:var(--navy);border-bottom:1px solid var(--line);gap:10px}
@@ -233,6 +233,12 @@
 .rpt-sec{margin-top:16px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);font-weight:bold;border-top:1.5px solid var(--gold);padding-top:8px}
 .rpt-obs{font-size:13px;margin-top:6px;white-space:pre-wrap;line-height:1.5}
 @media (min-width:860px){#report-sheet{max-width:640px}#report-body{font-size:15px}.rpt-row{font-size:14.5px}}
+#paste-modal{position:fixed;inset:0;z-index:200}
+#paste-modal.hide{display:none}
+#paste-overlay{position:absolute;inset:0;background:rgba(11,20,46,.72)}
+#paste-sheet{position:relative;max-width:560px;margin:24px auto;background:#fff;border-radius:14px;max-height:calc(100vh - 48px);overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+#paste-close{position:sticky;top:10px;float:right;margin-right:10px;width:32px;height:32px;border-radius:50%;border:none;background:var(--navy);color:#fff;font-size:15px;cursor:pointer;z-index:2}
+@media (min-width:860px){#paste-sheet{max-width:640px}}
 </style>
 </head>
 <body>
@@ -404,7 +410,7 @@
 
     <!-- TAB RELATÓRIO A2 -->
     <div id="tab-rel-a2" class="card hide">
-      <div class="pane-head"><h2 data-i="rel_a2">A2 — Gestão</h2><button class="btn-mini" id="rel-a2-new" data-i="cli_new">+ Novo</button></div>
+      <div class="pane-head"><h2 data-i="rel_a2">A2 — Gestão</h2><span style="display:flex;gap:8px"><button class="btn-mini" id="rel-a2-paste" data-i="paste_btn">📋 Colar Relatório</button><button class="btn-mini" id="rel-a2-new" data-i="cli_new">+ Novo</button></span></div>
       <div id="rel-a2" class="reltab-wrap"></div>
     </div>
 
@@ -496,9 +502,26 @@
   </div>
 </div>
 
+<div id="paste-modal" class="hide">
+  <div id="paste-overlay"></div>
+  <div id="paste-sheet">
+    <button id="paste-close">✕</button>
+    <div style="padding:24px">
+      <h3 style="margin:0 0 4px;color:var(--navy)" data-i="paste_title">Colar Relatório</h3>
+      <p style="margin:0 0 12px;font-size:13px;color:var(--muted)" data-i="paste_help">Cole o texto do relatório completo abaixo. O sistema vai tentar identificar cada campo automaticamente.</p>
+      <textarea id="paste-text" style="width:100%;min-height:260px;font-family:inherit;font-size:13px;padding:12px;border:1px solid var(--line);border-radius:10px;box-sizing:border-box" placeholder="Cole aqui o relatório..."></textarea>
+      <div class="acts" style="margin-top:12px">
+        <button class="btn" id="paste-process" data-i="paste_process">Processar</button>
+        <button class="btn gold" id="paste-cancel" data-i="vend_cancel">Cancelar</button>
+      </div>
+      <div id="paste-msg" class="msg"></div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070548';
+const APP_VERSION='2026070549';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -536,6 +559,7 @@ const I18N={
    rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 Nível 1',rpt_l2:'📍 Nível 2',rpt_l3:'📍 Nível 3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
    proc_interceptacao:'Interceptação',proc_formulario:'Formulário',proc_termo:'Termo',proc_vizinhos:'Vizinhos',proc_relatorio:'Relatório',proc_carta:'Carta de Autodeclaração',proc_procedimentos_iniciais:'Procedimentos Iniciais',proc_lista:'Lista',
    cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',rpt_editar_a3:'✏️ Editar A3',
+   paste_btn:'📋 Colar Relatório',paste_title:'Colar Relatório',paste_help:'Cole o texto do relatório completo abaixo. O sistema vai tentar identificar cada campo automaticamente.',paste_process:'Processar',paste_empty:'Cole o texto do relatório primeiro.',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
    f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',f_renda:'Renda mensal',f_depositado:'Valor depositado',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
@@ -577,6 +601,7 @@ const I18N={
    rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 Level 1',rpt_l2:'📍 Level 2',rpt_l3:'📍 Level 3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
    proc_interceptacao:'Interception',proc_formulario:'Form',proc_termo:'Terms',proc_vizinhos:'Neighbors',proc_relatorio:'Report',proc_carta:'Self-declaration letter',proc_procedimentos_iniciais:'Initial procedures',proc_lista:'List',
    cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',rpt_editar_a3:'✏️ Edit A3',
+   paste_btn:'📋 Paste Report',paste_title:'Paste Report',paste_help:'Paste the full report text below. The system will try to identify each field automatically.',paste_process:'Process',paste_empty:'Paste the report text first.',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
    f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',f_renda:'Monthly income',f_depositado:'Deposited value',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
@@ -618,6 +643,7 @@ const I18N={
    rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第一級',rpt_l2:'📍 第二級',rpt_l3:'📍 第三級',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
    proc_interceptacao:'攔截',proc_formulario:'表格',proc_termo:'條款',proc_vizinhos:'鄰居',proc_relatorio:'報告',proc_carta:'自我聲明書',proc_procedimentos_iniciais:'初步程序',proc_lista:'清單',
    cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',rpt_editar_a3:'✏️ 編輯A3',
+   paste_btn:'📋 貼上報告',paste_title:'貼上報告',paste_help:'將完整報告文字貼在下方，系統會自動嘗試辨識每個欄位。',paste_process:'處理',paste_empty:'請先貼上報告文字。',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
    f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',f_renda:'月收入',f_depositado:'已存入金額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
@@ -1254,6 +1280,180 @@ function calcPrazos(){
 }
 function calcTotal(){let s=0;FINF.forEach(k=>{if(k!=='imoveis'&&k!=='conta_conjunta')s+=num('cf-'+k);});document.getElementById('cf-total').textContent=fmtMoney(s);}
 const PROC_OPTS=['procedimentos_iniciais','interceptacao','formulario','termo','vizinhos','lista','relatorio','carta'];
+
+/* ===== PARSER DE RELATÓRIO COLADO ===== */
+function pr_normToken(tok){
+  if(tok.includes(',')){return parseFloat(tok.replace(/\./g,'').replace(',','.'));}
+  const parts=tok.split('.');
+  if(parts.length>2)return parseFloat(parts.join(''));
+  if(parts.length===2&&parts[1].length===3)return parseFloat(parts.join(''));
+  return parseFloat(tok);
+}
+function pr_parseNum(s){
+  if(!s)return{value:0,note:null};
+  const clean=s.trim();
+  if(!clean||/^[-—]$/.test(clean))return{value:0,note:null};
+  const nums=clean.replace(/R\$/gi,'').replace(/\d+[ºª]/g,'').match(/\d+(?:[.,]\d+)*/g);
+  if(!nums||!nums.length){
+    if(/n[ãa]o\s*se\s*aplica|n[ãa]o\s*possui|^n\/?a$/i.test(clean))return{value:0,note:null};
+    return{value:0,note:clean};
+  }
+  let sum=0;nums.forEach(n=>{const v=pr_normToken(n);if(!isNaN(v))sum+=v;});
+  const hasNaoAplica=/n[ãa]o\s*se\s*aplica|n[ãa]o\s*possui/i.test(clean);
+  return{value:sum,note:(nums.length>1||hasNaoAplica)?clean:null};
+}
+function pr_parseImoveis(s){
+  if(!s)return{value:0,note:null};
+  const clean=s.trim();
+  if(!clean||/^[-—]$/.test(clean))return{value:0,note:null};
+  if(/n[ãa]o\s*se\s*aplica|n[ãa]o\s*possui|^n\/?a$/i.test(clean))return{value:0,note:null};
+  if(/^\d+\s*im[oó]ve(l|is)/i.test(clean))return{value:0,note:clean};
+  return pr_parseNum(s);
+}
+function pr_parseCode(s){
+  if(!s)return null;
+  const clean=s.trim();
+  if(!clean||/n[ãa]o\s*tinha|aguardando|^n\/?a$|^[-—]$/i.test(clean))return null;
+  const m=clean.match(/[A-Za-z]\s?\d+/);
+  return m?m[0].replace(/\s/g,'').toUpperCase():null;
+}
+function pr_parseL2(s){
+  if(!s)return{a2:null,a2b:null,note:null};
+  const clean=s.trim();
+  if(!clean||/^[-—]$/.test(clean))return{a2:null,a2b:null,note:null};
+  const parts=clean.split('/').map(x=>x.trim()).filter(Boolean);
+  const codes=parts.map(pr_parseCode).filter(Boolean);
+  return{a2:codes[0]||null,a2b:codes[1]||null,note:codes.length?null:clean};
+}
+function pr_parseDate(s){
+  if(!s)return'';
+  const m=s.match(/(\d{1,2})\s*\/\s*(\d{1,2})\s*(?:\/\s*(\d{2,4}))?/);
+  if(!m)return'';
+  const dd=m[1].padStart(2,'0'),mm=m[2].padStart(2,'0');
+  let yyyy=m[3];
+  if(!yyyy)yyyy=String(new Date().getFullYear());
+  else if(yyyy.length===2)yyyy='20'+yyyy;
+  return yyyy+'-'+mm+'-'+dd;
+}
+function pr_parseSituacao(s){
+  if(!s)return'REPORTANDO A2';
+  const low=s.toLowerCase();
+  if(low.includes('morreu'))return(low.includes('3')||low.includes('três')||low.includes('nível 3'))?'MORREU A3':'MORREU A2';
+  if(low.includes('finaliz'))return'FINALIZADO';
+  if(low.includes('atenç')||low.includes('atencao'))return'ATENCAO';
+  if(low.includes('report'))return(low.includes('nível 3')||low.includes('nivel 3')||/\b3\b/.test(low))?'REPORTANDO A3':'REPORTANDO A2';
+  return'REPORTANDO A2';
+}
+function pr_norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');}
+function pr_parseProc(s){
+  if(!s)return[];
+  const map={'procedimentosiniciais':'procedimentos_iniciais','procedimentoinicial':'procedimentos_iniciais',
+    'interceptacao':'interceptacao','intercepcao':'interceptacao','formulario':'formulario',
+    'termo':'termo','tempo':'termo','vizinhos':'vizinhos','vizinho':'vizinhos','lista':'lista',
+    'relatorio':'relatorio','cartadeautodeclaracao':'carta','carta':'carta'};
+  const out=[];
+  s.split(/[,\n]/).map(x=>x.trim()).filter(Boolean).forEach(tok=>{
+    const n=pr_norm(tok);let matched=null;
+    if(n.startsWith('procediment')&&n.includes('inicia'))matched='procedimentos_iniciais';
+    else{for(const k in map){if(n===k||n.includes(k)||k.includes(n)){matched=map[k];break;}}}
+    if(matched&&!out.includes(matched))out.push(matched);
+  });
+  return out;
+}
+const PR_FIELDS=[
+  ['entregue',/\bENTREGUE\b/i],['data',/\bDATA\b/i],['nome',/\bNOME\b/i],
+  ['l1',/\bL\s*1\b|LINHA\s*1\b/i],['l2',/\bL\s*2\b|LINHA\s*2\b/i],['l3',/\bL\s*3\b|LINHA\s*3\b/i],
+  ['situacao',/\bSITUA[CÇ][AÃ]O/i],['procedimentos',/\bPROCEDIMENTOS\b/i],['renda',/RENDA\s*MENSAL/i],
+  ['saldo_resgatavel',/SALDO\s*TOTAL\s*RESGAT[AÁ]VEL/i],['saldo_estimado',/SALDO\s*ESTIMADO/i],
+  ['conta_corrente',/\bCONTA\s*CORRENTE\b/i],['deposito_prazo',/DEP[OÓ]SITO\s*A\s*PRAZO/i],
+  ['investimentos',/\bINVESTIMENTOS\b/i],['acoes',/\bA[CÇ][OÕ]ES\b/i],['criptomoedas',/\bCRIPTOMOEDAS\b/i],
+  ['imoveis',/\bIM[OÓ]VEIS\b/i],['ouro',/\bOURO\b/i],['dinheiro',/\bDINHEIRO\b/i],['conta_conjunta',/\bCONTA\s*CONJUNTA\b/i],
+  ['valor_depositado',/VALOR\s*(J[AÁ]\s*)?DEPOSITADO/i],['valor_total',/\bVALOR\s*TOTAL\b/i],
+  ['observacoes',/\bOBSERVA[CÇ][OÕ]ES\b/i]
+];
+function parseReport(text){
+  const raw={};let current=null;
+  text.split(/\r?\n/).forEach(line=>{
+    const l=line.trim();if(!l)return;
+    const lc=l.lastIndexOf(':');
+    let matched=null;
+    if(lc>=0){
+      const labelPart=l.slice(0,lc);
+      for(const[f,pat]of PR_FIELDS){if(pat.test(labelPart)){matched=f;break;}}
+    }
+    if(matched){current=matched;const valuePart=l.slice(lc+1).trim();raw[current]=(raw[current]?raw[current]+'\n':'')+valuePart;}
+    else if(current){raw[current]=(raw[current]?raw[current]+'\n':'')+l;}
+  });
+  const notes=[];
+  const nomeParts=(raw.nome||'').trim().split(/\s+/);
+  const primeiro_nome=nomeParts.shift()||'';
+  const segundo_nome=nomeParts.join(' ')||null;
+  const l1=pr_parseCode(raw.l1);if(raw.l1&&!l1)notes.push('Linha 1 (A1): '+raw.l1.trim());
+  const l2r=pr_parseL2(raw.l2);if(l2r.note)notes.push('Linha 2 (A2): '+l2r.note);
+  const l3=pr_parseCode(raw.l3);if(raw.l3&&!l3)notes.push('Linha 3 (A3): '+raw.l3.trim());
+  const numFields=['conta_corrente','deposito_prazo','investimentos','acoes','criptomoedas','imoveis','ouro','dinheiro','conta_conjunta','saldo_estimado','saldo_resgatavel','valor_depositado','renda'];
+  const vals={};
+  numFields.forEach(f=>{const r=(f==='imoveis'?pr_parseImoveis:pr_parseNum)(raw[f]);vals[f]=r.value;if(r.note)notes.push(t('f_'+({conta_corrente:'cc',deposito_prazo:'dp',investimentos:'inv',acoes:'ac',criptomoedas:'cr',imoveis:'im',ouro:'ou',dinheiro:'di',conta_conjunta:'cj',saldo_estimado:'est',saldo_resgatavel:'res',valor_depositado:'depositado',renda:'renda'}[f]||f))+': '+r.note);});
+  const situacaoRaw=raw.situacao||'';
+  if(situacaoRaw && !/report|finaliz|morreu|atenç|atencao/i.test(situacaoRaw))notes.push('Situação (texto original): '+situacaoRaw.trim());
+  let obs=(raw.observacoes||'').trim();
+  if(notes.length)obs=(obs?obs+' ':'')+notes.join('. ')+(notes.length?'.':'');
+  return{
+    primeiro_nome,segundo_nome,
+    data_entrada:pr_parseDate(raw.data),
+    vendedor_a1:l1,vendedor_a2:l2r.a2,vendedor_a2b:l2r.a2b,vendedor_a3:l3,
+    situacao:pr_parseSituacao(situacaoRaw),
+    procedimentos_lista:pr_parseProc(raw.procedimentos),
+    renda_mensal:vals.renda,saldo_estimado:vals.saldo_estimado,
+    conta_corrente:vals.conta_corrente,deposito_prazo:vals.deposito_prazo,investimentos:vals.investimentos,
+    acoes:vals.acoes,criptomoedas:vals.criptomoedas,imoveis:vals.imoveis,ouro:vals.ouro,dinheiro:vals.dinheiro,
+    conta_conjunta:vals.conta_conjunta,saldo_resgatavel:vals.saldo_resgatavel,valor_depositado:vals.valor_depositado,
+    observacoes:obs||null
+  };
+}
+function applyParsedToForm(p){
+  openCForm(null);
+  document.getElementById('cf-pnome').value=p.primeiro_nome||'';
+  document.getElementById('cf-snome').value=p.segundo_nome||'';
+  document.getElementById('cf-dtentrada').value=p.data_entrada||'';
+  ensureOpt('cf-va1',p.vendedor_a1||'');document.getElementById('cf-va1').value=p.vendedor_a1||'';
+  ensureOpt('cf-va2',p.vendedor_a2||'');document.getElementById('cf-va2').value=p.vendedor_a2||'';
+  ensureOpt('cf-va2b',p.vendedor_a2b||'');document.getElementById('cf-va2b').value=p.vendedor_a2b||'';
+  ensureOpt('cf-va3',p.vendedor_a3||'');document.getElementById('cf-va3').value=p.vendedor_a3||'';
+  document.getElementById('cf-situacao').value=p.situacao;
+  renderProcList(p.procedimentos_lista);
+  document.getElementById('cf-renda_mensal').value=p.renda_mensal||0;
+  document.getElementById('cf-saldo_estimado').value=p.saldo_estimado||0;
+  document.getElementById('cf-conta_corrente').value=p.conta_corrente||0;
+  document.getElementById('cf-deposito_prazo').value=p.deposito_prazo||0;
+  document.getElementById('cf-investimentos').value=p.investimentos||0;
+  document.getElementById('cf-acoes').value=p.acoes||0;
+  document.getElementById('cf-criptomoedas').value=p.criptomoedas||0;
+  document.getElementById('cf-imoveis').value=p.imoveis||0;
+  document.getElementById('cf-ouro').value=p.ouro||0;
+  document.getElementById('cf-dinheiro').value=p.dinheiro||0;
+  document.getElementById('cf-conta_conjunta').value=p.conta_conjunta||0;
+  document.getElementById('cf-saldo_resgatavel').value=p.saldo_resgatavel||0;
+  document.getElementById('cf-valor_depositado').value=p.valor_depositado||0;
+  document.getElementById('cf-obs').value=p.observacoes||'';
+  calcTotal();calcPrazos();
+}
+document.getElementById('rel-a2-paste').onclick=()=>{
+  document.getElementById('paste-text').value='';msg('paste-msg');
+  document.getElementById('paste-modal').classList.remove('hide');
+};
+document.getElementById('paste-close').onclick=()=>document.getElementById('paste-modal').classList.add('hide');
+document.getElementById('paste-overlay').onclick=()=>document.getElementById('paste-modal').classList.add('hide');
+document.getElementById('paste-cancel').onclick=()=>document.getElementById('paste-modal').classList.add('hide');
+document.getElementById('paste-process').onclick=()=>{
+  const text=document.getElementById('paste-text').value;
+  if(!text.trim()){msg('paste-msg','err',t('paste_empty'));return;}
+  const parsed=parseReport(text);
+  document.getElementById('paste-modal').classList.add('hide');
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='cli'));
+  ['tab-cli','tab-vend','tab-rel-a1','tab-rel-a2','tab-rel-a3','tab-sal'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!=='tab-cli'));
+  applyParsedToForm(parsed);
+};
 function renderProcList(sel){
   const box=document.getElementById('cf-proc-list');
   sel=sel||[];
