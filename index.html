@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070572';
+  var V='2026070573';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -149,9 +149,9 @@
   .rel-ghead-code{flex:0 0 auto;min-width:80px;text-align:center;padding:9px 10px;border-right:1px solid rgba(255,255,255,.15);position:sticky;left:0;background:var(--navy);z-index:2}
   .rel-ghead-code .gs-val{display:block;color:#fff;font-size:16px}
   .rel-ghead-code .gs-lbl{display:block;font-size:9.5px;color:#c7cde0;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
-  .gstat{flex:1 1 0;min-width:90px;text-align:center;padding:9px 6px;border-right:1px solid rgba(255,255,255,.15)}
+  .gstat{flex:1 1 0;min-width:90px;max-width:140px;text-align:center;padding:9px 6px;border-right:1px solid rgba(255,255,255,.15);overflow:hidden}
   .gstat:last-child{border-right:none}
-  .gstat .gs-val{display:block;font-size:15px;font-weight:bold;color:var(--gold-l)}
+  .gstat .gs-val{display:block;font-size:13px;font-weight:bold;color:var(--gold-l);white-space:normal;word-break:break-word;line-height:1.2}
   .gstat .gs-lbl{display:block;font-size:9.5px;color:#c7cde0;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
   .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:11px 14px;font-size:14px}
   .rel-ghead b{letter-spacing:.3px;font-size:15px}
@@ -552,7 +552,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070572';
+const APP_VERSION='2026070573';
 (function(){
   let checking=false;
   async function checkVersion(){
