@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070554';
+  var V='2026070555';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -536,7 +536,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070554';
+const APP_VERSION='2026070555';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1313,7 +1313,11 @@ const PROC_OPTS=['procedimentos_iniciais','interceptacao','formulario','termo','
 
 /* ===== PARSER DE RELATÓRIO COLADO ===== */
 function pr_normToken(tok){
-  if(tok.includes(',')){return parseFloat(tok.replace(/\./g,'').replace(',','.'));}
+  if(tok.includes(',')){
+    const commaParts=tok.split(',');
+    if(commaParts.length===2&&commaParts[1].length===3){return parseFloat(commaParts.join(''));}
+    return parseFloat(tok.replace(/\./g,'').replace(',','.'));
+  }
   const parts=tok.split('.');
   if(parts.length>2)return parseFloat(parts.join(''));
   if(parts.length===2&&parts[1].length===3)return parseFloat(parts.join(''));
@@ -1323,7 +1327,7 @@ function pr_parseNum(s){
   if(!s)return{value:0,note:null};
   const clean=s.trim();
   if(!clean||/^[-—]$/.test(clean))return{value:0,note:null};
-  const nums=clean.replace(/R\$/gi,'').replace(/\d+[ºª]/g,'').match(/\d+(?:[.,]\d+)*/g);
+  const nums=clean.replace(/R\$/gi,'').replace(/\d+[ºª]/g,'').match(/(?<![A-Za-zÀ-ú])\d+(?:[.,]\d+)*(?![A-Za-zÀ-ú])/g);
   if(!nums||!nums.length){
     if(/n[ãa]o\s*se\s*aplica|n[ãa]o\s*possui|^n\/?a$/i.test(clean))return{value:0,note:null};
     return{value:0,note:clean};
@@ -1408,7 +1412,7 @@ function parseReport(text){
   const raw={};let current=null;
   text.split(/\r?\n/).forEach(line=>{
     const l=line.trim();if(!l)return;
-    const lc=l.lastIndexOf(':');
+    const lc=l.indexOf(':');
     let matched=null;
     if(lc>=0){
       const labelPart=l.slice(0,lc);
@@ -1514,7 +1518,7 @@ function parseReportA3(text){
   const raw={};let current=null;
   text.split(/\r?\n/).forEach(line=>{
     const l=line.trim();if(!l)return;
-    const lc=l.lastIndexOf(':');
+    const lc=l.indexOf(':');
     let matched=null;
     if(lc>=0){
       const labelPart=l.slice(0,lc);
