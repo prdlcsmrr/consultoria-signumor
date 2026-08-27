@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070569';
+  var V='2026070570';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -552,7 +552,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070569';
+const APP_VERSION='2026070570';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -767,7 +767,7 @@ document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.cl
   document.getElementById('tab-sal').classList.toggle('hide',b.dataset.tab!=='sal');
   if(['rel-a1','rel-a2','rel-a3'].includes(b.dataset.tab))renderRel();
   if(b.dataset.tab==='vend'){if(!VEND.loaded)loadVend();else{loadComTotals().then(renderVend);}}
-  if(b.dataset.tab==='sal'){document.getElementById('sal-pag-view').classList.add('hide');document.getElementById('sal-emp-list').classList.remove('hide');if(!VEND.loaded)loadVend();else renderSalEmpList();}
+  if(b.dataset.tab==='sal'){document.getElementById('sal-pag-view').classList.add('hide');document.getElementById('sal-emp-list').classList.remove('hide');if(!VEND.loaded)loadVend();else{loadComTotals().then(renderSalEmpList);}}
 });
 
 /* ===== VENDEDORES ===== */
@@ -783,6 +783,7 @@ async function loadVend(){
   if(document.getElementById('sal-emp-list'))renderSalEmpList();
   await loadComTotals();
   renderVend();
+  if(document.getElementById('sal-emp-list'))renderSalEmpList();
   VEND.loading=false;
 }
 let COM_TOTALS={};
@@ -793,9 +794,9 @@ async function loadComTotals(){
     const totals={};
     (data||[]).forEach(r=>{
       const k=r.vendedor_codigo;
-      totals[k]=totals[k]||{pendenteQtd:0,confirmadoQtd:0};
-      if(r.confirmado)totals[k].confirmadoQtd++;
-      else totals[k].pendenteQtd++;
+      totals[k]=totals[k]||{pendenteQtd:0,confirmadoQtd:0,pendenteValor:0,confirmadoValor:0};
+      if(r.confirmado){totals[k].confirmadoQtd++;totals[k].confirmadoValor+=Number(r.valor_calculado)||0;}
+      else{totals[k].pendenteQtd++;totals[k].pendenteValor+=Number(r.valor_calculado)||0;}
     });
     COM_TOTALS=totals;
   }catch(e){console.error('loadComTotals exception:',e);}
@@ -810,15 +811,10 @@ function renderVend(){
     if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
     else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
       const dual=c==='A3'&&v.canal==='A2';
-      const com=COM_TOTALS[v.codigo];
-      const comLine=com&&(com.confirmadoQtd>0||com.pendenteQtd>0)
-        ?'<div class="vitem-com">'+(com.confirmadoQtd>0?'<span class="vc-conf">'+t('com_ganho')+': '+com.confirmadoQtd+'</span>':'')+(com.pendenteQtd>0?'<span class="vc-pend">'+t('com_pend_curto')+': '+com.pendenteQtd+'</span>':'')+'</div>'
-        :'';
-      html+='<div class="vitem-wrap"><div class="vitem"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
+      html+='<div class="vitem"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
         +(dual?'<span class="badge a3tag">'+t('lvl2')+'+'+t('lvl3')+'</span>':'')
         +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):t('vend_inactive'))+'</span>'
-        +'<button class="iconbtn" data-edit="'+v.id+'">✏️</button><button class="iconbtn" data-del="'+v.id+'">🗑️</button></div>'
-        +comLine+'</div>';});
+        +'<button class="iconbtn" data-edit="'+v.id+'">✏️</button><button class="iconbtn" data-del="'+v.id+'">🗑️</button></div>';});
     html+='</div>';
   });
   box.innerHTML=html;
@@ -873,8 +869,13 @@ function renderSalEmpList(){
     html+='<div class="grp"><div class="grp-h"><span class="dot" style="background:'+color+'"></span><b>'+lvlLabel(c)+'</b><span class="cnt">'+arr.length+'</span></div>';
     if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
     else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
-      html+='<div class="vitem" data-sal="'+v.id+'" data-cod="'+esc(v.codigo)+'" style="cursor:pointer"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
-        +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):t('vend_inactive'))+'</span></div>';});
+      const com=COM_TOTALS[v.codigo];
+      const comLine=com&&(com.confirmadoValor>0||com.pendenteValor>0)
+        ?'<div class="vitem-com">'+(com.confirmadoValor>0?'<span class="vc-conf">'+t('com_ganho')+': '+fmtUSD(com.confirmadoValor)+'</span>':'')+(com.pendenteValor>0?'<span class="vc-pend">'+t('com_pend_curto')+': '+fmtUSD(com.pendenteValor)+'</span>':'')+'</div>'
+        :'';
+      html+='<div class="vitem-wrap"><div class="vitem" data-sal="'+v.id+'" data-cod="'+esc(v.codigo)+'" style="cursor:pointer"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
+        +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):t('vend_inactive'))+'</span></div>'
+        +comLine+'</div>';});
     html+='</div>';
   });
   box.innerHTML=html;
