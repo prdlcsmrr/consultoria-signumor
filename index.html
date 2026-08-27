@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070553';
+  var V='2026070554';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -144,7 +144,8 @@
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
   .rel-ghead-merged{background:var(--navy);border-bottom:2px solid var(--gold);display:flex;flex-wrap:nowrap;overflow-x:auto}
   .rel-ghead-code{flex:1 1 0;min-width:80px;text-align:center;padding:9px 6px;border-right:1px solid rgba(255,255,255,.15)}
-  .rel-ghead-code .gs-val{color:#fff;font-size:16px}
+  .rel-ghead-code .gs-val{display:block;color:#fff;font-size:16px}
+  .rel-ghead-code .gs-lbl{display:block;font-size:9.5px;color:#c7cde0;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
   .gstat{flex:1 1 0;min-width:90px;text-align:center;padding:9px 6px;border-right:1px solid rgba(255,255,255,.15)}
   .gstat:last-child{border-right:none}
   .gstat .gs-val{display:block;font-size:15px;font-weight:bold;color:var(--gold-l)}
@@ -535,7 +536,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070553';
+const APP_VERSION='2026070554';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1019,7 +1020,7 @@ function renderRel(){
           +statChip(fmtMoney(r.valorTotal),t('rel_col_valtotal'))
           +statChip(r.enva3,t('rel_col_enva3'))
         +'</div>'
-        +'<table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div>';
+        +'<div class="reltab-wrap"><table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div></div>';
     }).join('');
   document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
     '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+listA3.length+'</b></div>'
