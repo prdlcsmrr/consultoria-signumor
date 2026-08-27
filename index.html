@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070551';
+  var V='2026070552';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -142,10 +142,10 @@
   .reltab tr.row-atencao{background:#fff3b0}
   .reltab tr.row-atencao td{color:#7a5c00}
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-  .rel-ghead-merged{background:var(--navy);border-bottom:2px solid var(--gold)}
-  .rel-ghead-code{padding:11px 14px 6px;font-size:16px;font-weight:bold;letter-spacing:.3px;color:#fff}
-  .rel-gstats{display:flex;flex-wrap:wrap;gap:0;padding-bottom:2px}
-  .gstat{flex:1 1 0;min-width:90px;text-align:center;padding:6px 6px 9px;border-right:1px solid rgba(255,255,255,.15)}
+  .rel-ghead-merged{background:var(--navy);border-bottom:2px solid var(--gold);display:flex;flex-wrap:nowrap;overflow-x:auto}
+  .rel-ghead-code{flex:1 1 0;min-width:80px;text-align:center;padding:9px 6px;border-right:1px solid rgba(255,255,255,.15)}
+  .rel-ghead-code .gs-val{color:#fff;font-size:16px}
+  .gstat{flex:1 1 0;min-width:90px;text-align:center;padding:9px 6px;border-right:1px solid rgba(255,255,255,.15)}
   .gstat:last-child{border-right:none}
   .gstat .gs-val{display:block;font-size:15px;font-weight:bold;color:var(--gold-l)}
   .gstat .gs-lbl{display:block;font-size:9.5px;color:#c7cde0;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
@@ -535,7 +535,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070551';
+const APP_VERSION='2026070552';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1013,13 +1013,12 @@ function renderRel(){
     '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+totalA2+'</b></div>'
     +k2.map(k=>{const r=mapA2[k];
       return '<div class="rel-group"><div class="rel-ghead-merged">'
-        +'<div class="rel-ghead-code">'+esc(k)+'</div>'
-        +'<div class="rel-gstats">'
+        +'<div class="rel-ghead-code"><span class="gs-val">'+esc(k)+'</span><span class="gs-lbl">'+t('rel_col_func')+'</span></div>'
           +statChip(r.total,t('rel_col_total'))
           +statChip(r.morreu,t('rel_col_morreu'))
           +statChip(fmtMoney(r.valorTotal),t('rel_col_valtotal'))
           +statChip(r.enva3,t('rel_col_enva3'))
-        +'</div></div>'
+        +'</div>'
         +'<table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div>';
     }).join('');
   document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
