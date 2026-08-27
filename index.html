@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070564';
+  var V='2026070565';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -204,7 +204,12 @@
   .dot{width:10px;height:10px;border-radius:50%}
   .grp-h b{font-size:14px;color:var(--navy);letter-spacing:1px}
   .grp-h .cnt{font-size:11px;color:var(--muted);margin-left:auto}
-  .vitem{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:7px;background:#fff}
+  .vitem{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:0;background:#fff}
+  .vitem-wrap{margin-bottom:7px}
+  .vitem-wrap .vitem{border-radius:10px 10px 0 0;margin-bottom:0}
+  .vitem-com{display:flex;gap:12px;padding:6px 12px;border:1px solid var(--line);border-top:none;border-radius:0 0 10px 10px;background:#fafbfd;font-size:11.5px}
+  .vitem-com .vc-conf{color:#1e7d3c;font-weight:bold}
+  .vitem-com .vc-pend{color:#b5781a;font-weight:bold}
   .vitem .vc{font-weight:bold;color:var(--navy);font-size:15px;min-width:46px}
   .vitem .vn{flex:1;font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .vitem .vn small{color:var(--muted)}
@@ -547,7 +552,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070564';
+const APP_VERSION='2026070565';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -612,7 +617,7 @@ const I18N={
    pag_adiantamento:'Adiantamento',pag_multa:'Multa',pag_resumo:'Resumo do salário',
    pag_empty:'Nenhum mês registrado ainda.',pag_dup:'Já existe um registro para esse mês/ano.',pag_del:'Excluir este registro de pagamento?',pag_ano_req:'Informe um ano válido.',
    nav_sal:'Salários',sal_back:'Voltar',rel_a1_tab:'Relatório Nível 1',rel_a2_tab:'Relatório Nível 2',rel_a3_tab:'Relatório Nível 3',
-   com_pend_btn:'🧾 Comissões Pendentes',com_pend_empty:'Nenhuma comissão pendente.',com_base:'Base',com_confirm:'✓ Confirmar',
+   com_pend_btn:'🧾 Comissões Pendentes',com_pend_empty:'Nenhuma comissão pendente.',com_base:'Base',com_confirm:'✓ Confirmar',com_ganho:'Ganho',com_pend_curto:'Pendente',
    none_opt:'—',generic:'Algo deu errado. Tente novamente.',
    fill:'Preencha e-mail e senha.',invalid:'E-mail ou senha incorretos.',
    signup_ok:'Conta criada! Verifique seu e-mail para confirmar e depois faça login.',signup_exists:'Este e-mail já está cadastrado. Faça login.',weakpass:'A senha precisa ter ao menos 6 caracteres.'},
@@ -656,7 +661,7 @@ const I18N={
    pag_adiantamento:'Advance',pag_multa:'Penalty',pag_resumo:'Salary summary',
    pag_empty:'No months recorded yet.',pag_dup:'A record for this month/year already exists.',pag_del:'Delete this payroll record?',pag_ano_req:'Enter a valid year.',
    nav_sal:'Salaries',sal_back:'Back',rel_a1_tab:'Level 1 Report',rel_a2_tab:'Level 2 Report',rel_a3_tab:'Level 3 Report',
-   com_pend_btn:'🧾 Pending Commissions',com_pend_empty:'No pending commissions.',com_base:'Base',com_confirm:'✓ Confirm',
+   com_pend_btn:'🧾 Pending Commissions',com_pend_empty:'No pending commissions.',com_base:'Base',com_confirm:'✓ Confirm',com_ganho:'Earned',com_pend_curto:'Pending',
    none_opt:'—',generic:'Something went wrong. Please try again.',
    fill:'Enter e-mail and password.',invalid:'Wrong e-mail or password.',
    signup_ok:'Account created! Check your e-mail to confirm, then sign in.',signup_exists:'This e-mail is already registered. Please sign in.',weakpass:'Password must be at least 6 characters.'},
@@ -700,7 +705,7 @@ const I18N={
    pag_adiantamento:'預支',pag_multa:'罰款',pag_resumo:'薪資總結',
    pag_empty:'尚無月份紀錄。',pag_dup:'該月份/年份的紀錄已存在。',pag_del:'確定刪除此薪資紀錄？',pag_ano_req:'請輸入有效年份。',
    nav_sal:'薪資',sal_back:'返回',rel_a1_tab:'第一級報表',rel_a2_tab:'第二級報表',rel_a3_tab:'第三級報表',
-   com_pend_btn:'🧾 待確認佣金',com_pend_empty:'沒有待確認的佣金。',com_base:'計算基礎',com_confirm:'✓ 確認',
+   com_pend_btn:'🧾 待確認佣金',com_pend_empty:'沒有待確認的佣金。',com_base:'計算基礎',com_confirm:'✓ 確認',com_ganho:'已賺取',com_pend_curto:'待確認',
    none_opt:'—',generic:'發生錯誤，請再試一次。',
    fill:'請輸入電子郵件與密碼。',invalid:'電子郵件或密碼錯誤。',
    signup_ok:'帳號已建立！請查收電子郵件確認後再登入。',signup_exists:'此電子郵件已註冊，請直接登入。',weakpass:'密碼至少需 6 個字元。'}
@@ -773,6 +778,20 @@ async function loadVend(){
   if(error){document.getElementById('v-list').innerHTML='<div class="empty">'+t('generic')+'</div>';return;}
   VEND.list=data||[];VEND.loaded=true;renderVend();fillVendSelects();
   if(document.getElementById('sal-emp-list'))renderSalEmpList();
+  await loadComTotals();
+  renderVend();
+}
+let COM_TOTALS={};
+async function loadComTotals(){
+  const{data}=await sb.from('comissoes').select('vendedor_codigo,valor_calculado,confirmado');
+  const totals={};
+  (data||[]).forEach(r=>{
+    const k=r.vendedor_codigo;
+    totals[k]=totals[k]||{pendente:0,confirmado:0};
+    if(r.confirmado)totals[k].confirmado+=Number(r.valor_calculado)||0;
+    else totals[k].pendente+=Number(r.valor_calculado)||0;
+  });
+  COM_TOTALS=totals;
 }
 function renderVend(){
   const box=document.getElementById('v-list');
@@ -784,10 +803,15 @@ function renderVend(){
     if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
     else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
       const dual=c==='A3'&&v.canal==='A2';
-      html+='<div class="vitem"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
+      const com=COM_TOTALS[v.codigo];
+      const comLine=com&&(com.confirmado>0||com.pendente>0)
+        ?'<div class="vitem-com">'+(com.confirmado>0?'<span class="vc-conf">'+t('com_ganho')+': '+fmtUSD(com.confirmado)+'</span>':'')+(com.pendente>0?'<span class="vc-pend">'+t('com_pend_curto')+': '+fmtUSD(com.pendente)+'</span>':'')+'</div>'
+        :'';
+      html+='<div class="vitem-wrap"><div class="vitem"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
         +(dual?'<span class="badge a3tag">'+t('lvl2')+'+'+t('lvl3')+'</span>':'')
         +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):t('vend_inactive'))+'</span>'
-        +'<button class="iconbtn" data-edit="'+v.id+'">✏️</button><button class="iconbtn" data-del="'+v.id+'">🗑️</button></div>';});
+        +'<button class="iconbtn" data-edit="'+v.id+'">✏️</button><button class="iconbtn" data-del="'+v.id+'">🗑️</button></div>'
+        +comLine+'</div>';});
     html+='</div>';
   });
   box.innerHTML=html;
@@ -1235,6 +1259,7 @@ async function confirmComissao(id){
     }
   }
   await loadAndRenderComPend();
+  await loadComTotals();
 }
 document.getElementById('com-pend-btn').onclick=async()=>{
   document.getElementById('sal-emp-list').classList.add('hide');
@@ -1324,7 +1349,7 @@ document.getElementById('a3f-save').onclick=async function(){
   document.getElementById('a3-form').classList.add('hide');
   await loadCli();renderRel();
   const updated=CLI.list.find(x=>x.id===cid);
-  if(updated)calcComissoes(updated);
+  if(updated){await calcComissoes(updated);await loadComTotals();}
 };
 document.getElementById('rel-a2-new').onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='cli'));
