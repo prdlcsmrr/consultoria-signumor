@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070567';
+  var V='2026070568';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -552,7 +552,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070567';
+const APP_VERSION='2026070568';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -771,16 +771,19 @@ document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.cl
 });
 
 /* ===== VENDEDORES ===== */
-const VEND={list:[],loaded:false};
+const VEND={list:[],loaded:false,loading:false};
 const CANAIS=[['A1','var(--a1)'],['A2','var(--a2)'],['A3','var(--a3)']];
 function lvlLabel(c){return c==='A1'?t('lvl1'):c==='A2'?t('lvl2'):c==='A3'?t('lvl3'):c;}
 async function loadVend(){
+  if(VEND.loading)return;
+  VEND.loading=true;
   const {data,error}=await sb.from('vendedores').select('*').order('codigo');
-  if(error){document.getElementById('v-list').innerHTML='<div class="empty">'+t('generic')+'</div>';return;}
+  if(error){document.getElementById('v-list').innerHTML='<div class="empty">'+t('generic')+'</div>';VEND.loading=false;return;}
   VEND.list=data||[];VEND.loaded=true;renderVend();fillVendSelects();
   if(document.getElementById('sal-emp-list'))renderSalEmpList();
   await loadComTotals();
   renderVend();
+  VEND.loading=false;
 }
 let COM_TOTALS={};
 async function loadComTotals(){
