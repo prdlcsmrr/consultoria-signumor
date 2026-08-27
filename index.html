@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070549';
+  var V='2026070550';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -142,12 +142,14 @@
   .reltab tr.row-atencao{background:#fff3b0}
   .reltab tr.row-atencao td{color:#7a5c00}
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-  .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:11px 14px;font-size:14px}
-  .rel-gstats{display:flex;flex-wrap:wrap;gap:0;background:#16255a;border-bottom:2px solid var(--gold)}
-  .gstat{flex:1 1 0;min-width:90px;text-align:center;padding:9px 6px;border-right:1px solid rgba(255,255,255,.15)}
+  .rel-ghead-merged{background:var(--navy);border-bottom:2px solid var(--gold)}
+  .rel-ghead-code{padding:11px 14px 6px;font-size:16px;font-weight:bold;letter-spacing:.3px;color:#fff}
+  .rel-gstats{display:flex;flex-wrap:wrap;gap:0;padding-bottom:2px}
+  .gstat{flex:1 1 0;min-width:90px;text-align:center;padding:6px 6px 9px;border-right:1px solid rgba(255,255,255,.15)}
   .gstat:last-child{border-right:none}
   .gstat .gs-val{display:block;font-size:15px;font-weight:bold;color:var(--gold-l)}
   .gstat .gs-lbl{display:block;font-size:9.5px;color:#c7cde0;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+  .rel-ghead{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:11px 14px;font-size:14px}
   .rel-ghead b{letter-spacing:.3px;font-size:15px}
   .rel-ghead span{font-size:13.5px;font-weight:bold;color:#fff}
   .rel-sub{display:grid;grid-template-columns:78px 1fr auto;align-items:center;padding:12px 14px;font-size:14.5px;color:var(--navy);border-bottom:1px solid var(--line);gap:10px}
@@ -521,7 +523,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070549';
+const APP_VERSION='2026070550';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -575,7 +577,7 @@ const I18N={
    rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',rel_col_renda:'Renda mensal',rel_total_clientes:'Total de clientes',
    tot_atencao:'Atenção (atrasado)',tot_reportando:'Reportando',tot_pronto3:'Prontos p/ Nível 3',tot_report3:'Reportando Nível 3',tot_finalizado:'Finalizados',tot_morreu2:'Morreu Nível 2',tot_morreu3:'Morreu Nível 3',
    lvl1:'Nível 1',lvl2:'Nível 2',lvl3:'Nível 3',
-   rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ Nível 3',rel_col_valenva3:'Valor enviado Nível 3',
+   rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ Nível 3',rel_col_valenva3:'Valor enviado Nível 3',rel_col_total:'Total de clientes',rel_col_morreu:'Morreu',rel_col_valtotal:'Valor total trabalhado',
    rel_col_cliente:'Cliente',rel_col_diasa3:'Dias em A3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
    rel_empty:'Sem dados.',
    pag_title:'Folha de Pagamento',pag_new:'+ Novo mês',pag_mes:'Mês',pag_ano:'Ano',
@@ -617,7 +619,7 @@ const I18N={
    rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',rel_col_renda:'Monthly income',rel_total_clientes:'Total clients',
    tot_atencao:'Attention (delayed)',tot_reportando:'Reporting',tot_pronto3:'Ready for Level 3',tot_report3:'Reporting Level 3',tot_finalizado:'Finalized',tot_morreu2:'Lost Level 2',tot_morreu3:'Lost Level 3',
    lvl1:'Level 1',lvl2:'Level 2',lvl3:'Level 3',
-   rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to Level 3',rel_col_valenva3:'Value sent to Level 3',
+   rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to Level 3',rel_col_valenva3:'Value sent to Level 3',rel_col_total:'Total clients',rel_col_morreu:'Lost',rel_col_valtotal:'Total value handled',
    rel_col_cliente:'Client',rel_col_diasa3:'Days in A3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
    rel_empty:'No data.',
    pag_title:'Payroll',pag_new:'+ New month',pag_mes:'Month',pag_ano:'Year',
@@ -659,7 +661,7 @@ const I18N={
    rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',rel_col_renda:'月收入',rel_total_clientes:'客戶總數',
    tot_atencao:'注意（已延遲）',tot_reportando:'報告中',tot_pronto3:'準備進入第三級',tot_report3:'第三級報告中',tot_finalizado:'已完成',tot_morreu2:'第二級流失',tot_morreu3:'第三級流失',
    lvl1:'第一級',lvl2:'第二級',lvl3:'第三級',
-   rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入第三級',rel_col_valenva3:'轉入第三級金額',
+   rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入第三級',rel_col_valenva3:'轉入第三級金額',rel_col_total:'客戶總數',rel_col_morreu:'流失',rel_col_valtotal:'處理總金額',
    rel_col_cliente:'客戶',rel_col_diasa3:'在A3天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
    rel_empty:'無資料。',
    pag_title:'薪資單',pag_new:'+ 新增月份',pag_mes:'月份',pag_ano:'年份',
@@ -920,17 +922,18 @@ async function delPag(id){if(!confirm(t('pag_del')))return;const {error}=await s
 /* ===== RELATÓRIOS ===== */
 function relBuild(){
   const mapA1={},mapA2={};
-  const isAtivo=c=>c.situacao&&!['FINALIZADO','MORREU A2','MORREU A3'].includes(c.situacao);
   CLI.list.forEach(c=>{
     const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
     if(c.vendedor_a1){const k=c.vendedor_a1;mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
       mapA1[k].receb++;
       if(c.vendedor_a2)mapA1[k].transferidos.push({id:c.id,nome:nome||'—',valor:Number(c.valor_total)||0,renda:Number(c.renda_mensal)||0,data:c.data_entrada});}
     if(c.vendedor_a2){const k=c.vendedor_a2;
-      mapA2[k]=mapA2[k]||{ativos:0,valadm:0,enva3:0,valenva3:0,clientes:[]};
+      mapA2[k]=mapA2[k]||{total:0,morreu:0,valorTotal:0,enva3:0,clientes:[]};
       mapA2[k].clientes.push(c);
-      if(isAtivo(c)){mapA2[k].ativos++;mapA2[k].valadm+=Number(c.valor_total)||0;}
-      if(c.vendedor_a3){mapA2[k].enva3++;mapA2[k].valenva3+=Number(c.valor_total)||0;}
+      mapA2[k].total++;
+      mapA2[k].valorTotal+=Number(c.valor_total)||0;
+      if(c.situacao==='MORREU A2'||c.situacao==='MORREU A3')mapA2[k].morreu++;
+      if(c.vendedor_a3)mapA2[k].enva3++;
     }
   });
   const listA3=CLI.list.filter(c=>c.vendedor_a3).map(c=>({
@@ -994,13 +997,14 @@ function renderRel(){
   document.getElementById('rel-a2').innerHTML=!k2.length?'<div class="empty">'+t('rel_empty')+'</div>':
     '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+totalA2+'</b></div>'
     +k2.map(k=>{const r=mapA2[k];
-      return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b></div>'
+      return '<div class="rel-group"><div class="rel-ghead-merged">'
+        +'<div class="rel-ghead-code">'+esc(k)+'</div>'
         +'<div class="rel-gstats">'
-          +statChip(r.ativos,t('rel_col_ativos'))
-          +statChip(fmtMoney(r.valadm),t('rel_col_valadm'))
+          +statChip(r.total,t('rel_col_total'))
+          +statChip(r.morreu,t('rel_col_morreu'))
+          +statChip(fmtMoney(r.valorTotal),t('rel_col_valtotal'))
           +statChip(r.enva3,t('rel_col_enva3'))
-          +statChip(fmtMoney(r.valenva3),t('rel_col_valenva3'))
-        +'</div>'
+        +'</div></div>'
         +'<table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div>';
     }).join('');
   document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
