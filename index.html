@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070565';
+  var V='2026070566';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -552,7 +552,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070565';
+const APP_VERSION='2026070566';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -805,7 +805,7 @@ function renderVend(){
       const dual=c==='A3'&&v.canal==='A2';
       const com=COM_TOTALS[v.codigo];
       const comLine=com&&(com.confirmado>0||com.pendente>0)
-        ?'<div class="vitem-com">'+(com.confirmado>0?'<span class="vc-conf">'+t('com_ganho')+': '+fmtUSD(com.confirmado)+'</span>':'')+(com.pendente>0?'<span class="vc-pend">'+t('com_pend_curto')+': '+fmtUSD(com.pendente)+'</span>':'')+'</div>'
+        ?'<div class="vitem-com"'+(com.pendente>0?' data-goto-pend="'+esc(v.codigo)+'" style="cursor:pointer"':'')+'>'+(com.confirmado>0?'<span class="vc-conf">'+t('com_ganho')+': '+fmtUSD(com.confirmado)+'</span>':'')+(com.pendente>0?'<span class="vc-pend">'+t('com_pend_curto')+': '+fmtUSD(com.pendente)+' ›</span>':'')+'</div>'
         :'';
       html+='<div class="vitem-wrap"><div class="vitem"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
         +(dual?'<span class="badge a3tag">'+t('lvl2')+'+'+t('lvl3')+'</span>':'')
@@ -833,10 +833,18 @@ document.getElementById('vf-canal').addEventListener('change',e=>{
 });
 document.getElementById('v-new').onclick=()=>openVForm(null);
 document.getElementById('vf-cancel').onclick=()=>{vform.classList.add('hide');msg('v-msg');};
-document.getElementById('v-list').addEventListener('click',e=>{
-  const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
+document.getElementById('v-list').addEventListener('click',async e=>{
+  const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]'),gp=e.target.closest('[data-goto-pend]');
   if(ed){const v=VEND.list.find(x=>x.id===ed.dataset.edit);if(v)openVForm(v);}
   if(dl)delVend(dl.dataset.del);
+  if(gp){
+    document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='sal'));
+    ['tab-cli','tab-vend','tab-rel-a1','tab-rel-a2','tab-rel-a3','tab-sal'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!=='tab-sal'));
+    document.getElementById('sal-emp-list').classList.add('hide');
+    document.getElementById('sal-pag-view').classList.add('hide');
+    document.getElementById('com-pend-view').classList.remove('hide');
+    await loadAndRenderComPend();
+  }
 });
 document.getElementById('vf-save').onclick=async function(){
   const id=document.getElementById('vf-id').value;
