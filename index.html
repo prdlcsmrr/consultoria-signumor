@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070552';
+  var V='2026070553';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -535,7 +535,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070552';
+const APP_VERSION='2026070553';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -574,7 +574,7 @@ const I18N={
    rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 Nível 1',rpt_l2:'📍 Nível 2',rpt_l3:'📍 Nível 3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
    proc_interceptacao:'Interceptação',proc_formulario:'Formulário',proc_termo:'Termo',proc_vizinhos:'Vizinhos',proc_relatorio:'Relatório',proc_carta:'Carta de Autodeclaração',proc_procedimentos_iniciais:'Procedimentos Iniciais',proc_lista:'Lista',
    cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',rpt_editar_a3:'✏️ Editar A3',
-   paste_btn:'📋 Colar Relatório',paste_title:'Colar Relatório',paste_help:'Cole o texto do relatório completo abaixo. O sistema vai tentar identificar cada campo automaticamente.',paste_process:'Processar',paste_empty:'Cole o texto do relatório primeiro.',paste_pick_client:'Não encontrei o cliente pelo nome — selecione manualmente antes de salvar.',
+   paste_btn:'📋 Colar Relatório',paste_title:'Colar Relatório',paste_help:'Cole o texto do relatório completo abaixo. O sistema vai tentar identificar cada campo automaticamente.',paste_process:'Processar',paste_empty:'Cole o texto do relatório primeiro.',paste_client_matched:'Cliente localizado — confira e salve.',paste_client_created:'Cliente não encontrado — cadastro novo criado automaticamente. Confira e salve.',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
    f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',f_renda:'Renda mensal',f_depositado:'Valor depositado',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
@@ -617,7 +617,7 @@ const I18N={
    rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 Level 1',rpt_l2:'📍 Level 2',rpt_l3:'📍 Level 3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
    proc_interceptacao:'Interception',proc_formulario:'Form',proc_termo:'Terms',proc_vizinhos:'Neighbors',proc_relatorio:'Report',proc_carta:'Self-declaration letter',proc_procedimentos_iniciais:'Initial procedures',proc_lista:'List',
    cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',rpt_editar_a3:'✏️ Edit A3',
-   paste_btn:'📋 Paste Report',paste_title:'Paste Report',paste_help:'Paste the full report text below. The system will try to identify each field automatically.',paste_process:'Process',paste_empty:'Paste the report text first.',paste_pick_client:'Could not find the client by name — please select manually before saving.',
+   paste_btn:'📋 Paste Report',paste_title:'Paste Report',paste_help:'Paste the full report text below. The system will try to identify each field automatically.',paste_process:'Process',paste_empty:'Paste the report text first.',paste_client_matched:'Client found — review and save.',paste_client_created:'Client not found — a new record was created automatically. Review and save.',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
    f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',f_renda:'Monthly income',f_depositado:'Deposited value',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
@@ -660,7 +660,7 @@ const I18N={
    rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第一級',rpt_l2:'📍 第二級',rpt_l3:'📍 第三級',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
    proc_interceptacao:'攔截',proc_formulario:'表格',proc_termo:'條款',proc_vizinhos:'鄰居',proc_relatorio:'報告',proc_carta:'自我聲明書',proc_procedimentos_iniciais:'初步程序',proc_lista:'清單',
    cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',rpt_editar_a3:'✏️ 編輯A3',
-   paste_btn:'📋 貼上報告',paste_title:'貼上報告',paste_help:'將完整報告文字貼在下方，系統會自動嘗試辨識每個欄位。',paste_process:'處理',paste_empty:'請先貼上報告文字。',paste_pick_client:'找不到符合姓名的客戶，請在儲存前手動選擇。',
+   paste_btn:'📋 貼上報告',paste_title:'貼上報告',paste_help:'將完整報告文字貼在下方，系統會自動嘗試辨識每個欄位。',paste_process:'處理',paste_empty:'請先貼上報告文字。',paste_client_matched:'已找到客戶，請確認後儲存。',paste_client_created:'找不到客戶，已自動建立新客戶資料，請確認後儲存。',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
    f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',f_renda:'月收入',f_depositado:'已存入金額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
@@ -1547,13 +1547,50 @@ function parseReportA3(text){
     situacao:pr_parseSituacao(raw.situacao||'','a3')
   };
 }
-function applyParsedToA3Form(p){
+async function applyParsedToA3Form(p){
   const nameNorm=pr_norm(p.nome);
-  const found=CLI.list.find(c=>{
+  let found=CLI.list.find(c=>{
     const full=pr_norm((c.primeiro_nome||'')+(c.segundo_nome||''));
     return nameNorm&&(full===nameNorm||full.includes(nameNorm)||nameNorm.includes(full));
   });
-  openA3Form(found||null);
+  if(!found&&nameNorm){
+    const firstWord=p.nome.trim().split(/\s+/)[0]||'';
+    const firstNorm=pr_norm(firstWord);
+    if(firstNorm)found=CLI.list.find(c=>pr_norm(c.primeiro_nome||'')===firstNorm);
+  }
+  if(!found){
+    const nameParts=(p.nome||'').trim().split(/\s+/).filter(Boolean);
+    const primeiro=nameParts.shift()||'';
+    const segundo=nameParts.join(' ')||null;
+    const payload={
+      primeiro_nome:primeiro,segundo_nome:segundo,
+      data_entrada:p.data_entrada_a3||today(),
+      data_entrada_a3:p.data_entrada_a3||null,
+      data_relatorio_a3:p.data_relatorio_a3||null,
+      agenda_diaria_a3:p.agenda_diaria_a3||null,
+      valor_estimado_total_a3:p.valor_estimado_total_a3||0,
+      dinheiro_conta_a3:p.dinheiro_conta_a3||0,
+      dinheiro_gasto_a3:p.dinheiro_gasto_a3||0,
+      disponivel_resgate_a3:p.disponivel_resgate_a3||0,
+      indisponivel_resgate_a3:p.indisponivel_resgate_a3||0,
+      motivo_indisponibilidade_a3:p.motivo_indisponibilidade_a3||null,
+      endereco_deposito_a3:p.endereco_deposito_a3||null,
+      valor_deposito_usdt:p.valor_deposito_usdt||0,
+      valor_deposito_pix:p.valor_deposito_pix||0,
+      valor_deposito_ted:p.valor_deposito_ted||0,
+      valor_depositado:p.valor_depositado||0,
+      situacao:p.situacao||'REPORTANDO A3'
+    };
+    const{data,error}=await sb.from('clientes').insert(payload).select().single();
+    if(error){openA3Form(null);msg('a3f-msg','err',error.message||t('generic'));return;}
+    await loadCli();
+    const created=CLI.list.find(c=>c.id===data.id);
+    openA3Form(created||null);
+    msg('a3f-msg','ok',t('paste_client_created'));
+    renderRel();
+    return;
+  }
+  openA3Form(found);
   document.getElementById('a3f-recebido').value=p.data_entrada_a3||'';
   document.getElementById('a3f-data').value=p.data_relatorio_a3||'';
   document.getElementById('a3f-agenda').value=p.agenda_diaria_a3||'';
@@ -1569,7 +1606,7 @@ function applyParsedToA3Form(p){
   document.getElementById('a3f-ted').value=p.valor_deposito_ted||0;
   document.getElementById('a3f-depositado').value=p.valor_depositado||0;
   document.getElementById('a3f-situacao').value=p.situacao||'REPORTANDO A3';
-  if(!found)msg('a3f-msg','err',t('paste_pick_client'));
+  msg('a3f-msg','ok',t('paste_client_matched'));
 }
 function renderProcList(sel){
   const box=document.getElementById('cf-proc-list');
