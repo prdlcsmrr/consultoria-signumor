@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070559';
+  var V='2026070560';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -543,7 +543,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070559';
+const APP_VERSION='2026070560';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1041,13 +1041,13 @@ function renderRel(){
     }).join('');
   const k3=Object.keys(mapA3).sort();
   const totalA3=k3.reduce((s,k)=>s+mapA3[k].clientes.length,0);
-  const a3HeadRow='<tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
+  const a3HeadRow='<tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('f_depositado')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
   const a3Row=c=>{
     const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
     const a2txt=c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2;
     const dias=days(c.data_entrada_a3,today());
     const cats=FINF.filter(k=>c.resgates&&c.resgates[k]&&c.resgates[k].marcado).map(k=>t(FINLBL[k])+(c.resgates[k].data?' ('+c.resgates[k].data+')':''));
-    return '<tr data-report="'+c.id+'"><td class="cli-name-cell" style="cursor:pointer" data-reportcell title="'+esc(nome)+'">'+esc(nome||'—')+'</td><td><b>'+esc(c.vendedor_a1||'—')+'</b></td><td><b>'+esc(a2txt||'—')+'</b></td><td>'+(dias==null?'—':dias)+'</td><td>'+fmtMoney(c.saldo_resgatavel)+'</td><td>'+(cats.length?esc(cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id,'a3')+'</td></tr>';
+    return '<tr data-report="'+c.id+'"><td class="cli-name-cell" style="cursor:pointer" data-reportcell title="'+esc(nome)+'">'+esc(nome||'—')+'</td><td><b>'+esc(c.vendedor_a1||'—')+'</b></td><td><b>'+esc(a2txt||'—')+'</b></td><td>'+(dias==null?'—':dias)+'</td><td>'+fmtMoney(c.saldo_resgatavel)+'</td><td><b>'+fmtMoney(c.valor_depositado)+'</b></td><td>'+(cats.length?esc(cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id,'a3')+'</td></tr>';
   };
   document.getElementById('rel-a3').innerHTML=!k3.length?'<div class="empty">'+t('rel_empty')+'</div>':
     '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+totalA3+'</b></div>'
