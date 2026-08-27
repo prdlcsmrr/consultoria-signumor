@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070571';
+  var V='2026070572';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -552,7 +552,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070571';
+const APP_VERSION='2026070572';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -991,18 +991,20 @@ function relBuild(){
       mapA1[k].receb++;
       if(c.vendedor_a2)mapA1[k].transferidos.push({id:c.id,nome:nome||'—',valor:Number(c.valor_total)||0,renda:Number(c.renda_mensal)||0,data:c.data_entrada});}
     if(c.vendedor_a2){const k=c.vendedor_a2;
-      mapA2[k]=mapA2[k]||{total:0,morreu:0,valorTotal:0,enva3:0,clientes:[]};
+      mapA2[k]=mapA2[k]||{total:0,morreu:0,valorTotal:0,valorDepositado:0,enva3:0,clientes:[]};
       mapA2[k].clientes.push(c);
       mapA2[k].total++;
       mapA2[k].valorTotal+=Number(c.valor_total)||0;
+      mapA2[k].valorDepositado+=Number(c.valor_depositado)||0;
       if(c.situacao==='MORREU A2'||c.situacao==='MORREU A3')mapA2[k].morreu++;
       if(c.vendedor_a3)mapA2[k].enva3++;
     }
     if(c.vendedor_a3){const k=c.vendedor_a3;
-      mapA3[k]=mapA3[k]||{total:0,reportando:0,morreu:0,valorTotal:0,clientes:[]};
+      mapA3[k]=mapA3[k]||{total:0,reportando:0,morreu:0,valorTotal:0,valorDepositado:0,clientes:[]};
       mapA3[k].clientes.push(c);
       mapA3[k].total++;
       mapA3[k].valorTotal+=Number(c.saldo_resgatavel)||0;
+      mapA3[k].valorDepositado+=Number(c.valor_depositado)||0;
       if(c.situacao==='REPORTANDO A3')mapA3[k].reportando++;
       if(c.situacao==='MORREU A3')mapA3[k].morreu++;
     }
@@ -1076,6 +1078,7 @@ function renderRel(){
           +statChip(r.total,t('rel_col_total'))
           +statChip(r.morreu,t('rel_col_morreu'))
           +statChip(fmtMoney(r.valorTotal),t('rel_col_valtotal'))
+          +statChip(fmtMoney(r.valorDepositado),t('f_depositado'))
           +statChip(r.enva3,t('rel_col_enva3'))
         +'</div>'
         +'<div class="reltab-wrap"><table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div></div>';
@@ -1099,6 +1102,7 @@ function renderRel(){
           +statChip(r.reportando,t('rel_col_reportando'))
           +statChip(r.morreu,t('rel_col_morreu'))
           +statChip(fmtMoney(r.valorTotal),t('rel_col_valtotal'))
+          +statChip(fmtMoney(r.valorDepositado),t('f_depositado'))
         +'</div>'
         +'<div class="reltab-wrap"><table class="reltab"><thead>'+a3HeadRow+'</thead><tbody>'+r.clientes.map(a3Row).join('')+'</tbody></table></div></div>';
     }).join('');
