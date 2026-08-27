@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070561';
+  var V='2026070562';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -469,8 +469,12 @@
 
     <!-- TAB SALÁRIOS -->
     <div id="tab-sal" class="card hide">
-      <div class="pane-head"><h2 data-i="nav_sal">Salários</h2></div>
+      <div class="pane-head"><h2 data-i="nav_sal">Salários</h2><button class="btn-mini" id="com-pend-btn" data-i="com_pend_btn">🧾 Comissões Pendentes</button></div>
       <div id="sal-emp-list"></div>
+      <div id="com-pend-view" class="hide">
+        <button class="btn-mini" id="com-pend-back">‹ <span data-i="sal_back">Voltar</span></button>
+        <div id="com-pend-list" style="margin-top:12px"></div>
+      </div>
       <div id="sal-pag-view" class="hide">
         <button class="btn-mini" id="sal-back">‹ <span data-i="sal_back">Voltar</span></button>
         <div class="pane-head" style="margin-top:12px"><h3 id="sal-emp-title" style="font-size:15px;color:var(--navy);margin:0"></h3><button class="btn-mini" id="pag-new" data-i="pag_new">+ Novo mês</button></div>
@@ -543,7 +547,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070561';
+const APP_VERSION='2026070562';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -608,6 +612,7 @@ const I18N={
    pag_adiantamento:'Adiantamento',pag_multa:'Multa',pag_resumo:'Resumo do salário',
    pag_empty:'Nenhum mês registrado ainda.',pag_dup:'Já existe um registro para esse mês/ano.',pag_del:'Excluir este registro de pagamento?',pag_ano_req:'Informe um ano válido.',
    nav_sal:'Salários',sal_back:'Voltar',rel_a1_tab:'Relatório Nível 1',rel_a2_tab:'Relatório Nível 2',rel_a3_tab:'Relatório Nível 3',
+   com_pend_btn:'🧾 Comissões Pendentes',com_pend_empty:'Nenhuma comissão pendente.',com_base:'Base',com_confirm:'✓ Confirmar',
    none_opt:'—',generic:'Algo deu errado. Tente novamente.',
    fill:'Preencha e-mail e senha.',invalid:'E-mail ou senha incorretos.',
    signup_ok:'Conta criada! Verifique seu e-mail para confirmar e depois faça login.',signup_exists:'Este e-mail já está cadastrado. Faça login.',weakpass:'A senha precisa ter ao menos 6 caracteres.'},
@@ -651,6 +656,7 @@ const I18N={
    pag_adiantamento:'Advance',pag_multa:'Penalty',pag_resumo:'Salary summary',
    pag_empty:'No months recorded yet.',pag_dup:'A record for this month/year already exists.',pag_del:'Delete this payroll record?',pag_ano_req:'Enter a valid year.',
    nav_sal:'Salaries',sal_back:'Back',rel_a1_tab:'Level 1 Report',rel_a2_tab:'Level 2 Report',rel_a3_tab:'Level 3 Report',
+   com_pend_btn:'🧾 Pending Commissions',com_pend_empty:'No pending commissions.',com_base:'Base',com_confirm:'✓ Confirm',
    none_opt:'—',generic:'Something went wrong. Please try again.',
    fill:'Enter e-mail and password.',invalid:'Wrong e-mail or password.',
    signup_ok:'Account created! Check your e-mail to confirm, then sign in.',signup_exists:'This e-mail is already registered. Please sign in.',weakpass:'Password must be at least 6 characters.'},
@@ -694,6 +700,7 @@ const I18N={
    pag_adiantamento:'預支',pag_multa:'罰款',pag_resumo:'薪資總結',
    pag_empty:'尚無月份紀錄。',pag_dup:'該月份/年份的紀錄已存在。',pag_del:'確定刪除此薪資紀錄？',pag_ano_req:'請輸入有效年份。',
    nav_sal:'薪資',sal_back:'返回',rel_a1_tab:'第一級報表',rel_a2_tab:'第二級報表',rel_a3_tab:'第三級報表',
+   com_pend_btn:'🧾 待確認佣金',com_pend_empty:'沒有待確認的佣金。',com_base:'計算基礎',com_confirm:'✓ 確認',
    none_opt:'—',generic:'發生錯誤，請再試一次。',
    fill:'請輸入電子郵件與密碼。',invalid:'電子郵件或密碼錯誤。',
    signup_ok:'帳號已建立！請查收電子郵件確認後再登入。',signup_exists:'此電子郵件已註冊，請直接登入。',weakpass:'密碼至少需 6 個字元。'}
@@ -1153,6 +1160,94 @@ document.getElementById('rel-a3').addEventListener('click',relReportClick);
 
 /* ===== FORMULÁRIO RELATÓRIO A3 ===== */
 const A3F={clienteId:null};
+/* ===== COMISSÕES (PENDENTE → CONFIRMAÇÃO → SALÁRIO) ===== */
+function calcComissaoValor(c,percentual){
+  const ted=Number(c.valor_deposito_ted)||0;
+  const pix=Number(c.valor_deposito_pix)||0;
+  const usdt=Number(c.valor_deposito_usdt)||0;
+  const valorReal=(ted+pix)/7.5*percentual;
+  const valorCripto=usdt*0.95*percentual;
+  return{base:ted+pix+usdt,valor:valorReal+valorCripto};
+}
+async function calcComissoes(c){
+  if(!c||!c.id)return;
+  const entries=[];
+  if(c.vendedor_a1)entries.push({etapa:'A1',vendedor:c.vendedor_a1,percentual:0.04});
+  if(c.vendedor_a2&&c.vendedor_a2b){
+    entries.push({etapa:'A2',vendedor:c.vendedor_a2,percentual:0.03});
+    entries.push({etapa:'A2',vendedor:c.vendedor_a2b,percentual:0.03});
+  }else if(c.vendedor_a2){
+    entries.push({etapa:'A2',vendedor:c.vendedor_a2,percentual:0.06});
+  }
+  if(c.vendedor_a3)entries.push({etapa:'A3',vendedor:c.vendedor_a3,percentual:0.05});
+  const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
+  for(const e of entries){
+    const{base,valor}=calcComissaoValor(c,e.percentual);
+    if(valor<=0)continue;
+    const{data:existing}=await sb.from('comissoes').select('id').eq('cliente_id',c.id).eq('etapa',e.etapa).eq('vendedor_codigo',e.vendedor).eq('confirmado',false).limit(1);
+    if(existing&&existing.length){
+      await sb.from('comissoes').update({percentual:e.percentual,base_calculo:base,valor_calculado:valor,cliente_nome:nome}).eq('id',existing[0].id);
+    }else{
+      await sb.from('comissoes').insert({cliente_id:c.id,cliente_nome:nome,vendedor_codigo:e.vendedor,etapa:e.etapa,percentual:e.percentual,base_calculo:base,valor_calculado:valor,confirmado:false});
+    }
+  }
+}
+async function loadAndRenderComPend(){
+  document.getElementById('com-pend-list').innerHTML='<div class="empty">'+t('loading')+'</div>';
+  const{data,error}=await sb.from('comissoes').select('*').eq('confirmado',false).order('created_at',{ascending:false});
+  renderComPend(data||[]);
+}
+function renderComPend(list){
+  const box=document.getElementById('com-pend-list');
+  if(!list.length){box.innerHTML='<div class="empty">'+t('com_pend_empty')+'</div>';return;}
+  const grouped={};
+  list.forEach(r=>{grouped[r.vendedor_codigo]=grouped[r.vendedor_codigo]||[];grouped[r.vendedor_codigo].push(r);});
+  let html='';
+  Object.keys(grouped).sort().forEach(v=>{
+    const rows=grouped[v];
+    const total=rows.reduce((s,r)=>s+Number(r.valor_calculado||0),0);
+    html+='<div class="rel-group"><div class="rel-ghead"><b>'+esc(v)+'</b><span>'+fmtMoney(total)+'</span></div>';
+    rows.forEach(r=>{
+      html+='<div class="rel-sub"><span class="rs-info"><span class="rs-nome">'+esc(r.cliente_nome||'—')+' · '+esc(r.etapa)+'</span><span class="rs-renda">'+t('com_base')+': '+fmtMoney(r.base_calculo)+' · '+(Number(r.percentual)*100).toFixed(0)+'%</span></span><span class="rs-val">'+fmtMoney(r.valor_calculado)+'</span></div>'
+        +'<div style="padding:0 14px 12px;text-align:right"><button class="btn-mini com-confirm" data-id="'+r.id+'">'+t('com_confirm')+'</button></div>';
+    });
+    html+='</div>';
+  });
+  box.innerHTML=html;
+}
+async function confirmComissao(id){
+  const{data:row}=await sb.from('comissoes').select('*').eq('id',id).single();
+  if(!row)return;
+  const now=new Date(),mes=now.getMonth()+1,ano=now.getFullYear();
+  await sb.from('comissoes').update({confirmado:true,confirmado_em:now.toISOString(),mes_pagamento:mes,ano_pagamento:ano}).eq('id',id);
+  const{data:vend}=await sb.from('vendedores').select('id').eq('codigo',row.vendedor_codigo).limit(1);
+  const vendedorId=vend&&vend[0]?vend[0].id:null;
+  if(vendedorId){
+    const{data:pag}=await sb.from('pagamentos').select('*').eq('vendedor_id',vendedorId).eq('mes',mes).eq('ano',ano).limit(1);
+    if(pag&&pag.length){
+      await sb.from('pagamentos').update({comissao:(Number(pag[0].comissao)||0)+Number(row.valor_calculado)}).eq('id',pag[0].id);
+    }else{
+      await sb.from('pagamentos').insert({vendedor_id:vendedorId,mes,ano,comissao:Number(row.valor_calculado)});
+    }
+  }
+  await loadAndRenderComPend();
+}
+document.getElementById('com-pend-btn').onclick=async()=>{
+  document.getElementById('sal-emp-list').classList.add('hide');
+  document.getElementById('sal-pag-view').classList.add('hide');
+  document.getElementById('com-pend-view').classList.remove('hide');
+  await loadAndRenderComPend();
+};
+document.getElementById('com-pend-back').onclick=()=>{
+  document.getElementById('com-pend-view').classList.add('hide');
+  document.getElementById('sal-emp-list').classList.remove('hide');
+};
+document.getElementById('com-pend-list').addEventListener('click',async e=>{
+  const btn=e.target.closest('.com-confirm');
+  if(!btn)return;
+  btn.disabled=true;btn.textContent='…';
+  await confirmComissao(btn.dataset.id);
+});
 function fillA3ClienteSelect(cur){
   const sel=document.getElementById('a3f-cliente');
   let html='<option value="">'+t('none_opt')+'</option>';
@@ -1224,6 +1319,8 @@ document.getElementById('a3f-save').onclick=async function(){
   if(error){msg('a3f-msg','err',error.message||t('generic'));return;}
   document.getElementById('a3-form').classList.add('hide');
   await loadCli();renderRel();
+  const updated=CLI.list.find(x=>x.id===cid);
+  if(updated)calcComissoes(updated);
 };
 document.getElementById('rel-a2-new').onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='cli'));
