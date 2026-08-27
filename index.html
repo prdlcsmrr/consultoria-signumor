@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070558';
+  var V='2026070559';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -543,7 +543,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070558';
+const APP_VERSION='2026070559';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -598,7 +598,7 @@ const I18N={
    rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',rel_col_renda:'Renda mensal',rel_total_clientes:'Total de clientes',
    tot_atencao:'Atenção (atrasado)',tot_reportando:'Reportando',tot_pronto3:'Prontos p/ Nível 3',tot_report3:'Reportando Nível 3',tot_finalizado:'Finalizados',tot_morreu2:'Morreu Nível 2',tot_morreu3:'Morreu Nível 3',
    lvl1:'Nível 1',lvl2:'Nível 2',lvl3:'Nível 3',
-   rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ Nível 3',rel_col_valenva3:'Valor enviado Nível 3',rel_col_total:'Total de clientes',rel_col_morreu:'Morreu',rel_col_valtotal:'Valor total trabalhado',
+   rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ Nível 3',rel_col_valenva3:'Valor enviado Nível 3',rel_col_total:'Total de clientes',rel_col_morreu:'Morreu',rel_col_valtotal:'Valor total trabalhado',rel_col_reportando:'Reportando',
    rel_col_cliente:'Cliente',rel_col_diasa3:'Dias no Nível 3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
    rel_empty:'Sem dados.',
    pag_title:'Folha de Pagamento',pag_new:'+ Novo mês',pag_mes:'Mês',pag_ano:'Ano',
@@ -641,7 +641,7 @@ const I18N={
    rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',rel_col_renda:'Monthly income',rel_total_clientes:'Total clients',
    tot_atencao:'Attention (delayed)',tot_reportando:'Reporting',tot_pronto3:'Ready for Level 3',tot_report3:'Reporting Level 3',tot_finalizado:'Finalized',tot_morreu2:'Lost Level 2',tot_morreu3:'Lost Level 3',
    lvl1:'Level 1',lvl2:'Level 2',lvl3:'Level 3',
-   rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to Level 3',rel_col_valenva3:'Value sent to Level 3',rel_col_total:'Total clients',rel_col_morreu:'Lost',rel_col_valtotal:'Total value handled',
+   rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to Level 3',rel_col_valenva3:'Value sent to Level 3',rel_col_total:'Total clients',rel_col_morreu:'Lost',rel_col_valtotal:'Total value handled',rel_col_reportando:'Reporting',
    rel_col_cliente:'Client',rel_col_diasa3:'Days in Level 3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
    rel_empty:'No data.',
    pag_title:'Payroll',pag_new:'+ New month',pag_mes:'Month',pag_ano:'Year',
@@ -684,7 +684,7 @@ const I18N={
    rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',rel_col_renda:'月收入',rel_total_clientes:'客戶總數',
    tot_atencao:'注意（已延遲）',tot_reportando:'報告中',tot_pronto3:'準備進入第三級',tot_report3:'第三級報告中',tot_finalizado:'已完成',tot_morreu2:'第二級流失',tot_morreu3:'第三級流失',
    lvl1:'第一級',lvl2:'第二級',lvl3:'第三級',
-   rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入第三級',rel_col_valenva3:'轉入第三級金額',rel_col_total:'客戶總數',rel_col_morreu:'流失',rel_col_valtotal:'處理總金額',
+   rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入第三級',rel_col_valenva3:'轉入第三級金額',rel_col_total:'客戶總數',rel_col_morreu:'流失',rel_col_valtotal:'處理總金額',rel_col_reportando:'報告中',
    rel_col_cliente:'客戶',rel_col_diasa3:'第三級天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
    rel_empty:'無資料。',
    pag_title:'薪資單',pag_new:'+ 新增月份',pag_mes:'月份',pag_ano:'年份',
@@ -944,7 +944,7 @@ async function delPag(id){if(!confirm(t('pag_del')))return;const {error}=await s
 
 /* ===== RELATÓRIOS ===== */
 function relBuild(){
-  const mapA1={},mapA2={};
+  const mapA1={},mapA2={},mapA3={};
   CLI.list.forEach(c=>{
     const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
     if(c.vendedor_a1){const k=c.vendedor_a1;mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
@@ -958,6 +958,14 @@ function relBuild(){
       if(c.situacao==='MORREU A2'||c.situacao==='MORREU A3')mapA2[k].morreu++;
       if(c.vendedor_a3)mapA2[k].enva3++;
     }
+    if(c.vendedor_a3){const k=c.vendedor_a3;
+      mapA3[k]=mapA3[k]||{total:0,reportando:0,morreu:0,valorTotal:0,clientes:[]};
+      mapA3[k].clientes.push(c);
+      mapA3[k].total++;
+      mapA3[k].valorTotal+=Number(c.saldo_resgatavel)||0;
+      if(c.situacao==='REPORTANDO A3')mapA3[k].reportando++;
+      if(c.situacao==='MORREU A3')mapA3[k].morreu++;
+    }
   });
   const listA3=CLI.list.filter(c=>c.vendedor_a3).map(c=>({
     id:c.id,
@@ -969,7 +977,7 @@ function relBuild(){
     resg:c.saldo_resgatavel,
     cats:FINF.filter(k=>c.resgates&&c.resgates[k]&&c.resgates[k].marcado).map(k=>t(FINLBL[k])+(c.resgates[k].data?' ('+c.resgates[k].data+')':''))
   }));
-  return {mapA1,mapA2,listA3};
+  return {mapA1,mapA2,mapA3,listA3};
 }
 function inlineVendSelect(list,cur,cid,field){
   const codes=list.map(v=>v.codigo);
@@ -1006,7 +1014,7 @@ function relRow(c){
 }
 function renderRel(){
   if(!CLI.loaded)return;
-  const {mapA1,mapA2,listA3}=relBuild();
+  const {mapA1,mapA2,mapA3,listA3}=relBuild();
   const k1=Object.keys(mapA1).sort();
   const totalA1=k1.reduce((s,k)=>s+mapA1[k].transferidos.length,0);
   document.getElementById('rel-a1').innerHTML=!k1.length?'<div class="empty">'+t('rel_empty')+'</div>':
@@ -1031,11 +1039,28 @@ function renderRel(){
         +'</div>'
         +'<div class="reltab-wrap"><table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div></div>';
     }).join('');
-  document.getElementById('rel-a3').innerHTML=!listA3.length?'<div class="empty">'+t('rel_empty')+'</div>':
-    '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+listA3.length+'</b></div>'
-    +'<table class="reltab"><thead><tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('lvl3')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th></tr></thead><tbody>'
-    +listA3.map(r=>'<tr data-report="'+r.id+'"><td class="cli-name-cell" style="cursor:pointer" data-reportcell title="'+esc(r.nome||'')+'">'+esc(r.nome||'—')+'</td><td><b>'+esc(r.a1||'—')+'</b></td><td><b>'+esc(r.a2||'—')+'</b></td><td><b>'+esc(r.func||'—')+'</b></td><td>'+(r.dias==null?'—':r.dias)+'</td><td>'+fmtMoney(r.resg)+'</td><td>'+(r.cats.length?esc(r.cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(r.situacao,r.id,'a3')+'</td></tr>').join('')
-    +'</tbody></table>';
+  const k3=Object.keys(mapA3).sort();
+  const totalA3=k3.reduce((s,k)=>s+mapA3[k].clientes.length,0);
+  const a3HeadRow='<tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th></tr>';
+  const a3Row=c=>{
+    const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
+    const a2txt=c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2;
+    const dias=days(c.data_entrada_a3,today());
+    const cats=FINF.filter(k=>c.resgates&&c.resgates[k]&&c.resgates[k].marcado).map(k=>t(FINLBL[k])+(c.resgates[k].data?' ('+c.resgates[k].data+')':''));
+    return '<tr data-report="'+c.id+'"><td class="cli-name-cell" style="cursor:pointer" data-reportcell title="'+esc(nome)+'">'+esc(nome||'—')+'</td><td><b>'+esc(c.vendedor_a1||'—')+'</b></td><td><b>'+esc(a2txt||'—')+'</b></td><td>'+(dias==null?'—':dias)+'</td><td>'+fmtMoney(c.saldo_resgatavel)+'</td><td>'+(cats.length?esc(cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id,'a3')+'</td></tr>';
+  };
+  document.getElementById('rel-a3').innerHTML=!k3.length?'<div class="empty">'+t('rel_empty')+'</div>':
+    '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+totalA3+'</b></div>'
+    +k3.map(k=>{const r=mapA3[k];
+      return '<div class="rel-group"><div class="rel-ghead-merged">'
+        +'<div class="rel-ghead-code"><span class="gs-val">'+esc(k)+'</span><span class="gs-lbl">'+t('rel_col_func')+'</span></div>'
+          +statChip(r.total,t('rel_col_total'))
+          +statChip(r.reportando,t('rel_col_reportando'))
+          +statChip(r.morreu,t('rel_col_morreu'))
+          +statChip(fmtMoney(r.valorTotal),t('rel_col_valtotal'))
+        +'</div>'
+        +'<div class="reltab-wrap"><table class="reltab"><thead>'+a3HeadRow+'</thead><tbody>'+r.clientes.map(a3Row).join('')+'</tbody></table></div></div>';
+    }).join('');
 }
 const REPORT={current:null};
 function rptRow(label,val){
