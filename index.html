@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070550';
+  var V='2026070551';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -418,30 +418,42 @@
 
     <!-- TAB RELATÓRIO A3 -->
     <div id="tab-rel-a3" class="card hide">
-      <div class="pane-head"><h2 data-i="rel_a3">A3 — Resgate</h2><button class="btn-mini" id="rel-a3-new" data-i="cli_new">+ Novo</button></div>
+      <div class="pane-head"><h2 data-i="rel_a3">A3 — Resgate</h2><span style="display:flex;gap:8px"><button class="btn-mini" id="rel-a3-paste" data-i="paste_btn">📋 Colar Relatório</button><button class="btn-mini" id="rel-a3-new" data-i="cli_new">+ Novo</button></span></div>
       <div id="rel-a3" class="reltab-wrap"></div>
       <div id="a3-form" class="hide" style="margin-top:14px;background:#f7f8fb;border:1px solid var(--line);border-radius:10px;padding:14px">
         <input type="hidden" id="a3f-id">
         <label class="fld"><span class="lbl" data-i="a3_cliente">Cliente</span><select id="a3f-cliente"></select></label>
         <div class="row2">
+          <label class="fld"><span class="lbl" data-i="a3_recebido">Cliente recebido em</span><input id="a3f-recebido" type="date"></label>
           <label class="fld"><span class="lbl" data-i="a3_data_rel">Data do relatório</span><input id="a3f-data" type="date"></label>
-          <label class="fld"><span class="lbl" data-i="a3_agenda">Agenda diária</span><input id="a3f-agenda" maxlength="120" placeholder="—"></label>
         </div>
+        <label class="fld"><span class="lbl" data-i="a3_agenda">Agenda diária</span><input id="a3f-agenda" maxlength="120" placeholder="—"></label>
         <div class="row2">
           <label class="fld"><span class="lbl" data-i="a3_valor_est">Valor estimado total</span><input id="a3f-valorest" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           <label class="fld"><span class="lbl" data-i="a3_dinheiro_conta">Dinheiro em conta</span><input id="a3f-dconta" type="number" inputmode="decimal" step="any" placeholder="0"></label>
         </div>
         <div class="row2">
           <label class="fld"><span class="lbl" data-i="a3_dinheiro_gasto">Dinheiro gasto</span><input id="a3f-dgasto" type="number" inputmode="decimal" step="any" placeholder="0"></label>
-          <label class="fld"><span class="lbl" data-i="a3_trocado_usdt">Já trocado por USDT</span><input id="a3f-usdt" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <label class="fld"><span class="lbl" data-i="a3_disponivel">Disponível para resgate</span><input id="a3f-disp" type="number" inputmode="decimal" step="any" placeholder="0"></label>
         </div>
         <div class="row2">
-          <label class="fld"><span class="lbl" data-i="a3_disponivel">Disponível para resgate</span><input id="a3f-disp" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           <label class="fld"><span class="lbl" data-i="a3_indisponivel">Indisponível para resgate</span><input id="a3f-indisp" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <label class="fld"><span class="lbl" data-i="a3_motivo">Motivo da indisponibilidade</span><input id="a3f-motivo" maxlength="200" placeholder="—"></label>
         </div>
-        <label class="fld"><span class="lbl" data-i="a3_motivo">Motivo da indisponibilidade</span><input id="a3f-motivo" maxlength="200" placeholder="—"></label>
         <label class="fld"><span class="lbl" data-i="a3_endereco">Endereço de depósito</span><input id="a3f-endereco" maxlength="200" placeholder="—"></label>
-        <label class="fld"><span class="lbl" data-i="f_depositado">Valor depositado</span><input id="a3f-depositado" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+        <div class="row3">
+          <label class="fld"><span class="lbl" data-i="a3_usdt">Depósito em USDT</span><input id="a3f-usdt" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <label class="fld"><span class="lbl" data-i="a3_pix">Depósito em PIX</span><input id="a3f-pix" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <label class="fld"><span class="lbl" data-i="a3_ted">Depósito em TED</span><input id="a3f-ted" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+        </div>
+        <label class="fld"><span class="lbl" data-i="f_depositado">Valor total já depositado</span><input id="a3f-depositado" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+        <label class="fld"><span class="lbl" data-i="cli_situacao">Situação atual</span>
+          <select id="a3f-situacao">
+            <option value="ATENCAO" data-i="st_ATENCAO">ATENÇÃO</option>
+            <option value="REPORTANDO A3" data-i="st_REPORTANDO A3">REPORTANDO A3</option>
+            <option value="FINALIZADO" data-i="st_FINALIZADO">FINALIZADO</option>
+            <option value="MORREU A3" data-i="st_MORREU A3">MORREU A3</option>
+          </select></label>
         <div class="acts"><button class="btn" id="a3f-save" data-i="vend_save">Salvar</button><button class="btn gold" id="a3f-cancel" data-i="vend_cancel">Cancelar</button></div>
         <div id="a3f-msg" class="msg"></div>
       </div>
@@ -523,7 +535,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070550';
+const APP_VERSION='2026070551';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -557,11 +569,12 @@ const I18N={
    cli_title:'Clientes',cli_new:'+ Novo',cli_pnome:'Primeiro nome',cli_snome:'Segundo nome',
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',sec_a3rel:'Relatório de Atendimento A3',
    a3_data_rel:'Data do relatório',a3_agenda:'Agenda diária',a3_valor_est:'Valor estimado total',a3_dinheiro_conta:'Dinheiro em conta',a3_dinheiro_gasto:'Dinheiro gasto',
-   a3_trocado_usdt:'Já trocado por USDT',a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',
+   a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',
+   a3_recebido:'Cliente recebido em',a3_usdt:'Depósito em USDT',a3_pix:'Depósito em PIX',a3_ted:'Depósito em TED',
    rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 Nível 1',rpt_l2:'📍 Nível 2',rpt_l3:'📍 Nível 3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
    proc_interceptacao:'Interceptação',proc_formulario:'Formulário',proc_termo:'Termo',proc_vizinhos:'Vizinhos',proc_relatorio:'Relatório',proc_carta:'Carta de Autodeclaração',proc_procedimentos_iniciais:'Procedimentos Iniciais',proc_lista:'Lista',
    cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',rpt_editar_a3:'✏️ Editar A3',
-   paste_btn:'📋 Colar Relatório',paste_title:'Colar Relatório',paste_help:'Cole o texto do relatório completo abaixo. O sistema vai tentar identificar cada campo automaticamente.',paste_process:'Processar',paste_empty:'Cole o texto do relatório primeiro.',
+   paste_btn:'📋 Colar Relatório',paste_title:'Colar Relatório',paste_help:'Cole o texto do relatório completo abaixo. O sistema vai tentar identificar cada campo automaticamente.',paste_process:'Processar',paste_empty:'Cole o texto do relatório primeiro.',paste_pick_client:'Não encontrei o cliente pelo nome — selecione manualmente antes de salvar.',
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
    f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',f_renda:'Renda mensal',f_depositado:'Valor depositado',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
@@ -599,11 +612,12 @@ const I18N={
    cli_title:'Clients',cli_new:'+ New',cli_pnome:'First name',cli_snome:'Second name',
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',sec_a3rel:'A3 Attendance Report',
    a3_data_rel:'Report date',a3_agenda:'Daily agenda',a3_valor_est:'Total estimated value',a3_dinheiro_conta:'Money in account',a3_dinheiro_gasto:'Money spent',
-   a3_trocado_usdt:'Already converted to USDT',a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',
+   a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',
+   a3_recebido:'Client received on',a3_usdt:'USDT deposit',a3_pix:'PIX deposit',a3_ted:'TED deposit',
    rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 Level 1',rpt_l2:'📍 Level 2',rpt_l3:'📍 Level 3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
    proc_interceptacao:'Interception',proc_formulario:'Form',proc_termo:'Terms',proc_vizinhos:'Neighbors',proc_relatorio:'Report',proc_carta:'Self-declaration letter',proc_procedimentos_iniciais:'Initial procedures',proc_lista:'List',
    cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',rpt_editar_a3:'✏️ Edit A3',
-   paste_btn:'📋 Paste Report',paste_title:'Paste Report',paste_help:'Paste the full report text below. The system will try to identify each field automatically.',paste_process:'Process',paste_empty:'Paste the report text first.',
+   paste_btn:'📋 Paste Report',paste_title:'Paste Report',paste_help:'Paste the full report text below. The system will try to identify each field automatically.',paste_process:'Process',paste_empty:'Paste the report text first.',paste_pick_client:'Could not find the client by name — please select manually before saving.',
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
    f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',f_renda:'Monthly income',f_depositado:'Deposited value',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
@@ -641,11 +655,12 @@ const I18N={
    cli_title:'客戶',cli_new:'+ 新增',cli_pnome:'名',cli_snome:'第二名',
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',sec_a3rel:'A3服務報告',
    a3_data_rel:'報告日期',a3_agenda:'每日行程',a3_valor_est:'預估總值',a3_dinheiro_conta:'帳戶內金額',a3_dinheiro_gasto:'已花費金額',
-   a3_trocado_usdt:'已兌換USDT',a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',
+   a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',
+   a3_recebido:'客戶接收日期',a3_usdt:'USDT存款',a3_pix:'PIX存款',a3_ted:'TED存款',
    rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第一級',rpt_l2:'📍 第二級',rpt_l3:'📍 第三級',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
    proc_interceptacao:'攔截',proc_formulario:'表格',proc_termo:'條款',proc_vizinhos:'鄰居',proc_relatorio:'報告',proc_carta:'自我聲明書',proc_procedimentos_iniciais:'初步程序',proc_lista:'清單',
    cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',rpt_editar_a3:'✏️ 編輯A3',
-   paste_btn:'📋 貼上報告',paste_title:'貼上報告',paste_help:'將完整報告文字貼在下方，系統會自動嘗試辨識每個欄位。',paste_process:'處理',paste_empty:'請先貼上報告文字。',
+   paste_btn:'📋 貼上報告',paste_title:'貼上報告',paste_help:'將完整報告文字貼在下方，系統會自動嘗試辨識每個欄位。',paste_process:'處理',paste_empty:'請先貼上報告文字。',paste_pick_client:'找不到符合姓名的客戶，請在儲存前手動選擇。',
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
    f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',f_renda:'月收入',f_depositado:'已存入金額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
@@ -1049,16 +1064,19 @@ function openReport(c){
   html+=rptRow(t('f_depositado'),fmtMoney(c.valor_depositado));
   if(c.vendedor_a3){
     html+='<div class="rpt-sec">'+t('rel_a3_tab')+'</div>';
+    html+=rptRow(t('a3_recebido'),fmtDt(c.data_entrada_a3));
     html+=rptRow(t('a3_data_rel'),fmtDt(c.data_relatorio_a3));
     html+=rptRow(t('a3_agenda'),c.agenda_diaria_a3?esc(c.agenda_diaria_a3):'—');
     html+=rptRow(t('a3_valor_est'),fmtMoney(c.valor_estimado_total_a3));
     html+=rptRow(t('a3_dinheiro_conta'),fmtMoney(c.dinheiro_conta_a3));
     html+=rptRow(t('a3_dinheiro_gasto'),fmtMoney(c.dinheiro_gasto_a3));
-    html+=rptRow(t('a3_trocado_usdt'),fmtMoney(c.trocado_usdt_a3));
     html+=rptRow(t('a3_disponivel'),fmtMoney(c.disponivel_resgate_a3));
     html+=rptRow(t('a3_indisponivel'),fmtMoney(c.indisponivel_resgate_a3));
     html+=rptRow(t('a3_motivo'),c.motivo_indisponibilidade_a3?esc(c.motivo_indisponibilidade_a3):'—');
     html+=rptRow(t('a3_endereco'),c.endereco_deposito_a3?esc(c.endereco_deposito_a3):'—');
+    html+=rptRow(t('a3_usdt'),fmtMoney(c.valor_deposito_usdt));
+    html+=rptRow(t('a3_pix'),fmtMoney(c.valor_deposito_pix));
+    html+=rptRow(t('a3_ted'),fmtMoney(c.valor_deposito_ted));
   }
   html+='<div class="rpt-sec">'+t('sec_obs')+'</div><div class="rpt-obs">'+(esc(c.observacoes||'')||'—')+'</div>';
   document.getElementById('report-body').innerHTML=html;
@@ -1113,17 +1131,21 @@ function openA3Form(c){
   const sel=document.getElementById('a3f-cliente');
   sel.disabled=!!c;
   A3F.clienteId=c?c.id:null;
+  document.getElementById('a3f-recebido').value=c&&c.data_entrada_a3?c.data_entrada_a3:'';
   document.getElementById('a3f-data').value=c&&c.data_relatorio_a3?c.data_relatorio_a3:'';
   document.getElementById('a3f-agenda').value=c&&c.agenda_diaria_a3?c.agenda_diaria_a3:'';
   document.getElementById('a3f-valorest').value=c&&c.valor_estimado_total_a3!=null?c.valor_estimado_total_a3:0;
   document.getElementById('a3f-dconta').value=c&&c.dinheiro_conta_a3!=null?c.dinheiro_conta_a3:0;
   document.getElementById('a3f-dgasto').value=c&&c.dinheiro_gasto_a3!=null?c.dinheiro_gasto_a3:0;
-  document.getElementById('a3f-usdt').value=c&&c.trocado_usdt_a3!=null?c.trocado_usdt_a3:0;
   document.getElementById('a3f-disp').value=c&&c.disponivel_resgate_a3!=null?c.disponivel_resgate_a3:0;
   document.getElementById('a3f-indisp').value=c&&c.indisponivel_resgate_a3!=null?c.indisponivel_resgate_a3:0;
   document.getElementById('a3f-motivo').value=c&&c.motivo_indisponibilidade_a3?c.motivo_indisponibilidade_a3:'';
   document.getElementById('a3f-endereco').value=c&&c.endereco_deposito_a3?c.endereco_deposito_a3:'';
+  document.getElementById('a3f-usdt').value=c&&c.valor_deposito_usdt!=null?c.valor_deposito_usdt:0;
+  document.getElementById('a3f-pix').value=c&&c.valor_deposito_pix!=null?c.valor_deposito_pix:0;
+  document.getElementById('a3f-ted').value=c&&c.valor_deposito_ted!=null?c.valor_deposito_ted:0;
   document.getElementById('a3f-depositado').value=c&&c.valor_depositado!=null?c.valor_depositado:0;
+  document.getElementById('a3f-situacao').value=c&&c.situacao?c.situacao:'REPORTANDO A3';
   msg('a3f-msg');document.getElementById('a3-form').classList.remove('hide');
 }
 document.getElementById('rel-a3-new').onclick=()=>openA3Form(null);
@@ -1132,17 +1154,21 @@ document.getElementById('a3f-save').onclick=async function(){
   const cid=document.getElementById('a3f-cliente').disabled?A3F.clienteId:document.getElementById('a3f-cliente').value;
   if(!cid){msg('a3f-msg','err',t('a3_cliente_req'));return;}
   const payload={
+    data_entrada_a3:document.getElementById('a3f-recebido').value||null,
     data_relatorio_a3:document.getElementById('a3f-data').value||null,
     agenda_diaria_a3:document.getElementById('a3f-agenda').value.trim()||null,
     valor_estimado_total_a3:num('a3f-valorest'),
     dinheiro_conta_a3:num('a3f-dconta'),
     dinheiro_gasto_a3:num('a3f-dgasto'),
-    trocado_usdt_a3:num('a3f-usdt'),
     disponivel_resgate_a3:num('a3f-disp'),
     indisponivel_resgate_a3:num('a3f-indisp'),
     motivo_indisponibilidade_a3:document.getElementById('a3f-motivo').value.trim()||null,
     endereco_deposito_a3:document.getElementById('a3f-endereco').value.trim()||null,
-    valor_depositado:num('a3f-depositado')
+    valor_deposito_usdt:num('a3f-usdt'),
+    valor_deposito_pix:num('a3f-pix'),
+    valor_deposito_ted:num('a3f-ted'),
+    valor_depositado:num('a3f-depositado'),
+    situacao:document.getElementById('a3f-situacao').value
   };
   this.disabled=true;const o=this.textContent;this.innerHTML='<span class="spin"></span>';
   const {error}=await sb.from('clientes').update(payload).eq('id',cid);
@@ -1339,14 +1365,17 @@ function pr_parseDate(s){
   else if(yyyy.length===2)yyyy='20'+yyyy;
   return yyyy+'-'+mm+'-'+dd;
 }
-function pr_parseSituacao(s){
-  if(!s)return'REPORTANDO A2';
+function pr_parseSituacao(s,ctx){
+  ctx=ctx||'a2';
+  const def=ctx==='a3'?'REPORTANDO A3':'REPORTANDO A2';
+  const defMorreu=ctx==='a3'?'MORREU A3':'MORREU A2';
+  if(!s)return def;
   const low=s.toLowerCase();
-  if(low.includes('morreu'))return(low.includes('3')||low.includes('três')||low.includes('nível 3'))?'MORREU A3':'MORREU A2';
+  if(low.includes('morreu'))return(low.includes('3')||low.includes('três')||low.includes('nível 3'))?'MORREU A3':(ctx==='a3'?defMorreu:'MORREU A2');
   if(low.includes('finaliz'))return'FINALIZADO';
   if(low.includes('atenç')||low.includes('atencao'))return'ATENCAO';
-  if(low.includes('report'))return(low.includes('nível 3')||low.includes('nivel 3')||/\b3\b/.test(low))?'REPORTANDO A3':'REPORTANDO A2';
-  return'REPORTANDO A2';
+  if(low.includes('report'))return(low.includes('nível 3')||low.includes('nivel 3')||/\b3\b/.test(low))?'REPORTANDO A3':(ctx==='a3'?'REPORTANDO A3':'REPORTANDO A2');
+  return def;
 }
 function pr_norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');}
 function pr_parseProc(s){
@@ -1442,7 +1471,14 @@ function applyParsedToForm(p){
   document.getElementById('cf-obs').value=p.observacoes||'';
   calcTotal();calcPrazos();
 }
+const PASTE_MODE={mode:'a2'};
 document.getElementById('rel-a2-paste').onclick=()=>{
+  PASTE_MODE.mode='a2';
+  document.getElementById('paste-text').value='';msg('paste-msg');
+  document.getElementById('paste-modal').classList.remove('hide');
+};
+document.getElementById('rel-a3-paste').onclick=()=>{
+  PASTE_MODE.mode='a3';
   document.getElementById('paste-text').value='';msg('paste-msg');
   document.getElementById('paste-modal').classList.remove('hide');
 };
@@ -1452,12 +1488,90 @@ document.getElementById('paste-cancel').onclick=()=>document.getElementById('pas
 document.getElementById('paste-process').onclick=()=>{
   const text=document.getElementById('paste-text').value;
   if(!text.trim()){msg('paste-msg','err',t('paste_empty'));return;}
-  const parsed=parseReport(text);
   document.getElementById('paste-modal').classList.add('hide');
+  if(PASTE_MODE.mode==='a3'){
+    const parsed=parseReportA3(text);
+    document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='rel-a3'));
+    ['tab-cli','tab-vend','tab-rel-a1','tab-rel-a2','tab-rel-a3','tab-sal'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!=='tab-rel-a3'));
+    applyParsedToA3Form(parsed);
+    return;
+  }
+  const parsed=parseReport(text);
   document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='cli'));
   ['tab-cli','tab-vend','tab-rel-a1','tab-rel-a2','tab-rel-a3','tab-sal'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!=='tab-cli'));
   applyParsedToForm(parsed);
 };
+const PR_FIELDS_A3=[
+  ['recebido',/CLIENTE\s*RECEBIDO/i],['data_rel',/\bDATA\s*DO\s*RELAT[ÓO]RIO/i],['nome',/\bNOME\b/i],
+  ['agenda',/AGENDA\s*DI[ÁA]RIA/i],['valor_est',/VALOR\s*ESTIMADO\s*TOTAL/i],
+  ['dconta',/DINHEIRO\s*EM\s*CONTA/i],['dgasto',/DINHEIRO\s*GASTO/i],
+  ['disp',/\bDISPON[ÍI]VEL\s*PARA\s*RESGATE\b/i],['indisp',/\bINDISPON[ÍI]VEL\s*PARA\s*RESGATE\b/i],
+  ['motivo',/MOTIVO\s*DA\s*INDISPONIBILIDADE/i],['endereco',/ENDERE[ÇC]O\s*DE\s*DEP[ÓO]SITO/i],
+  ['usdt',/DEP[ÓO]SITO\s*EM\s*USDT/i],['pix',/DEP[ÓO]SITO\s*EM\s*PIX/i],['ted',/DEP[ÓO]SITO\s*EM\s*TED/i],
+  ['depositado',/VALOR\s*TOTAL\s*J[ÁA]\s*DEPOSITADO/i],['situacao',/\bSITUA[CÇ][AÃ]O\s*ATUAL/i]
+];
+function parseReportA3(text){
+  const raw={};let current=null;
+  text.split(/\r?\n/).forEach(line=>{
+    const l=line.trim();if(!l)return;
+    const lc=l.lastIndexOf(':');
+    let matched=null;
+    if(lc>=0){
+      const labelPart=l.slice(0,lc);
+      for(const[f,pat]of PR_FIELDS_A3){if(pat.test(labelPart)){matched=f;break;}}
+    }
+    if(matched){current=matched;const valuePart=l.slice(lc+1).trim();raw[current]=(raw[current]?raw[current]+'\n':'')+valuePart;}
+    else if(current){raw[current]=(raw[current]?raw[current]+'\n':'')+l;}
+  });
+  const notes=[];
+  const numFields=['valor_est','dconta','dgasto','disp','indisp','usdt','pix','ted','depositado'];
+  const vals={};
+  numFields.forEach(f=>{const r=pr_parseNum(raw[f]);vals[f]=r.value;if(r.note)notes.push(f+': '+r.note);});
+  let motivo=(raw.motivo||'').trim();
+  if(notes.length)motivo=(motivo?motivo+' ':'')+notes.join('. ')+(notes.length?'.':'');
+  return{
+    nome:(raw.nome||'').trim(),
+    data_entrada_a3:pr_parseDate(raw.recebido),
+    data_relatorio_a3:pr_parseDate(raw.data_rel),
+    agenda_diaria_a3:(raw.agenda||'').trim()||null,
+    valor_estimado_total_a3:vals.valor_est,
+    dinheiro_conta_a3:vals.dconta,
+    dinheiro_gasto_a3:vals.dgasto,
+    disponivel_resgate_a3:vals.disp,
+    indisponivel_resgate_a3:vals.indisp,
+    motivo_indisponibilidade_a3:motivo||null,
+    endereco_deposito_a3:(raw.endereco||'').trim()||null,
+    valor_deposito_usdt:vals.usdt,
+    valor_deposito_pix:vals.pix,
+    valor_deposito_ted:vals.ted,
+    valor_depositado:vals.depositado||(vals.usdt+vals.pix+vals.ted),
+    situacao:pr_parseSituacao(raw.situacao||'','a3')
+  };
+}
+function applyParsedToA3Form(p){
+  const nameNorm=pr_norm(p.nome);
+  const found=CLI.list.find(c=>{
+    const full=pr_norm((c.primeiro_nome||'')+(c.segundo_nome||''));
+    return nameNorm&&(full===nameNorm||full.includes(nameNorm)||nameNorm.includes(full));
+  });
+  openA3Form(found||null);
+  document.getElementById('a3f-recebido').value=p.data_entrada_a3||'';
+  document.getElementById('a3f-data').value=p.data_relatorio_a3||'';
+  document.getElementById('a3f-agenda').value=p.agenda_diaria_a3||'';
+  document.getElementById('a3f-valorest').value=p.valor_estimado_total_a3||0;
+  document.getElementById('a3f-dconta').value=p.dinheiro_conta_a3||0;
+  document.getElementById('a3f-dgasto').value=p.dinheiro_gasto_a3||0;
+  document.getElementById('a3f-disp').value=p.disponivel_resgate_a3||0;
+  document.getElementById('a3f-indisp').value=p.indisponivel_resgate_a3||0;
+  document.getElementById('a3f-motivo').value=p.motivo_indisponibilidade_a3||'';
+  document.getElementById('a3f-endereco').value=p.endereco_deposito_a3||'';
+  document.getElementById('a3f-usdt').value=p.valor_deposito_usdt||0;
+  document.getElementById('a3f-pix').value=p.valor_deposito_pix||0;
+  document.getElementById('a3f-ted').value=p.valor_deposito_ted||0;
+  document.getElementById('a3f-depositado').value=p.valor_depositado||0;
+  document.getElementById('a3f-situacao').value=p.situacao||'REPORTANDO A3';
+  if(!found)msg('a3f-msg','err',t('paste_pick_client'));
+}
 function renderProcList(sel){
   const box=document.getElementById('cf-proc-list');
   sel=sel||[];
