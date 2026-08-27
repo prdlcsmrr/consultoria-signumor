@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070556';
+  var V='2026070557';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -456,6 +456,7 @@
             <option value="FINALIZADO" data-i="st_FINALIZADO">FINALIZADO</option>
             <option value="MORREU A3" data-i="st_MORREU A3">MORREU A3</option>
           </select></label>
+        <label class="fld"><span class="lbl" data-i="sec_obs">Observações</span><textarea id="a3f-obs" maxlength="1000" placeholder="—" style="min-height:80px"></textarea></label>
         <div class="acts"><button class="btn" id="a3f-save" data-i="vend_save">Salvar</button><button class="btn gold" id="a3f-cancel" data-i="vend_cancel">Cancelar</button></div>
         <div id="a3f-msg" class="msg"></div>
       </div>
@@ -537,7 +538,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070556';
+const APP_VERSION='2026070557';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1157,6 +1158,7 @@ function openA3Form(c){
   document.getElementById('a3f-ted').value=c&&c.valor_deposito_ted!=null?c.valor_deposito_ted:0;
   document.getElementById('a3f-depositado').value=c&&c.valor_depositado!=null?c.valor_depositado:0;
   document.getElementById('a3f-situacao').value=c&&c.situacao?c.situacao:'REPORTANDO A3';
+  document.getElementById('a3f-obs').value=c&&c.observacoes?c.observacoes:'';
   msg('a3f-msg');document.getElementById('a3-form').classList.remove('hide');
 }
 document.getElementById('rel-a3-new').onclick=()=>openA3Form(null);
@@ -1181,6 +1183,7 @@ document.getElementById('a3f-save').onclick=async function(){
     valor_deposito_ted:num('a3f-ted'),
     valor_depositado:num('a3f-depositado'),
     situacao:document.getElementById('a3f-situacao').value,
+    observacoes:document.getElementById('a3f-obs').value.trim()||null,
     vendedor_a3:document.getElementById('a3f-func').value||null
   };
   this.disabled=true;const o=this.textContent;this.innerHTML='<span class="spin"></span>';
@@ -1546,6 +1549,7 @@ function parseReportA3(text){
   numFields.forEach(f=>{const r=pr_parseNum(raw[f]);vals[f]=r.value;if(r.note)notes.push(f+': '+r.note);});
   let motivo=(raw.motivo||'').trim();
   if(notes.length)motivo=(motivo?motivo+' ':'')+notes.join('. ')+(notes.length?'.':'');
+  const situacaoRaw=(raw.situacao||'').trim();
   return{
     nome:(raw.nome||'').trim(),
     data_entrada_a3:pr_parseDate(raw.recebido),
@@ -1562,7 +1566,8 @@ function parseReportA3(text){
     valor_deposito_pix:vals.pix,
     valor_deposito_ted:vals.ted,
     valor_depositado:vals.depositado||(vals.usdt+vals.pix+vals.ted),
-    situacao:pr_parseSituacao(raw.situacao||'','a3')
+    situacao:pr_parseSituacao(situacaoRaw,'a3'),
+    observacoes:situacaoRaw.length>25?situacaoRaw:null
   };
 }
 async function applyParsedToA3Form(p){
@@ -1597,7 +1602,8 @@ async function applyParsedToA3Form(p){
       valor_deposito_pix:p.valor_deposito_pix||0,
       valor_deposito_ted:p.valor_deposito_ted||0,
       valor_depositado:p.valor_depositado||0,
-      situacao:p.situacao||'REPORTANDO A3'
+      situacao:p.situacao||'REPORTANDO A3',
+      observacoes:p.observacoes||null
     };
     const{data,error}=await sb.from('clientes').insert(payload).select().single();
     if(error){openA3Form(null);msg('a3f-msg','err',error.message||t('generic'));return;}
@@ -1624,6 +1630,7 @@ async function applyParsedToA3Form(p){
   document.getElementById('a3f-ted').value=p.valor_deposito_ted||0;
   document.getElementById('a3f-depositado').value=p.valor_depositado||0;
   document.getElementById('a3f-situacao').value=p.situacao||'REPORTANDO A3';
+  document.getElementById('a3f-obs').value=p.observacoes||'';
   msg('a3f-msg','ok',t('paste_client_matched'));
 }
 function renderProcList(sel){
