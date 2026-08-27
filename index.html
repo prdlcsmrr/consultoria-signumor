@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070555';
+  var V='2026070556';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -424,6 +424,7 @@
       <div id="a3-form" class="hide" style="margin-top:14px;background:#f7f8fb;border:1px solid var(--line);border-radius:10px;padding:14px">
         <input type="hidden" id="a3f-id">
         <label class="fld"><span class="lbl" data-i="a3_cliente">Cliente</span><select id="a3f-cliente"></select></label>
+        <label class="fld"><span class="lbl" data-i="lvl3">Nível 3</span><select id="a3f-func"></select></label>
         <div class="row2">
           <label class="fld"><span class="lbl" data-i="a3_recebido">Cliente recebido em</span><input id="a3f-recebido" type="date"></label>
           <label class="fld"><span class="lbl" data-i="a3_data_rel">Data do relatório</span><input id="a3f-data" type="date"></label>
@@ -536,7 +537,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070555';
+const APP_VERSION='2026070556';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -570,7 +571,7 @@ const I18N={
    cli_title:'Clientes',cli_new:'+ Novo',cli_pnome:'Primeiro nome',cli_snome:'Segundo nome',
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',sec_a3rel:'Relatório de Atendimento A3',
    a3_data_rel:'Data do relatório',a3_agenda:'Agenda diária',a3_valor_est:'Valor estimado total',a3_dinheiro_conta:'Dinheiro em conta',a3_dinheiro_gasto:'Dinheiro gasto',
-   a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',
+   a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',a3_func_req:'Selecione o funcionário do Nível 3.',
    a3_recebido:'Cliente recebido em',a3_usdt:'Depósito em USDT',a3_pix:'Depósito em PIX',a3_ted:'Depósito em TED',
    rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 Nível 1',rpt_l2:'📍 Nível 2',rpt_l3:'📍 Nível 3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
    proc_interceptacao:'Interceptação',proc_formulario:'Formulário',proc_termo:'Termo',proc_vizinhos:'Vizinhos',proc_relatorio:'Relatório',proc_carta:'Carta de Autodeclaração',proc_procedimentos_iniciais:'Procedimentos Iniciais',proc_lista:'Lista',
@@ -613,7 +614,7 @@ const I18N={
    cli_title:'Clients',cli_new:'+ New',cli_pnome:'First name',cli_snome:'Second name',
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',sec_a3rel:'A3 Attendance Report',
    a3_data_rel:'Report date',a3_agenda:'Daily agenda',a3_valor_est:'Total estimated value',a3_dinheiro_conta:'Money in account',a3_dinheiro_gasto:'Money spent',
-   a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',
+   a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',a3_func_req:'Select the Level 3 employee.',
    a3_recebido:'Client received on',a3_usdt:'USDT deposit',a3_pix:'PIX deposit',a3_ted:'TED deposit',
    rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 Level 1',rpt_l2:'📍 Level 2',rpt_l3:'📍 Level 3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
    proc_interceptacao:'Interception',proc_formulario:'Form',proc_termo:'Terms',proc_vizinhos:'Neighbors',proc_relatorio:'Report',proc_carta:'Self-declaration letter',proc_procedimentos_iniciais:'Initial procedures',proc_lista:'List',
@@ -656,7 +657,7 @@ const I18N={
    cli_title:'客戶',cli_new:'+ 新增',cli_pnome:'名',cli_snome:'第二名',
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',sec_a3rel:'A3服務報告',
    a3_data_rel:'報告日期',a3_agenda:'每日行程',a3_valor_est:'預估總值',a3_dinheiro_conta:'帳戶內金額',a3_dinheiro_gasto:'已花費金額',
-   a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',
+   a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',a3_func_req:'請選擇第三級員工。',
    a3_recebido:'客戶接收日期',a3_usdt:'USDT存款',a3_pix:'PIX存款',a3_ted:'TED存款',
    rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第一級',rpt_l2:'📍 第二級',rpt_l3:'📍 第三級',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
    proc_interceptacao:'攔截',proc_formulario:'表格',proc_termo:'條款',proc_vizinhos:'鄰居',proc_relatorio:'報告',proc_carta:'自我聲明書',proc_procedimentos_iniciais:'初步程序',proc_lista:'清單',
@@ -1126,8 +1127,18 @@ function fillA3ClienteSelect(cur){
     html+='<option value="'+c.id+'">'+esc(nome||'—')+'</option>';});
   sel.innerHTML=html;if(cur)sel.value=cur;
 }
+function fillA3FuncSelect(cur){
+  const sel=document.getElementById('a3f-func');
+  const list=VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3));
+  const codes=list.map(v=>v.codigo);
+  if(cur&&!codes.includes(cur))codes.unshift(cur);
+  let html='<option value="">'+t('none_opt')+'</option>';
+  codes.forEach(code=>{html+='<option value="'+esc(code)+'"'+(code===cur?' selected':'')+'>'+esc(code)+'</option>';});
+  sel.innerHTML=html;
+}
 function openA3Form(c){
   fillA3ClienteSelect(c?c.id:'');
+  fillA3FuncSelect(c&&c.vendedor_a3?c.vendedor_a3:'');
   const sel=document.getElementById('a3f-cliente');
   sel.disabled=!!c;
   A3F.clienteId=c?c.id:null;
@@ -1153,6 +1164,7 @@ document.getElementById('a3f-cancel').onclick=()=>{document.getElementById('a3-f
 document.getElementById('a3f-save').onclick=async function(){
   const cid=document.getElementById('a3f-cliente').disabled?A3F.clienteId:document.getElementById('a3f-cliente').value;
   if(!cid){msg('a3f-msg','err',t('a3_cliente_req'));return;}
+  if(!document.getElementById('a3f-func').value){msg('a3f-msg','err',t('a3_func_req'));return;}
   const payload={
     data_entrada_a3:document.getElementById('a3f-recebido').value||null,
     data_relatorio_a3:document.getElementById('a3f-data').value||null,
@@ -1168,7 +1180,8 @@ document.getElementById('a3f-save').onclick=async function(){
     valor_deposito_pix:num('a3f-pix'),
     valor_deposito_ted:num('a3f-ted'),
     valor_depositado:num('a3f-depositado'),
-    situacao:document.getElementById('a3f-situacao').value
+    situacao:document.getElementById('a3f-situacao').value,
+    vendedor_a3:document.getElementById('a3f-func').value||null
   };
   this.disabled=true;const o=this.textContent;this.innerHTML='<span class="spin"></span>';
   const {error}=await sb.from('clientes').update(payload).eq('id',cid);
