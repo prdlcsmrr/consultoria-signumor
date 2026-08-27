@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070562';
+  var V='2026070563';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -547,7 +547,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070562';
+const APP_VERSION='2026070563';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -725,6 +725,7 @@ function msg(box,type,text){const el=document.getElementById(box);el.className='
 function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function num(id){const v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
 function fmtMoney(n){n=Number(n)||0;const loc=LANG==='zh'?'zh-Hant':(LANG==='en'?'en-US':'pt-BR');return n.toLocaleString(loc,{maximumFractionDigits:2});}
+function fmtUSD(n){n=Number(n)||0;return '$ '+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function today(){const d=new Date();const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,'0');const day=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+day;}
 function days(a,b){if(!a||!b)return null;const d=Math.floor((new Date(b+'T00:00')-new Date(a+'T00:00'))/86400000);return d;}
 
@@ -1206,9 +1207,9 @@ function renderComPend(list){
   Object.keys(grouped).sort().forEach(v=>{
     const rows=grouped[v];
     const total=rows.reduce((s,r)=>s+Number(r.valor_calculado||0),0);
-    html+='<div class="rel-group"><div class="rel-ghead"><b>'+esc(v)+'</b><span>'+fmtMoney(total)+'</span></div>';
+    html+='<div class="rel-group"><div class="rel-ghead"><b>'+esc(v)+'</b><span>'+fmtUSD(total)+'</span></div>';
     rows.forEach(r=>{
-      html+='<div class="rel-sub"><span class="rs-info"><span class="rs-nome">'+esc(r.cliente_nome||'—')+' · '+esc(r.etapa)+'</span><span class="rs-renda">'+t('com_base')+': '+fmtMoney(r.base_calculo)+' · '+(Number(r.percentual)*100).toFixed(0)+'%</span></span><span class="rs-val">'+fmtMoney(r.valor_calculado)+'</span></div>'
+      html+='<div class="rel-sub"><span class="rs-info"><span class="rs-nome">'+esc(r.cliente_nome||'—')+' · '+esc(r.etapa)+'</span><span class="rs-renda">'+t('com_base')+': R$ '+fmtMoney(r.base_calculo)+' · '+(Number(r.percentual)*100).toFixed(0)+'%</span></span><span class="rs-val">'+fmtUSD(r.valor_calculado)+'</span></div>'
         +'<div style="padding:0 14px 12px;text-align:right"><button class="btn-mini com-confirm" data-id="'+r.id+'">'+t('com_confirm')+'</button></div>';
     });
     html+='</div>';
