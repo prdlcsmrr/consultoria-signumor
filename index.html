@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070563';
+  var V='2026070564';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -547,7 +547,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070563';
+const APP_VERSION='2026070564';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1201,15 +1201,18 @@ async function loadAndRenderComPend(){
 function renderComPend(list){
   const box=document.getElementById('com-pend-list');
   if(!list.length){box.innerHTML='<div class="empty">'+t('com_pend_empty')+'</div>';return;}
+  const etapaLbl=e=>e==='A1'?t('lvl1'):e==='A2'?t('lvl2'):e==='A3'?t('lvl3'):e;
   const grouped={};
   list.forEach(r=>{grouped[r.vendedor_codigo]=grouped[r.vendedor_codigo]||[];grouped[r.vendedor_codigo].push(r);});
   let html='';
   Object.keys(grouped).sort().forEach(v=>{
     const rows=grouped[v];
     const total=rows.reduce((s,r)=>s+Number(r.valor_calculado||0),0);
-    html+='<div class="rel-group"><div class="rel-ghead"><b>'+esc(v)+'</b><span>'+fmtUSD(total)+'</span></div>';
+    const niveis=[...new Set(rows.map(r=>r.etapa))];
+    const multiNivel=niveis.length>1;
+    html+='<div class="rel-group"><div class="rel-ghead"><b>'+esc(v)+'</b><span>'+fmtUSD(total)+(multiNivel?' ('+niveis.map(etapaLbl).join('+')+')':'')+'</span></div>';
     rows.forEach(r=>{
-      html+='<div class="rel-sub"><span class="rs-info"><span class="rs-nome">'+esc(r.cliente_nome||'—')+' · '+esc(r.etapa)+'</span><span class="rs-renda">'+t('com_base')+': R$ '+fmtMoney(r.base_calculo)+' · '+(Number(r.percentual)*100).toFixed(0)+'%</span></span><span class="rs-val">'+fmtUSD(r.valor_calculado)+'</span></div>'
+      html+='<div class="rel-sub"><span class="rs-info"><span class="rs-nome">'+esc(r.cliente_nome||'—')+' · '+etapaLbl(r.etapa)+'</span><span class="rs-renda">'+t('com_base')+': R$ '+fmtMoney(r.base_calculo)+' · '+(Number(r.percentual)*100).toFixed(0)+'%</span></span><span class="rs-val">'+fmtUSD(r.valor_calculado)+'</span></div>'
         +'<div style="padding:0 14px 12px;text-align:right"><button class="btn-mini com-confirm" data-id="'+r.id+'">'+t('com_confirm')+'</button></div>';
     });
     html+='</div>';
