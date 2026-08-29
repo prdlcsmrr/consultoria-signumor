@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070575';
+  var V='2026070576';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -244,6 +244,7 @@
 .rpt-row .rv{font-weight:bold;text-align:right}
 .rpt-sec{margin-top:16px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);font-weight:bold;border-top:1.5px solid var(--gold);padding-top:8px}
 .rpt-obs{font-size:13px;margin-top:6px;white-space:pre-wrap;line-height:1.5}
+.rpt-mt-tag{display:inline-block;margin-left:6px;font-size:9px;font-weight:bold;color:#8a8a8a;background:#f0f0f3;border-radius:6px;padding:1px 5px;vertical-align:middle}
 @media (min-width:860px){#report-sheet{max-width:640px}#report-body{font-size:15px}.rpt-row{font-size:14.5px}}
 #paste-modal{position:fixed;inset:0;z-index:200}
 #paste-modal.hide{display:none}
@@ -552,7 +553,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070575';
+const APP_VERSION='2026070576';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -588,7 +589,7 @@ const I18N={
    a3_data_rel:'Data do relatório',a3_agenda:'Agenda diária',a3_valor_est:'Valor estimado total',a3_dinheiro_conta:'Dinheiro em conta',a3_dinheiro_gasto:'Dinheiro gasto',
    a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',a3_func_req:'Selecione o funcionário do Nível 3.',
    a3_recebido:'Cliente recebido em',a3_usdt:'Depósito em USDT',a3_pix:'Depósito em PIX',a3_ted:'Depósito em TED',
-   rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 Nível 1',rpt_l2:'📍 Nível 2',rpt_l3:'📍 Nível 3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',
+   rpt_title:'📋 RELATÓRIO',rpt_data:'📅 Data',rpt_entregue:'✅ Entregue',rpt_sim:'Sim',rpt_nao:'Não',rpt_nome:'👤 Nome',rpt_l1:'📍 Nível 1',rpt_l2:'📍 Nível 2',rpt_l3:'📍 Nível 3',rpt_situacao:'📊 Situação atual',rpt_financeiro:'💰 Financeiro',rpt_mt_tag:'tradução automática',
    proc_interceptacao:'Interceptação',proc_formulario:'Formulário',proc_termo:'Termo',proc_vizinhos:'Vizinhos',proc_relatorio:'Relatório',proc_carta:'Carta de Autodeclaração',proc_procedimentos_iniciais:'Procedimentos Iniciais',proc_lista:'Lista',
    cli_dtentrada:'Entrada',cli_dtentregue:'Saída (p/ A3)',cli_situacao:'Situação',cli_procedimentos:'Procedimentos',rpt_editar:'✏️ Editar',rpt_editar_a3:'✏️ Editar A3',
    paste_btn:'📋 Colar Relatório',paste_title:'Colar Relatório',paste_help:'Cole o texto do relatório completo abaixo. O sistema vai tentar identificar cada campo automaticamente.',paste_process:'Processar',paste_empty:'Cole o texto do relatório primeiro.',paste_client_matched:'Cliente localizado — confira e salve.',paste_client_created:'✅ Cliente já cadastrado e dados já salvos! Falta só escolher o funcionário de Nível 3 abaixo e salvar de novo.',
@@ -632,7 +633,7 @@ const I18N={
    a3_data_rel:'Report date',a3_agenda:'Daily agenda',a3_valor_est:'Total estimated value',a3_dinheiro_conta:'Money in account',a3_dinheiro_gasto:'Money spent',
    a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',a3_func_req:'Select the Level 3 employee.',
    a3_recebido:'Client received on',a3_usdt:'USDT deposit',a3_pix:'PIX deposit',a3_ted:'TED deposit',
-   rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 Level 1',rpt_l2:'📍 Level 2',rpt_l3:'📍 Level 3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',
+   rpt_title:'📋 REPORT',rpt_data:'📅 Date',rpt_entregue:'✅ Delivered',rpt_sim:'Yes',rpt_nao:'No',rpt_nome:'👤 Name',rpt_l1:'📍 Level 1',rpt_l2:'📍 Level 2',rpt_l3:'📍 Level 3',rpt_situacao:'📊 Current status',rpt_financeiro:'💰 Financial',rpt_mt_tag:'machine translated',
    proc_interceptacao:'Interception',proc_formulario:'Form',proc_termo:'Terms',proc_vizinhos:'Neighbors',proc_relatorio:'Report',proc_carta:'Self-declaration letter',proc_procedimentos_iniciais:'Initial procedures',proc_lista:'List',
    cli_dtentrada:'Entered',cli_dtentregue:'Exit (to A3)',cli_situacao:'Status',cli_procedimentos:'Procedures',rpt_editar:'✏️ Edit',rpt_editar_a3:'✏️ Edit A3',
    paste_btn:'📋 Paste Report',paste_title:'Paste Report',paste_help:'Paste the full report text below. The system will try to identify each field automatically.',paste_process:'Process',paste_empty:'Paste the report text first.',paste_client_matched:'Client found — review and save.',paste_client_created:'✅ Client already created and data already saved! Just pick the Level 3 employee below and save again.',
@@ -676,7 +677,7 @@ const I18N={
    a3_data_rel:'報告日期',a3_agenda:'每日行程',a3_valor_est:'預估總值',a3_dinheiro_conta:'帳戶內金額',a3_dinheiro_gasto:'已花費金額',
    a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',a3_func_req:'請選擇第三級員工。',
    a3_recebido:'客戶接收日期',a3_usdt:'USDT存款',a3_pix:'PIX存款',a3_ted:'TED存款',
-   rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第一級',rpt_l2:'📍 第二級',rpt_l3:'📍 第三級',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',
+   rpt_title:'📋 報告',rpt_data:'📅 日期',rpt_entregue:'✅ 已交付',rpt_sim:'是',rpt_nao:'否',rpt_nome:'👤 名稱',rpt_l1:'📍 第一級',rpt_l2:'📍 第二級',rpt_l3:'📍 第三級',rpt_situacao:'📊 目前狀況',rpt_financeiro:'💰 財務',rpt_mt_tag:'機器翻譯',
    proc_interceptacao:'攔截',proc_formulario:'表格',proc_termo:'條款',proc_vizinhos:'鄰居',proc_relatorio:'報告',proc_carta:'自我聲明書',proc_procedimentos_iniciais:'初步程序',proc_lista:'清單',
    cli_dtentrada:'進入',cli_dtentregue:'離開（至A3）',cli_situacao:'狀態',cli_procedimentos:'處理步驟',rpt_editar:'✏️ 編輯',rpt_editar_a3:'✏️ 編輯A3',
    paste_btn:'📋 貼上報告',paste_title:'貼上報告',paste_help:'將完整報告文字貼在下方，系統會自動嘗試辨識每個欄位。',paste_process:'處理',paste_empty:'請先貼上報告文字。',paste_client_matched:'已找到客戶，請確認後儲存。',paste_client_created:'✅ 客戶已建立，資料已儲存！只需在下方選擇第三級員工後再次儲存即可。',
@@ -1108,6 +1109,29 @@ function renderRel(){
     }).join('');
 }
 const REPORT={current:null};
+const TRANSLATE_CACHE={};
+async function translateText(text,targetLang){
+  if(!text||!text.trim())return null;
+  const tgt=targetLang==='zh'?'zh-TW':'en';
+  const cacheKey=tgt+'::'+text;
+  if(TRANSLATE_CACHE[cacheKey])return TRANSLATE_CACHE[cacheKey];
+  try{
+    const resp=await fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=pt&tl='+tgt+'&dt=t&q='+encodeURIComponent(text));
+    const data=await resp.json();
+    const translated=data[0].map(seg=>seg[0]).join('');
+    TRANSLATE_CACHE[cacheKey]=translated;
+    return translated;
+  }catch(e){console.error('translateText error:',e);return null;}
+}
+async function autoTranslateField(elId,originalText){
+  if(!originalText||!originalText.trim())return;
+  const el=document.getElementById(elId);
+  if(!el)return;
+  const translated=await translateText(originalText,LANG);
+  const stillOpen=document.getElementById(elId);
+  if(!stillOpen||!translated)return;
+  stillOpen.innerHTML=esc(translated)+'<span class="rpt-mt-tag">'+t('rpt_mt_tag')+'</span>';
+}
 function rptRow(label,val){
   return '<div class="rpt-row"><span class="rl">'+label+'</span><span class="rv">'+val+'</span></div>';
 }
@@ -1145,22 +1169,27 @@ function openReport(c){
     html+='<div class="rpt-sec">'+t('rel_a3_tab')+'</div>';
     html+=rptRow(t('a3_recebido'),fmtDt(c.data_entrada_a3));
     html+=rptRow(t('a3_data_rel'),fmtDt(c.data_relatorio_a3));
-    html+=rptRow(t('a3_agenda'),c.agenda_diaria_a3?esc(c.agenda_diaria_a3):'—');
+    html+='<div class="rpt-row"><span class="rl">'+t('a3_agenda')+'</span><span class="rv" id="rpt-agenda-val">'+(c.agenda_diaria_a3?esc(c.agenda_diaria_a3):'—')+'</span></div>';
     html+=rptRow(t('a3_valor_est'),fmtMoney(c.valor_estimado_total_a3));
     html+=rptRow(t('a3_dinheiro_conta'),fmtMoney(c.dinheiro_conta_a3));
     html+=rptRow(t('a3_dinheiro_gasto'),fmtMoney(c.dinheiro_gasto_a3));
     html+=rptRow(t('a3_disponivel'),fmtMoney(c.disponivel_resgate_a3));
     html+=rptRow(t('a3_indisponivel'),fmtMoney(c.indisponivel_resgate_a3));
-    html+=rptRow(t('a3_motivo'),c.motivo_indisponibilidade_a3?esc(c.motivo_indisponibilidade_a3):'—');
+    html+='<div class="rpt-row"><span class="rl">'+t('a3_motivo')+'</span><span class="rv" id="rpt-motivo-val">'+(c.motivo_indisponibilidade_a3?esc(c.motivo_indisponibilidade_a3):'—')+'</span></div>';
     html+=rptRow(t('a3_endereco'),c.endereco_deposito_a3?esc(c.endereco_deposito_a3):'—');
     html+=rptRow(t('a3_usdt'),fmtMoney(c.valor_deposito_usdt));
     html+=rptRow(t('a3_pix'),fmtMoney(c.valor_deposito_pix));
     html+=rptRow(t('a3_ted'),fmtMoney(c.valor_deposito_ted));
   }
-  html+='<div class="rpt-sec">'+t('sec_obs')+'</div><div class="rpt-obs">'+(esc(c.observacoes||'')||'—')+'</div>';
+  html+='<div class="rpt-sec">'+t('sec_obs')+'</div><div class="rpt-obs" id="rpt-obs-val">'+(esc(c.observacoes||'')||'—')+'</div>';
   document.getElementById('report-body').innerHTML=html;
   document.getElementById('report-edit-a3').classList.toggle('hide',!c.vendedor_a3);
   document.getElementById('report-modal').classList.remove('hide');
+  if(LANG!=='pt'){
+    autoTranslateField('rpt-agenda-val',c.agenda_diaria_a3);
+    autoTranslateField('rpt-motivo-val',c.motivo_indisponibilidade_a3);
+    autoTranslateField('rpt-obs-val',c.observacoes);
+  }
 }
 document.getElementById('report-close').onclick=()=>document.getElementById('report-modal').classList.add('hide');
 document.getElementById('report-overlay').onclick=()=>document.getElementById('report-modal').classList.add('hide');
