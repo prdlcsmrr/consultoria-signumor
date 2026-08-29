@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070574';
+  var V='2026070575';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -552,7 +552,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070574';
+const APP_VERSION='2026070575';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1190,6 +1190,10 @@ document.getElementById('rel-a2').addEventListener('change',async e=>{
   const sel=e.target.closest('.rel-edit');if(!sel)return;
   const cid=sel.dataset.cid,field=sel.dataset.field,val=sel.value||null;
   const payload={};payload[field]=val;
+  if(field==='vendedor_a3'&&val){
+    const c=CLI.list.find(x=>x.id===cid);
+    if(c&&!c.data_entrada_a3)payload.data_entrada_a3=today();
+  }
   const {error}=await sb.from('clientes').update(payload).eq('id',cid);
   if(error){alert(error.message||t('generic'));return;}
   await loadCli();renderRel();
@@ -1345,7 +1349,7 @@ document.getElementById('a3f-save').onclick=async function(){
     return;
   }
   const payload={
-    data_entrada_a3:document.getElementById('a3f-recebido').value||null,
+    data_entrada_a3:document.getElementById('a3f-recebido').value||today(),
     data_relatorio_a3:document.getElementById('a3f-data').value||null,
     agenda_diaria_a3:document.getElementById('a3f-agenda').value.trim()||null,
     valor_estimado_total_a3:num('a3f-valorest'),
