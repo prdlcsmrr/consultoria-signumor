@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070577';
+  var V='2026070578';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -401,7 +401,7 @@
     <!-- TAB VENDEDORES -->
     <div id="tab-vend" class="card">
       <div class="pane-head"><h2 data-i="vend_title">Funcionários</h2><button class="btn-mini" id="v-new" data-i="vend_new">+ Novo</button></div>
-      <div class="funnel">A1 → A2 → A3</div>
+      <div class="funnel" id="v-funnel"></div>
       <div id="v-form" class="vform hide">
         <input type="hidden" id="vf-id">
         <div class="row2">
@@ -555,7 +555,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070577';
+const APP_VERSION='2026070578';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -720,6 +720,7 @@ function applyLang(){
   document.title=t('brand_sistema')+' SIGNUMOR';
   document.querySelectorAll('[data-i]').forEach(el=>{el.textContent=t(el.getAttribute('data-i'));});
   document.querySelectorAll('#lang button').forEach(b=>b.classList.toggle('active',b.dataset.lang===LANG));
+  const vf=document.getElementById('v-funnel');if(vf)vf.textContent=t('lvl1')+' → '+t('lvl2')+' → '+t('lvl3');
   if(VEND.loaded) renderVend();
   if(CLI.loaded){renderCli();renderRel();}
   if(document.getElementById('pf-mes'))fillMesSelect();
