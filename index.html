@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070579';
+  var V='2026070580';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -555,7 +555,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070579';
+const APP_VERSION='2026070580';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1380,8 +1380,11 @@ document.getElementById('a3f-save').onclick=async function(){
     setTimeout(()=>{fsel.style.border='';fsel.style.background='';},4000);
     return;
   }
+  const existing=CLI.list.find(x=>x.id===cid);
+  const recebidoInput=document.getElementById('a3f-recebido').value;
+  const dataEntradaA3=recebidoInput||(existing&&existing.data_entrada_a3)||today();
   const payload={
-    data_entrada_a3:document.getElementById('a3f-recebido').value||today(),
+    data_entrada_a3:dataEntradaA3,
     data_relatorio_a3:document.getElementById('a3f-data').value||null,
     agenda_diaria_a3:document.getElementById('a3f-agenda').value.trim()||null,
     valor_estimado_total_a3:num('a3f-valorest'),
