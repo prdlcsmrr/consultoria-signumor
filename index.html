@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070581';
+  var V='2026070582';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -555,7 +555,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070581';
+const APP_VERSION='2026070582';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1660,6 +1660,7 @@ const PR_FIELDS=[
   ['observacoes',/\bOBSERVA[CÇ][OÕ]ES\b/i]
 ];
 function parseReport(text){
+  text=text.replace(/^\s*[A-Za-z]{1,4}[^\n:]{0,15}:\s*(?=[📅🧑👤])/,'');
   const raw={};let current=null;
   text.split(/\r?\n/).forEach(line=>{
     const l=line.trim();if(!l)return;
@@ -1766,6 +1767,7 @@ const PR_FIELDS_A3=[
   ['depositado',/VALOR\s*TOTAL\s*J[ÁA]\s*DEPOSITADO/i],['situacao',/\bSITUA[CÇ][AÃ]O\s*ATUAL/i]
 ];
 function parseReportA3(text){
+  text=text.replace(/^\s*[A-Za-z]{1,4}[^\n:]{0,15}:\s*(?=[📋📅🧑👤])/,'');
   const raw={};let current=null;
   text.split(/\r?\n/).forEach(line=>{
     const l=line.trim();if(!l)return;
