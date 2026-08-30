@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070582';
+  var V='2026070583';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -555,7 +555,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070582';
+const APP_VERSION='2026070583';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -614,7 +614,7 @@ const I18N={
    rel_col_cliente:'Cliente',rel_col_diasa3:'Dias no Nível 3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
    rel_empty:'Sem dados.',
    pag_title:'Folha de Pagamento',pag_new:'+ Novo mês',pag_mes:'Mês',pag_ano:'Ano',
-   pag_desemp_rs:'Desempenho (R$)',pag_desemp_usdt:'Desempenho (USDT)',pag_comissao:'Comissão',pag_salario_base:'Salário base',
+   pag_desemp_rs:'Desempenho (R$)',pag_desemp_usdt:'Desempenho (USDT)',pag_comissao:'Comissão',pag_salario_base:'Salário base',pag_col_mes:'Mês',pag_col_total:'Total',
    pag_dias:'Dias presentes',pag_presenca_valor:'Valor da presença',pag_dias_no_mes:'dias no mês',
    pag_comissao_ind:'Comissão por indicação',pag_bonus_sup:'Bônus de supervisão',pag_bonus_assid:'Bônus de assiduidade',
    pag_adiantamento:'Adiantamento',pag_multa:'Multa',pag_resumo:'Resumo do salário',
@@ -658,7 +658,7 @@ const I18N={
    rel_col_cliente:'Client',rel_col_diasa3:'Days in Level 3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
    rel_empty:'No data.',
    pag_title:'Payroll',pag_new:'+ New month',pag_mes:'Month',pag_ano:'Year',
-   pag_desemp_rs:'Performance (R$)',pag_desemp_usdt:'Performance (USDT)',pag_comissao:'Commission',pag_salario_base:'Base salary',
+   pag_desemp_rs:'Performance (R$)',pag_desemp_usdt:'Performance (USDT)',pag_comissao:'Commission',pag_salario_base:'Base salary',pag_col_mes:'Month',pag_col_total:'Total',
    pag_dias:'Days present',pag_presenca_valor:'Attendance value',pag_dias_no_mes:'days in month',
    pag_comissao_ind:'Referral commission',pag_bonus_sup:'Supervision bonus',pag_bonus_assid:'Attendance bonus',
    pag_adiantamento:'Advance',pag_multa:'Penalty',pag_resumo:'Salary summary',
@@ -702,7 +702,7 @@ const I18N={
    rel_col_cliente:'客戶',rel_col_diasa3:'第三級天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
    rel_empty:'無資料。',
    pag_title:'薪資單',pag_new:'+ 新增月份',pag_mes:'月份',pag_ano:'年份',
-   pag_desemp_rs:'業績（R$）',pag_desemp_usdt:'業績（USDT）',pag_comissao:'佣金',pag_salario_base:'底薪',
+   pag_desemp_rs:'業績（R$）',pag_desemp_usdt:'業績（USDT）',pag_comissao:'佣金',pag_salario_base:'底薪',pag_col_mes:'月份',pag_col_total:'總計',
    pag_dias:'出勤天數',pag_presenca_valor:'出勤金額',pag_dias_no_mes:'當月天數',
    pag_comissao_ind:'介紹佣金',pag_bonus_sup:'督導獎金',pag_bonus_assid:'全勤獎金',
    pag_adiantamento:'預支',pag_multa:'罰款',pag_resumo:'薪資總結',
@@ -933,8 +933,13 @@ function renderPagList(){
   const box=document.getElementById('pag-list');
   if(!PAG.list.length){box.innerHTML='<div class="empty">'+t('pag_empty')+'</div>';return;}
   const mArr=MESES[LANG]||MESES.pt;
-  box.innerHTML=PAG.list.map(p=>'<div class="pag-row"><span class="pm">'+mArr[p.mes-1]+'/'+p.ano+'</span><span class="pv">'+fmtMoney(p.resumo_salario)+'</span>'
-    +'<span class="pacts"><button class="iconbtn" data-pedit="'+p.id+'">✏️</button><button class="iconbtn" data-pdel="'+p.id+'">🗑️</button></span></div>').join('');
+  let html='<div class="reltab-wrap"><table class="reltab"><thead><tr>'
+    +'<th>'+t('pag_col_mes')+'</th><th>'+t('pag_salario_base')+'</th><th>'+t('pag_comissao')+'</th><th>'+t('pag_col_total')+'</th><th></th>'
+    +'</tr></thead><tbody>';
+  html+=PAG.list.map(p=>'<tr><td><b>'+mArr[p.mes-1]+'/'+p.ano+'</b></td><td>'+fmtMoney(p.salario_base)+'</td><td>'+fmtMoney(p.comissao)+'</td><td><b>'+fmtMoney(p.resumo_salario)+'</b></td>'
+    +'<td class="rel-edit-cell"><button class="iconbtn" data-pedit="'+p.id+'">✏️</button><button class="iconbtn" data-pdel="'+p.id+'">🗑️</button></td></tr>').join('');
+  html+='</tbody></table></div>';
+  box.innerHTML=html;
 }
 document.getElementById('pag-list').addEventListener('click',e=>{
   const ed=e.target.closest('[data-pedit]'),dl=e.target.closest('[data-pdel]');
