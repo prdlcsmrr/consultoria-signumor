@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070584';
+  var V='2026070585';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -114,7 +114,7 @@
   .reltab td{padding:11px 12px;border-bottom:1px solid var(--line);color:var(--navy);vertical-align:middle;line-height:1.3}
   .reltab tbody tr:nth-child(even):not(.row-morreu2):not(.row-morreu3):not(.row-reportando3):not(.row-finalizado):not(.row-atencao):not(.row-bloqueio){background:#fbfbfd}
   .reltab tbody tr:hover{filter:brightness(0.97)}
-  .cli-name-cell{max-width:150px;overflow:hidden;text-overflow:ellipsis;font-weight:bold;position:sticky;left:0;background:#fff;z-index:1}
+  .cli-name-cell{max-width:150px;overflow:hidden;text-overflow:ellipsis;font-weight:bold;position:sticky;left:0;background:#fff;z-index:1;font-size:13px!important;line-height:1.3}
   .st-line{display:block;white-space:nowrap;font-size:12px}
   .st-line:first-child{color:var(--muted)}
   .rel-total{font-size:13px;font-weight:bold;color:var(--navy);background:#fdf3e3;border:1px solid var(--gold);border-radius:8px;padding:8px 14px;margin-bottom:12px;display:inline-block}
@@ -560,7 +560,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070584';
+const APP_VERSION='2026070585';
 (function(){
   let checking=false;
   async function checkVersion(){
