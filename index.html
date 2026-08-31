@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070587';
+  var V='2026070588';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -560,7 +560,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070587';
+const APP_VERSION='2026070588';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1591,14 +1591,16 @@ function renderCli(){
     +'</tr></thead><tbody>';
   arr.forEach(c=>{
     const nome=esc(fullName(c));
+    const a1txt=c.vendedor_a1b?esc(c.vendedor_a1)+'+'+esc(c.vendedor_a1b):(c.vendedor_a1?esc(c.vendedor_a1):'—');
     const a2txt=c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):(c.vendedor_a2?esc(c.vendedor_a2):'—');
+    const a3txt=c.vendedor_a3b?esc(c.vendedor_a3)+'+'+esc(c.vendedor_a3b):(c.vendedor_a3?esc(c.vendedor_a3):'—');
     html+='<tr class="'+cliRowClass(c)+'" data-report="'+c.id+'" style="cursor:pointer">'
       +'<td>'+fmtDt(c.data_entrada)+'</td>'
       +'<td>'+(nome||'—')+'</td>'
       +'<td>'+fmtDt(c.data_entrada_a3)+'</td>'
-      +'<td>'+(c.vendedor_a1?'<b>'+esc(c.vendedor_a1)+'</b>':'—')+'</td>'
+      +'<td>'+(c.vendedor_a1?'<b>'+a1txt+'</b>':'—')+'</td>'
       +'<td>'+(c.vendedor_a2?'<b>'+a2txt+'</b>':'—')+'</td>'
-      +'<td>'+(c.vendedor_a3?'<b>'+esc(c.vendedor_a3)+'</b>':'—')+'</td>'
+      +'<td>'+(c.vendedor_a3?'<b>'+a3txt+'</b>':'—')+'</td>'
       +'<td>'+stageTime(c)+'</td>'
       +'<td>'+fmtMoney(c.saldo_resgatavel)+'</td>'
       +'<td>'+stBadge(c.situacao)+'</td>'
