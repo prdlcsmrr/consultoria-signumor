@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070591';
+  var V='2026070592';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -87,7 +87,6 @@
   .tabs button{flex:0 0 auto;white-space:nowrap;border:0;background:rgba(255,255,255,.08);color:#c7cde0;font-family:inherit;font-size:12.5px;font-weight:bold;padding:11px 14px;border-radius:11px;cursor:pointer;letter-spacing:.3px}
   .tabs button.active{background:var(--gold);color:var(--navy)}
   .pane-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .cli-total-header{font-size:13px;color:var(--muted);font-weight:bold;background:#f0f0f3;padding:5px 10px;border-radius:8px}
   .pane-head h2{font-size:18px;color:var(--navy);margin:0;letter-spacing:.5px}
   .btn-mini{border:0;background:linear-gradient(180deg,var(--navy2),var(--navy));color:#fff;font-family:inherit;font-size:13px;font-weight:bold;padding:8px 12px;border-radius:9px;cursor:pointer}
   .funnel{font-size:11px;color:var(--muted);text-align:center;margin:-4px 0 14px;letter-spacing:1px}
@@ -304,7 +303,8 @@
 
     <!-- TAB CLIENTES -->
     <div id="tab-cli" class="card hide">
-      <div class="pane-head"><h2 data-i="cli_title">Clientes</h2><span id="cli-total-header" class="cli-total-header"></span></div>
+      <div class="pane-head"><h2 data-i="cli_title">Clientes</h2></div>
+      <div id="cli-total-header" class="rel-total"></div>
 
       <!-- FICHA -->
       <div id="c-form" class="vform hide">
@@ -562,7 +562,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070591';
+const APP_VERSION='2026070592';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1594,7 +1594,7 @@ function renderCli(){
   let arr=CLI.list.slice();
   const totAtivos=CLI.list.filter(c=>(c.situacao||'').indexOf('MORREU')!==0&&c.situacao!=='FINALIZADO').length;
   const hdr=document.getElementById('cli-total-header');
-  if(hdr)hdr.textContent=t('cli_total_ativos')+': '+totAtivos;
+  if(hdr)hdr.innerHTML=t('cli_total_ativos')+': <b>'+totAtivos+'</b>';
   if(CLI.filtro==='MORTO')arr=arr.filter(c=>(c.situacao||'').indexOf('MORREU')===0);
   else if(CLI.filtro==='REPORTANDO')arr=arr.filter(c=>(c.situacao||'').indexOf('REPORTANDO')===0);
   else if(CLI.filtro!=='ALL')arr=arr.filter(c=>c.situacao===CLI.filtro);
