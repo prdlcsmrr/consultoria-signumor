@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070585';
+  var V='2026070586';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -560,7 +560,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070585';
+const APP_VERSION='2026070586';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -737,6 +737,16 @@ const views={boot:'boot',login:'view-login',signup:'view-signup',dash:'view-dash
 function show(v){Object.values(views).forEach(id=>document.getElementById(id).classList.add('hide'));document.getElementById(views[v]).classList.remove('hide');}
 function msg(box,type,text){const el=document.getElementById(box);el.className='msg '+(type||'');el.textContent=text||'';if(!text)el.style.display='none';}
 function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+const NAME_PARTICLES=new Set(['de','da','do','das','dos','e']);
+function titleCaseName(s){
+  if(!s)return s;
+  return s.toLowerCase().split(' ').map((w,i)=>{
+    if(!w)return w;
+    if(i>0&&NAME_PARTICLES.has(w))return w;
+    return w.charAt(0).toUpperCase()+w.slice(1);
+  }).join(' ');
+}
+function fullName(c){return titleCaseName((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));}
 function num(id){const v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
 function fmtMoney(n){n=Number(n)||0;const loc=LANG==='zh'?'zh-Hant':(LANG==='en'?'en-US':'pt-BR');return n.toLocaleString(loc,{maximumFractionDigits:2});}
 function fmtUSD(n){n=Number(n)||0;return '$ '+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
@@ -1000,7 +1010,7 @@ async function delPag(id){if(!confirm(t('pag_del')))return;const {error}=await s
 function relBuild(){
   const mapA1={},mapA2={},mapA3={};
   CLI.list.forEach(c=>{
-    const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
+    const nome=fullName(c);
     [c.vendedor_a1,c.vendedor_a1b].filter(Boolean).forEach(k=>{
       mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
       mapA1[k].receb++;
@@ -1027,7 +1037,7 @@ function relBuild(){
   });
   const listA3=CLI.list.filter(c=>c.vendedor_a3).map(c=>({
     id:c.id,
-    nome:(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''),
+    nome:fullName(c),
     a1:c.vendedor_a1,a2:c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,
     func:c.vendedor_a3,
     situacao:c.situacao,
@@ -1056,7 +1066,7 @@ function inlineSituacaoSelect(cur,cid,stage){
   return html;
 }
 function relRow(c){
-  const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
+  const nome=esc(fullName(c));
   const a1List=VEND.list.filter(v=>v.canal==='A1');
   const a2List=VEND.list.filter(v=>v.canal==='A2');
   const a3List=VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3));
@@ -1106,7 +1116,7 @@ function renderRel(){
   const totalA3=k3.reduce((s,k)=>s+mapA3[k].clientes.length,0);
   const a3HeadRow='<tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('f_depositado')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th><th></th></tr>';
   const a3Row=c=>{
-    const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
+    const nome=fullName(c);
     const a1txt=c.vendedor_a1b?c.vendedor_a1+'+'+c.vendedor_a1b:c.vendedor_a1;
     const a2txt=c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2;
     const dias=days(c.data_entrada_a3,today());
@@ -1156,7 +1166,7 @@ function rptRow(label,val){
 }
 function openReport(c){
   REPORT.current=c;
-  const nome=esc((c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:''));
+  const nome=esc(fullName(c));
   const l2=c.vendedor_a2?(c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):esc(c.vendedor_a2)):'—';
   const entregue=c.data_entrada_a3?t('rpt_sim')+' ('+fmtDt(c.data_entrada_a3)+')':t('rpt_nao');
   let html='<div class="rpt-title">'+t('rpt_title')+'</div>';
@@ -1288,7 +1298,7 @@ async function calcComissoes(c){
   }else if(c.vendedor_a3){
     entries.push({etapa:'A3',vendedor:c.vendedor_a3,percentual:0.05});
   }
-  const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
+  const nome=fullName(c);
   for(const e of entries){
     const{base,valor}=calcComissaoValor(c,e.percentual);
     if(valor<=0)continue;
@@ -1363,7 +1373,7 @@ document.getElementById('com-pend-list').addEventListener('click',async e=>{
 function fillA3ClienteSelect(cur){
   const sel=document.getElementById('a3f-cliente');
   let html='<option value="">'+t('none_opt')+'</option>';
-  CLI.list.forEach(c=>{const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
+  CLI.list.forEach(c=>{const nome=fullName(c);
     html+='<option value="'+c.id+'">'+esc(nome||'—')+'</option>';});
   sel.innerHTML=html;if(cur)sel.value=cur;
 }
@@ -1580,7 +1590,7 @@ function renderCli(){
     +'<th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('lvl3')+'</th><th>'+t('cli_col_tempo')+'</th><th>'+t('cli_col_resg')+'</th><th>'+t('cli_col_sit')+'</th>'
     +'</tr></thead><tbody>';
   arr.forEach(c=>{
-    const nome=esc(c.primeiro_nome||'')+(c.segundo_nome?' '+esc(c.segundo_nome):'');
+    const nome=esc(fullName(c));
     const a2txt=c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):(c.vendedor_a2?esc(c.vendedor_a2):'—');
     html+='<tr class="'+cliRowClass(c)+'" data-report="'+c.id+'" style="cursor:pointer">'
       +'<td>'+fmtDt(c.data_entrada)+'</td>'
