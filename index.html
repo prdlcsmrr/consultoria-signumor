@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070583';
+  var V='2026070584';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -322,9 +322,11 @@
         <div class="sec"><div class="sec-t" data-i="sec_funil">Funil</div>
           <div class="row3">
             <label class="fld"><span class="lbl" data-i="lvl1">A1</span><select id="cf-va1"></select></label>
+            <label class="fld"><span class="lbl" data-i="cli_va1b">A1 (2º)</span><select id="cf-va1b"></select></label>
             <label class="fld"><span class="lbl" data-i="lvl2">A2</span><select id="cf-va2"></select></label>
             <label class="fld"><span class="lbl" data-i="cli_va2b">A2 (2º)</span><select id="cf-va2b"></select></label>
             <label class="fld"><span class="lbl" data-i="lvl3">A3</span><select id="cf-va3"></select></label>
+            <label class="fld"><span class="lbl" data-i="cli_va3b">A3 (2º)</span><select id="cf-va3b"></select></label>
           </div>
           <div class="prazos" id="cf-prazos"></div>
         </div>
@@ -437,7 +439,10 @@
       <div id="a3-form" class="hide" style="margin-top:14px;background:#f7f8fb;border:1px solid var(--line);border-radius:10px;padding:14px">
         <input type="hidden" id="a3f-id">
         <label class="fld"><span class="lbl" data-i="a3_cliente">Cliente</span><select id="a3f-cliente"></select></label>
-        <label class="fld"><span class="lbl" data-i="lvl3">Nível 3</span><select id="a3f-func"></select></label>
+        <div class="row2">
+          <label class="fld"><span class="lbl" data-i="lvl3">Nível 3</span><select id="a3f-func"></select></label>
+          <label class="fld"><span class="lbl" data-i="cli_va3b">A3 (2º)</span><select id="a3f-func2"></select></label>
+        </div>
         <div class="row2">
           <label class="fld"><span class="lbl" data-i="a3_recebido">Cliente recebido em</span><input id="a3f-recebido" type="date"></label>
           <label class="fld"><span class="lbl" data-i="a3_data_rel">Data do relatório</span><input id="a3f-data" type="date"></label>
@@ -555,7 +560,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070583';
+const APP_VERSION='2026070584';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -600,7 +605,7 @@ const I18N={
    f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',f_renda:'Renda mensal',f_depositado:'Valor depositado',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
    cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',
    f_all:'Todos',st_morto:'Morreu',
-   st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu Nível 2','st_MORREU A3':'Morreu Nível 3',st_REPORTANDO:'Reportando','st_REPORTANDO A2':'Reportando Nível 2','st_REPORTANDO A3':'Reportando Nível 3',st_BLOQUEIO:'Bloqueio',cli_va2b:'Nível 2 (2º)',
+   st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu Nível 2','st_MORREU A3':'Morreu Nível 3',st_REPORTANDO:'Reportando','st_REPORTANDO A2':'Reportando Nível 2','st_REPORTANDO A3':'Reportando Nível 3',st_BLOQUEIO:'Bloqueio',cli_va1b:'Nível 1 (2º)',cli_va2b:'Nível 2 (2º)',cli_va3b:'Nível 3 (2º)',
    cli_col_nome:'Cliente',cli_col_entrada:'Entrada',cli_col_saida:'Saída',cli_col_atend:'Atendimento',cli_col_tempo:'Tempo na etapa',cli_col_resg:'Resgatável',cli_col_sit:'Situação',
    cli_em_a1:'em Nível 1',cli_em_a2:'em Nível 2',cli_em_a3:'em Nível 3',
    pz_funil:'dias no funil',pz_entrega:'p/ entregar',pz_a3:'dias no Nível 3',
@@ -644,7 +649,7 @@ const I18N={
    f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',f_renda:'Monthly income',f_depositado:'Deposited value',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
    cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',
    f_all:'All',st_morto:'Lost',
-   st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost Level 2','st_MORREU A3':'Lost Level 3',st_REPORTANDO:'Reporting','st_REPORTANDO A2':'Reporting Level 2','st_REPORTANDO A3':'Reporting Level 3',st_BLOQUEIO:'Block',cli_va2b:'Level 2 (2nd)',
+   st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost Level 2','st_MORREU A3':'Lost Level 3',st_REPORTANDO:'Reporting','st_REPORTANDO A2':'Reporting Level 2','st_REPORTANDO A3':'Reporting Level 3',st_BLOQUEIO:'Block',cli_va1b:'Level 1 (2nd)',cli_va2b:'Level 2 (2nd)',cli_va3b:'Level 3 (2nd)',
    cli_col_nome:'Client',cli_col_entrada:'Entry',cli_col_saida:'Exit',cli_col_atend:'Handled by',cli_col_tempo:'Time in stage',cli_col_resg:'Redeemable',cli_col_sit:'Status',
    cli_em_a1:'in Level 1',cli_em_a2:'in Level 2',cli_em_a3:'in Level 3',
    pz_funil:'days in funnel',pz_entrega:'to deliver',pz_a3:'days in Level 3',
@@ -688,7 +693,7 @@ const I18N={
    f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',f_renda:'月收入',f_depositado:'已存入金額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
    cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',
    f_all:'全部',st_morto:'流失',
-   st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'第二級流失','st_MORREU A3':'第三級流失',st_REPORTANDO:'報告中','st_REPORTANDO A2':'第二級報告中','st_REPORTANDO A3':'第三級報告中',st_BLOQUEIO:'鎖定',cli_va2b:'第二級（第二位）',
+   st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'第二級流失','st_MORREU A3':'第三級流失',st_REPORTANDO:'報告中','st_REPORTANDO A2':'第二級報告中','st_REPORTANDO A3':'第三級報告中',st_BLOQUEIO:'鎖定',cli_va1b:'第一級（第二位）',cli_va2b:'第二級（第二位）',cli_va3b:'第三級（第二位）',
    cli_col_nome:'客戶',cli_col_entrada:'進入日',cli_col_saida:'離開日',cli_col_atend:'負責人',cli_col_tempo:'目前階段時間',cli_col_resg:'可贖回',cli_col_sit:'狀況',
    cli_em_a1:'於第一級',cli_em_a2:'於第二級',cli_em_a3:'於第三級',
    pz_funil:'漏斗天數',pz_entrega:'待交付',pz_a3:'第三級天數',
@@ -996,10 +1001,12 @@ function relBuild(){
   const mapA1={},mapA2={},mapA3={};
   CLI.list.forEach(c=>{
     const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
-    if(c.vendedor_a1){const k=c.vendedor_a1;mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
+    [c.vendedor_a1,c.vendedor_a1b].filter(Boolean).forEach(k=>{
+      mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
       mapA1[k].receb++;
-      if(c.vendedor_a2)mapA1[k].transferidos.push({id:c.id,nome:nome||'—',valor:Number(c.valor_total)||0,renda:Number(c.renda_mensal)||0,data:c.data_entrada});}
-    if(c.vendedor_a2){const k=c.vendedor_a2;
+      if(c.vendedor_a2)mapA1[k].transferidos.push({id:c.id,nome:nome||'—',valor:Number(c.valor_total)||0,renda:Number(c.renda_mensal)||0,data:c.data_entrada});
+    });
+    [c.vendedor_a2,c.vendedor_a2b].filter(Boolean).forEach(k=>{
       mapA2[k]=mapA2[k]||{total:0,morreu:0,valorTotal:0,valorDepositado:0,enva3:0,clientes:[]};
       mapA2[k].clientes.push(c);
       mapA2[k].total++;
@@ -1007,8 +1014,8 @@ function relBuild(){
       mapA2[k].valorDepositado+=Number(c.valor_depositado)||0;
       if(c.situacao==='MORREU A2'||c.situacao==='MORREU A3')mapA2[k].morreu++;
       if(c.vendedor_a3)mapA2[k].enva3++;
-    }
-    if(c.vendedor_a3){const k=c.vendedor_a3;
+    });
+    [c.vendedor_a3,c.vendedor_a3b].filter(Boolean).forEach(k=>{
       mapA3[k]=mapA3[k]||{total:0,reportando:0,morreu:0,valorTotal:0,valorDepositado:0,clientes:[]};
       mapA3[k].clientes.push(c);
       mapA3[k].total++;
@@ -1016,7 +1023,7 @@ function relBuild(){
       mapA3[k].valorDepositado+=Number(c.valor_depositado)||0;
       if(c.situacao==='REPORTANDO A3')mapA3[k].reportando++;
       if(c.situacao==='MORREU A3')mapA3[k].morreu++;
-    }
+    });
   });
   const listA3=CLI.list.filter(c=>c.vendedor_a3).map(c=>({
     id:c.id,
@@ -1057,9 +1064,11 @@ function relRow(c){
     +'<td>'+fmtDt(c.data_entrada)+'</td>'
     +'<td class="cli-name-cell" title="'+nome+'">'+(nome||'—')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a1List,c.vendedor_a1,c.id,'vendedor_a1')+'</td>'
+    +'<td class="rel-edit-cell">'+inlineVendSelect(a1List,c.vendedor_a1b,c.id,'vendedor_a1b')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a2List,c.vendedor_a2,c.id,'vendedor_a2')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a2List,c.vendedor_a2b,c.id,'vendedor_a2b')+'</td>'
     +'<td class="rel-edit-cell">'+inlineVendSelect(a3List,c.vendedor_a3,c.id,'vendedor_a3')+'</td>'
+    +'<td class="rel-edit-cell">'+inlineVendSelect(a3List,c.vendedor_a3b,c.id,'vendedor_a3b')+'</td>'
     +'<td>'+fmtMoney(c.valor_total)+'</td>'
     +'<td><b>'+fmtMoney(c.valor_depositado)+'</b></td>'
     +'<td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id,'a2')+'</td>'
@@ -1076,7 +1085,7 @@ function renderRel(){
       const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span class="rs-date">'+fmtDt(x.data)+'</span><span class="rs-info"><span class="rs-nome">'+esc(x.nome)+'</span><span class="rs-renda">'+t('rel_col_renda')+': '+fmtMoney(x.renda)+'</span></span><span class="rs-val">'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
       return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
     }).join('');
-  const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('cli_va2b')+'</th><th>'+t('lvl3')+'</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('f_depositado')+'</th><th>'+t('cli_col_sit')+'</th><th></th></tr>';
+  const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('cli_va1b')+'</th><th>'+t('lvl2')+'</th><th>'+t('cli_va2b')+'</th><th>'+t('lvl3')+'</th><th>'+t('cli_va3b')+'</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('f_depositado')+'</th><th>'+t('cli_col_sit')+'</th><th></th></tr>';
   const k2=Object.keys(mapA2).sort();
   const totalA2=k2.reduce((s,k)=>s+mapA2[k].clientes.length,0);
   const statChip=(val,lbl)=>'<div class="gstat"><span class="gs-val">'+val+'</span><span class="gs-lbl">'+lbl+'</span></div>';
@@ -1098,10 +1107,11 @@ function renderRel(){
   const a3HeadRow='<tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('f_depositado')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th><th></th></tr>';
   const a3Row=c=>{
     const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
+    const a1txt=c.vendedor_a1b?c.vendedor_a1+'+'+c.vendedor_a1b:c.vendedor_a1;
     const a2txt=c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2;
     const dias=days(c.data_entrada_a3,today());
     const cats=FINF.filter(k=>c.resgates&&c.resgates[k]&&c.resgates[k].marcado).map(k=>t(FINLBL[k])+(c.resgates[k].data?' ('+c.resgates[k].data+')':''));
-    return '<tr data-report="'+c.id+'"><td class="cli-name-cell" style="cursor:pointer" data-reportcell title="'+esc(nome)+'">'+esc(nome||'—')+'</td><td><b>'+esc(c.vendedor_a1||'—')+'</b></td><td><b>'+esc(a2txt||'—')+'</b></td><td>'+(dias==null?'—':dias)+'</td><td>'+fmtMoney(c.saldo_resgatavel)+'</td><td><b>'+fmtMoney(c.valor_depositado)+'</b></td><td>'+(cats.length?esc(cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id,'a3')+'</td><td class="rel-edit-cell"><button class="iconbtn" data-del-cli="'+c.id+'">🗑️</button></td></tr>';
+    return '<tr data-report="'+c.id+'"><td class="cli-name-cell" style="cursor:pointer" data-reportcell title="'+esc(nome)+'">'+esc(nome||'—')+'</td><td><b>'+esc(a1txt||'—')+'</b></td><td><b>'+esc(a2txt||'—')+'</b></td><td>'+(dias==null?'—':dias)+'</td><td>'+fmtMoney(c.saldo_resgatavel)+'</td><td><b>'+fmtMoney(c.valor_depositado)+'</b></td><td>'+(cats.length?esc(cats.join(', ')):'—')+'</td><td class="rel-edit-cell">'+inlineSituacaoSelect(c.situacao,c.id,'a3')+'</td><td class="rel-edit-cell"><button class="iconbtn" data-del-cli="'+c.id+'">🗑️</button></td></tr>';
   };
   document.getElementById('rel-a3').innerHTML=!k3.length?'<div class="empty">'+t('rel_empty')+'</div>':
     '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+totalA3+'</b></div>'
@@ -1260,14 +1270,24 @@ function calcComissaoValor(c,percentual){
 async function calcComissoes(c){
   if(!c||!c.id)return;
   const entries=[];
-  if(c.vendedor_a1)entries.push({etapa:'A1',vendedor:c.vendedor_a1,percentual:0.04});
+  if(c.vendedor_a1&&c.vendedor_a1b){
+    entries.push({etapa:'A1',vendedor:c.vendedor_a1,percentual:0.02});
+    entries.push({etapa:'A1',vendedor:c.vendedor_a1b,percentual:0.02});
+  }else if(c.vendedor_a1){
+    entries.push({etapa:'A1',vendedor:c.vendedor_a1,percentual:0.04});
+  }
   if(c.vendedor_a2&&c.vendedor_a2b){
     entries.push({etapa:'A2',vendedor:c.vendedor_a2,percentual:0.03});
     entries.push({etapa:'A2',vendedor:c.vendedor_a2b,percentual:0.03});
   }else if(c.vendedor_a2){
     entries.push({etapa:'A2',vendedor:c.vendedor_a2,percentual:0.06});
   }
-  if(c.vendedor_a3)entries.push({etapa:'A3',vendedor:c.vendedor_a3,percentual:0.05});
+  if(c.vendedor_a3&&c.vendedor_a3b){
+    entries.push({etapa:'A3',vendedor:c.vendedor_a3,percentual:0.025});
+    entries.push({etapa:'A3',vendedor:c.vendedor_a3b,percentual:0.025});
+  }else if(c.vendedor_a3){
+    entries.push({etapa:'A3',vendedor:c.vendedor_a3,percentual:0.05});
+  }
   const nome=(c.primeiro_nome||'')+(c.segundo_nome?' '+c.segundo_nome:'');
   for(const e of entries){
     const{base,valor}=calcComissaoValor(c,e.percentual);
@@ -1356,9 +1376,19 @@ function fillA3FuncSelect(cur){
   codes.forEach(code=>{html+='<option value="'+esc(code)+'"'+(code===cur?' selected':'')+'>'+esc(code)+'</option>';});
   sel.innerHTML=html;
 }
+function fillA3Func2Select(cur){
+  const sel=document.getElementById('a3f-func2');
+  const list=VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3));
+  const codes=list.map(v=>v.codigo);
+  if(cur&&!codes.includes(cur))codes.unshift(cur);
+  let html='<option value="">'+t('none_opt')+'</option>';
+  codes.forEach(code=>{html+='<option value="'+esc(code)+'"'+(code===cur?' selected':'')+'>'+esc(code)+'</option>';});
+  sel.innerHTML=html;
+}
 function openA3Form(c){
   fillA3ClienteSelect(c?c.id:'');
   fillA3FuncSelect(c&&c.vendedor_a3?c.vendedor_a3:'');
+  fillA3Func2Select(c&&c.vendedor_a3b?c.vendedor_a3b:'');
   const sel=document.getElementById('a3f-cliente');
   sel.disabled=!!c;
   A3F.clienteId=c?c.id:null;
@@ -1414,7 +1444,8 @@ document.getElementById('a3f-save').onclick=async function(){
     valor_depositado:num('a3f-depositado'),
     situacao:document.getElementById('a3f-situacao').value,
     observacoes:document.getElementById('a3f-obs').value.trim()||null,
-    vendedor_a3:document.getElementById('a3f-func').value||null
+    vendedor_a3:document.getElementById('a3f-func').value||null,
+    vendedor_a3b:document.getElementById('a3f-func2').value||null
   };
   this.disabled=true;const o=this.textContent;this.innerHTML='<span class="spin"></span>';
   const {error}=await sb.from('clientes').update(payload).eq('id',cid);
@@ -1465,6 +1496,10 @@ function fillVendSelects(){
     VEND.list.filter(v=>v.canal===canal).forEach(v=>{html+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+'</option>';});
     sel.innerHTML=html;if(cur)sel.value=cur;
   });
+  const sel1b=document.getElementById('cf-va1b');const cur1b=sel1b.value;
+  let html1b='<option value="">'+t('none_opt')+'</option>';
+  VEND.list.filter(v=>v.canal==='A1').forEach(v=>{html1b+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+'</option>';});
+  sel1b.innerHTML=html1b;if(cur1b)sel1b.value=cur1b;
   const sel2b=document.getElementById('cf-va2b');const cur2b=sel2b.value;
   let html2b='<option value="">'+t('none_opt')+'</option>';
   VEND.list.filter(v=>v.canal==='A2').forEach(v=>{html2b+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+'</option>';});
@@ -1473,6 +1508,10 @@ function fillVendSelects(){
   let html3='<option value="">'+t('none_opt')+'</option>';
   VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)).forEach(v=>{html3+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+(v.canal==='A2'?' ('+t('lvl2')+'+'+t('lvl3')+')':'')+'</option>';});
   sel3.innerHTML=html3;if(cur3)sel3.value=cur3;
+  const sel3b=document.getElementById('cf-va3b');const cur3b=sel3b.value;
+  let html3b='<option value="">'+t('none_opt')+'</option>';
+  VEND.list.filter(v=>v.canal==='A3'||(v.canal==='A2'&&v.atua_a3)).forEach(v=>{html3b+='<option value="'+esc(v.codigo)+'">'+esc(v.codigo)+(v.nome?' · '+esc(v.nome):'')+'</option>';});
+  sel3b.innerHTML=html3b;if(cur3b)sel3b.value=cur3b;
 }
 function ensureOpt(id,val){ if(!val)return;const sel=document.getElementById(id);
   if(!Array.from(sel.options).some(o=>o.value===val)){const o=document.createElement('option');o.value=val;o.textContent=val;sel.appendChild(o);} sel.value=val; }
@@ -1711,9 +1750,11 @@ function applyParsedToForm(p){
   document.getElementById('cf-snome').value=p.segundo_nome||'';
   document.getElementById('cf-dtentrada').value=p.data_entrada||'';
   ensureOpt('cf-va1',p.vendedor_a1||'');document.getElementById('cf-va1').value=p.vendedor_a1||'';
+  ensureOpt('cf-va1b',p.vendedor_a1b||'');document.getElementById('cf-va1b').value=p.vendedor_a1b||'';
   ensureOpt('cf-va2',p.vendedor_a2||'');document.getElementById('cf-va2').value=p.vendedor_a2||'';
   ensureOpt('cf-va2b',p.vendedor_a2b||'');document.getElementById('cf-va2b').value=p.vendedor_a2b||'';
   ensureOpt('cf-va3',p.vendedor_a3||'');document.getElementById('cf-va3').value=p.vendedor_a3||'';
+  ensureOpt('cf-va3b',p.vendedor_a3b||'');document.getElementById('cf-va3b').value=p.vendedor_a3b||'';
   document.getElementById('cf-situacao').value=p.situacao;
   renderProcList(p.procedimentos_lista);
   document.getElementById('cf-renda_mensal').value=p.renda_mensal||0;
@@ -1894,10 +1935,11 @@ function openCForm(c){
   document.getElementById('cf-pnome').value=c?c.primeiro_nome||'':'';
   document.getElementById('cf-snome').value=c?c.segundo_nome||'':'';
   fillVendSelects();
-  ensureOpt('cf-va1',c?c.vendedor_a1:''); ensureOpt('cf-va2',c?c.vendedor_a2:''); ensureOpt('cf-va2b',c?c.vendedor_a2b:'');
+  ensureOpt('cf-va1',c?c.vendedor_a1:''); ensureOpt('cf-va1b',c?c.vendedor_a1b:''); ensureOpt('cf-va2',c?c.vendedor_a2:''); ensureOpt('cf-va2b',c?c.vendedor_a2b:'');
   const va2emp=c&&c.vendedor_a2?VEND.list.find(v=>v.codigo===c.vendedor_a2):null;
   ensureOpt('cf-va3', c ? (c.vendedor_a3 || ((va2emp&&va2emp.atua_a3)?c.vendedor_a2:'')) : '');
-  if(!c){document.getElementById('cf-va1').value='';document.getElementById('cf-va2').value='';document.getElementById('cf-va2b').value='';document.getElementById('cf-va3').value='';}
+  ensureOpt('cf-va3b',c?c.vendedor_a3b:'');
+  if(!c){document.getElementById('cf-va1').value='';document.getElementById('cf-va1b').value='';document.getElementById('cf-va2').value='';document.getElementById('cf-va2b').value='';document.getElementById('cf-va3').value='';document.getElementById('cf-va3b').value='';}
   document.getElementById('cf-dtentrada').value=c&&c.data_entrada?c.data_entrada:'';
   document.getElementById('cf-dtentregue').value=c&&c.data_entrada_a3?c.data_entrada_a3:'';
   document.getElementById('cf-dtA2').value=c&&c.data_entrada_a2?c.data_entrada_a2:'';
@@ -1950,9 +1992,11 @@ document.getElementById('cf-save').onclick=async function(){
     data_entrada_a2:(va2&&!dtA2atual)?today():(dtA2atual||null),
     data_entrada_a3:dtSaida||(va3?today():null),
     vendedor_a1:document.getElementById('cf-va1').value||null,
+    vendedor_a1b:document.getElementById('cf-va1b').value||null,
     vendedor_a2:va2,
     vendedor_a2b:document.getElementById('cf-va2b').value||null,
     vendedor_a3:va3,
+    vendedor_a3b:document.getElementById('cf-va3b').value||null,
     situacao:document.getElementById('cf-situacao').value,
     dia1:document.getElementById('cf-dia1').value.trim()||null,
     dia2:document.getElementById('cf-dia2').value.trim()||null,
