@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070586';
+  var V='2026070587';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -93,7 +93,7 @@
   /* form blocks */
   .vform{background:#f7f8fc;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
   .row2{display:flex;gap:10px}.row2>*{flex:1}
-  .row3{display:flex;gap:8px}.row3>*{flex:1}
+  .row3{display:flex;flex-wrap:wrap;gap:8px}.row3>*{flex:1 1 140px;min-width:140px}
   .chk{display:flex;align-items:center;gap:8px;margin:4px 0 10px}
   .chk input{width:auto;min-width:0}.chk span{font-size:13px;color:var(--navy);font-weight:bold}
   .acts{display:flex;gap:8px;margin-top:4px}.acts .btn{margin-top:0}
@@ -560,7 +560,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070586';
+const APP_VERSION='2026070587';
 (function(){
   let checking=false;
   async function checkVersion(){
