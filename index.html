@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070588';
+  var V='2026070589';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -560,7 +560,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070588';
+const APP_VERSION='2026070589';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -808,14 +808,15 @@ async function loadVend(){
 let COM_TOTALS={};
 async function loadComTotals(){
   try{
-    const{data,error}=await sb.from('comissoes').select('vendedor_codigo,valor_calculado,confirmado');
+    const{data,error}=await sb.from('comissoes').select('vendedor_codigo,valor_calculado,confirmado,mes_pagamento,ano_pagamento');
     if(error){console.error('loadComTotals error:',error);return;}
+    const now=new Date(),mesAtual=now.getMonth()+1,anoAtual=now.getFullYear();
     const totals={};
     (data||[]).forEach(r=>{
       const k=r.vendedor_codigo;
       totals[k]=totals[k]||{pendenteQtd:0,confirmadoQtd:0,pendenteValor:0,confirmadoValor:0};
       if(r.confirmado){totals[k].confirmadoQtd++;totals[k].confirmadoValor+=Number(r.valor_calculado)||0;}
-      else{totals[k].pendenteQtd++;totals[k].pendenteValor+=Number(r.valor_calculado)||0;}
+      else if(r.mes_pagamento===mesAtual&&r.ano_pagamento===anoAtual){totals[k].pendenteQtd++;totals[k].pendenteValor+=Number(r.valor_calculado)||0;}
     });
     COM_TOTALS=totals;
   }catch(e){console.error('loadComTotals exception:',e);}
@@ -1279,6 +1280,11 @@ function calcComissaoValor(c,percentual){
 }
 async function calcComissoes(c){
   if(!c||!c.id)return;
+  if(!c.data_relatorio_a3)return;
+  const relDate=new Date(c.data_relatorio_a3+'T00:00:00');
+  const now=new Date();
+  const mesRef=relDate.getMonth()+1,anoRef=relDate.getFullYear();
+  if(mesRef!==now.getMonth()+1||anoRef!==now.getFullYear())return;
   const entries=[];
   if(c.vendedor_a1&&c.vendedor_a1b){
     entries.push({etapa:'A1',vendedor:c.vendedor_a1,percentual:0.02});
@@ -1304,15 +1310,16 @@ async function calcComissoes(c){
     if(valor<=0)continue;
     const{data:existing}=await sb.from('comissoes').select('id').eq('cliente_id',c.id).eq('etapa',e.etapa).eq('vendedor_codigo',e.vendedor).eq('confirmado',false).limit(1);
     if(existing&&existing.length){
-      await sb.from('comissoes').update({percentual:e.percentual,base_calculo:base,valor_calculado:valor,cliente_nome:nome}).eq('id',existing[0].id);
+      await sb.from('comissoes').update({percentual:e.percentual,base_calculo:base,valor_calculado:valor,cliente_nome:nome,mes_pagamento:mesRef,ano_pagamento:anoRef}).eq('id',existing[0].id);
     }else{
-      await sb.from('comissoes').insert({cliente_id:c.id,cliente_nome:nome,vendedor_codigo:e.vendedor,etapa:e.etapa,percentual:e.percentual,base_calculo:base,valor_calculado:valor,confirmado:false});
+      await sb.from('comissoes').insert({cliente_id:c.id,cliente_nome:nome,vendedor_codigo:e.vendedor,etapa:e.etapa,percentual:e.percentual,base_calculo:base,valor_calculado:valor,confirmado:false,mes_pagamento:mesRef,ano_pagamento:anoRef});
     }
   }
 }
 async function loadAndRenderComPend(){
   document.getElementById('com-pend-list').innerHTML='<div class="empty">'+t('loading')+'</div>';
-  const{data,error}=await sb.from('comissoes').select('*').eq('confirmado',false).order('created_at',{ascending:false});
+  const now=new Date();
+  const{data,error}=await sb.from('comissoes').select('*').eq('confirmado',false).eq('mes_pagamento',now.getMonth()+1).eq('ano_pagamento',now.getFullYear()).order('created_at',{ascending:false});
   renderComPend(data||[]);
 }
 function renderComPend(list){
@@ -1339,8 +1346,8 @@ function renderComPend(list){
 async function confirmComissao(id){
   const{data:row}=await sb.from('comissoes').select('*').eq('id',id).single();
   if(!row)return;
-  const now=new Date(),mes=now.getMonth()+1,ano=now.getFullYear();
-  await sb.from('comissoes').update({confirmado:true,confirmado_em:now.toISOString(),mes_pagamento:mes,ano_pagamento:ano}).eq('id',id);
+  const mes=row.mes_pagamento,ano=row.ano_pagamento;
+  await sb.from('comissoes').update({confirmado:true,confirmado_em:new Date().toISOString()}).eq('id',id);
   const{data:vend}=await sb.from('vendedores').select('id').eq('codigo',row.vendedor_codigo).limit(1);
   const vendedorId=vend&&vend[0]?vend[0].id:null;
   if(vendedorId){
