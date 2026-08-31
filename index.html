@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070590';
+  var V='2026070591';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -87,6 +87,7 @@
   .tabs button{flex:0 0 auto;white-space:nowrap;border:0;background:rgba(255,255,255,.08);color:#c7cde0;font-family:inherit;font-size:12.5px;font-weight:bold;padding:11px 14px;border-radius:11px;cursor:pointer;letter-spacing:.3px}
   .tabs button.active{background:var(--gold);color:var(--navy)}
   .pane-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .cli-total-header{font-size:13px;color:var(--muted);font-weight:bold;background:#f0f0f3;padding:5px 10px;border-radius:8px}
   .pane-head h2{font-size:18px;color:var(--navy);margin:0;letter-spacing:.5px}
   .btn-mini{border:0;background:linear-gradient(180deg,var(--navy2),var(--navy));color:#fff;font-family:inherit;font-size:13px;font-weight:bold;padding:8px 12px;border-radius:9px;cursor:pointer}
   .funnel{font-size:11px;color:var(--muted);text-align:center;margin:-4px 0 14px;letter-spacing:1px}
@@ -303,7 +304,7 @@
 
     <!-- TAB CLIENTES -->
     <div id="tab-cli" class="card hide">
-      <div class="pane-head"><h2 data-i="cli_title">Clientes</h2></div>
+      <div class="pane-head"><h2 data-i="cli_title">Clientes</h2><span id="cli-total-header" class="cli-total-header"></span></div>
 
       <!-- FICHA -->
       <div id="c-form" class="vform hide">
@@ -561,7 +562,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070590';
+const APP_VERSION='2026070591';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -592,7 +593,7 @@ const I18N={
    signup_btn:'Criar conta',back_login:'← Voltar ao login',logged_as:'Conectado como',logout:'Sair',
    nav_vend:'Funcionários',nav_cli:'Clientes',
    vend_title:'Funcionários',vend_new:'+ Novo',vend_code:'Código',vend_channel:'Canal',vend_name:'Nome (opcional)',vend_active:'Ativo',vend_inactive:'Desativado',vend_atua_a3:'Também atua no Nível 3',vend_save:'Salvar',vend_cancel:'Cancelar',
-   cli_title:'Clientes',cli_new:'+ Novo',cli_pnome:'Primeiro nome',cli_snome:'Segundo nome',
+   cli_title:'Clientes',cli_total_ativos:'Total ativos',cli_new:'+ Novo',cli_pnome:'Primeiro nome',cli_snome:'Segundo nome',
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',sec_a3rel:'Relatório de Atendimento A3',
    a3_data_rel:'Data do relatório',a3_agenda:'Agenda diária',a3_valor_est:'Valor estimado total',a3_dinheiro_conta:'Dinheiro em conta',a3_dinheiro_gasto:'Dinheiro gasto',
    a3_disponivel:'Disponível para resgate',a3_indisponivel:'Indisponível para resgate',a3_motivo:'Motivo da indisponibilidade',a3_endereco:'Endereço de depósito',a3_cliente:'Cliente',a3_cliente_req:'Selecione um cliente.',a3_func_req:'Selecione o funcionário do Nível 3.',
@@ -636,7 +637,7 @@ const I18N={
    signup_btn:'Create account',back_login:'← Back to sign in',logged_as:'Signed in as',logout:'Sign out',
    nav_vend:'Employees',nav_cli:'Clients',
    vend_title:'Employees',vend_new:'+ New',vend_code:'Code',vend_channel:'Channel',vend_name:'Name (optional)',vend_active:'Active',vend_inactive:'Inactive',vend_atua_a3:'Also works in Level 3',vend_save:'Save',vend_cancel:'Cancel',
-   cli_title:'Clients',cli_new:'+ New',cli_pnome:'First name',cli_snome:'Second name',
+   cli_title:'Clients',cli_total_ativos:'Total active',cli_new:'+ New',cli_pnome:'First name',cli_snome:'Second name',
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',sec_a3rel:'A3 Attendance Report',
    a3_data_rel:'Report date',a3_agenda:'Daily agenda',a3_valor_est:'Total estimated value',a3_dinheiro_conta:'Money in account',a3_dinheiro_gasto:'Money spent',
    a3_disponivel:'Available for redemption',a3_indisponivel:'Unavailable for redemption',a3_motivo:'Reason for unavailability',a3_endereco:'Deposit address',a3_cliente:'Client',a3_cliente_req:'Select a client.',a3_func_req:'Select the Level 3 employee.',
@@ -680,7 +681,7 @@ const I18N={
    signup_btn:'建立帳號',back_login:'← 返回登入',logged_as:'登入身分',logout:'登出',
    nav_vend:'員工',nav_cli:'客戶',
    vend_title:'員工',vend_new:'+ 新增',vend_code:'代碼',vend_channel:'通路',vend_name:'姓名（選填）',vend_active:'啟用',vend_inactive:'已停用',vend_atua_a3:'同時支援第三級',vend_save:'儲存',vend_cancel:'取消',
-   cli_title:'客戶',cli_new:'+ 新增',cli_pnome:'名',cli_snome:'第二名',
+   cli_title:'客戶',cli_total_ativos:'活躍總數',cli_new:'+ 新增',cli_pnome:'名',cli_snome:'第二名',
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',sec_a3rel:'A3服務報告',
    a3_data_rel:'報告日期',a3_agenda:'每日行程',a3_valor_est:'預估總值',a3_dinheiro_conta:'帳戶內金額',a3_dinheiro_gasto:'已花費金額',
    a3_disponivel:'可贖回金額',a3_indisponivel:'不可贖回金額',a3_motivo:'不可贖回原因',a3_endereco:'存款地址',a3_cliente:'客戶',a3_cliente_req:'請選擇客戶。',a3_func_req:'請選擇第三級員工。',
@@ -1591,6 +1592,9 @@ function cliTotalsBar(){
 function renderCli(){
   const box=document.getElementById('c-list');
   let arr=CLI.list.slice();
+  const totAtivos=CLI.list.filter(c=>(c.situacao||'').indexOf('MORREU')!==0&&c.situacao!=='FINALIZADO').length;
+  const hdr=document.getElementById('cli-total-header');
+  if(hdr)hdr.textContent=t('cli_total_ativos')+': '+totAtivos;
   if(CLI.filtro==='MORTO')arr=arr.filter(c=>(c.situacao||'').indexOf('MORREU')===0);
   else if(CLI.filtro==='REPORTANDO')arr=arr.filter(c=>(c.situacao||'').indexOf('REPORTANDO')===0);
   else if(CLI.filtro!=='ALL')arr=arr.filter(c=>c.situacao===CLI.filtro);
