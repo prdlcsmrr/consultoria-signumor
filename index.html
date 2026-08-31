@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070592';
+  var V='2026070593';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -562,7 +562,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070592';
+const APP_VERSION='2026070593';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1592,7 +1592,7 @@ function cliTotalsBar(){
 function renderCli(){
   const box=document.getElementById('c-list');
   let arr=CLI.list.slice();
-  const totAtivos=CLI.list.filter(c=>(c.situacao||'').indexOf('MORREU')!==0&&c.situacao!=='FINALIZADO').length;
+  const totAtivos=CLI.list.filter(c=>c.situacao!=='FINALIZADO').length;
   const hdr=document.getElementById('cli-total-header');
   if(hdr)hdr.innerHTML=t('cli_total_ativos')+': <b>'+totAtivos+'</b>';
   if(CLI.filtro==='MORTO')arr=arr.filter(c=>(c.situacao||'').indexOf('MORREU')===0);
