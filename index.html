@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070589';
+  var V='2026070590';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -116,6 +116,7 @@
   .reltab tbody tr:hover{filter:brightness(0.97)}
   .cli-name-cell{max-width:150px;overflow:hidden;text-overflow:ellipsis;font-weight:bold;position:sticky;left:0;background:#fff;z-index:1;font-size:13px!important;line-height:1.3}
   .st-line{display:block;white-space:nowrap;font-size:12px}
+  .st-warn{color:#c0392b;font-weight:bold;white-space:normal!important}
   .st-line:first-child{color:var(--muted)}
   .rel-total{font-size:13px;font-weight:bold;color:var(--navy);background:#fdf3e3;border:1px solid var(--gold);border-radius:8px;padding:8px 14px;margin-bottom:12px;display:inline-block}
   .cli-totals{display:flex;flex-wrap:nowrap;gap:8px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
@@ -560,7 +561,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070589';
+const APP_VERSION='2026070590';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -619,7 +620,7 @@ const I18N={
    rel_col_cliente:'Cliente',rel_col_diasa3:'Dias no Nível 3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
    rel_empty:'Sem dados.',
    pag_title:'Folha de Pagamento',pag_new:'+ Novo mês',pag_mes:'Mês',pag_ano:'Ano',
-   pag_desemp_rs:'Desempenho (R$)',pag_desemp_usdt:'Desempenho (USDT)',pag_comissao:'Comissão',pag_salario_base:'Salário base',pag_col_mes:'Mês',pag_col_total:'Total',
+   pag_desemp_rs:'Desempenho (R$)',pag_desemp_usdt:'Desempenho (USDT)',pag_comissao:'Comissão',pag_salario_base:'Salário base',pag_col_mes:'Mês',pag_col_total:'Total',st_date_conflict:'Divergência de datas',
    pag_dias:'Dias presentes',pag_presenca_valor:'Valor da presença',pag_dias_no_mes:'dias no mês',
    pag_comissao_ind:'Comissão por indicação',pag_bonus_sup:'Bônus de supervisão',pag_bonus_assid:'Bônus de assiduidade',
    pag_adiantamento:'Adiantamento',pag_multa:'Multa',pag_resumo:'Resumo do salário',
@@ -663,7 +664,7 @@ const I18N={
    rel_col_cliente:'Client',rel_col_diasa3:'Days in Level 3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
    rel_empty:'No data.',
    pag_title:'Payroll',pag_new:'+ New month',pag_mes:'Month',pag_ano:'Year',
-   pag_desemp_rs:'Performance (R$)',pag_desemp_usdt:'Performance (USDT)',pag_comissao:'Commission',pag_salario_base:'Base salary',pag_col_mes:'Month',pag_col_total:'Total',
+   pag_desemp_rs:'Performance (R$)',pag_desemp_usdt:'Performance (USDT)',pag_comissao:'Commission',pag_salario_base:'Base salary',pag_col_mes:'Month',pag_col_total:'Total',st_date_conflict:'Date conflict',
    pag_dias:'Days present',pag_presenca_valor:'Attendance value',pag_dias_no_mes:'days in month',
    pag_comissao_ind:'Referral commission',pag_bonus_sup:'Supervision bonus',pag_bonus_assid:'Attendance bonus',
    pag_adiantamento:'Advance',pag_multa:'Penalty',pag_resumo:'Salary summary',
@@ -707,7 +708,7 @@ const I18N={
    rel_col_cliente:'客戶',rel_col_diasa3:'第三級天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
    rel_empty:'無資料。',
    pag_title:'薪資單',pag_new:'+ 新增月份',pag_mes:'月份',pag_ano:'年份',
-   pag_desemp_rs:'業績（R$）',pag_desemp_usdt:'業績（USDT）',pag_comissao:'佣金',pag_salario_base:'底薪',pag_col_mes:'月份',pag_col_total:'總計',
+   pag_desemp_rs:'業績（R$）',pag_desemp_usdt:'業績（USDT）',pag_comissao:'佣金',pag_salario_base:'底薪',pag_col_mes:'月份',pag_col_total:'總計',st_date_conflict:'日期衝突',
    pag_dias:'出勤天數',pag_presenca_valor:'出勤金額',pag_dias_no_mes:'當月天數',
    pag_comissao_ind:'介紹佣金',pag_bonus_sup:'督導獎金',pag_bonus_assid:'全勤獎金',
    pag_adiantamento:'預支',pag_multa:'罰款',pag_resumo:'薪資總結',
@@ -1550,6 +1551,9 @@ function stageTime(c){
   }
   const diasN2puro=days(inicioN2,c.data_entrada_a3);
   const diasN3=days(c.data_entrada_a3,today());
+  if(diasN2puro!=null&&diasN2puro<0){
+    return '<span class="st-line st-warn" title="'+t('st_date_conflict')+'">⚠️ '+t('st_date_conflict')+'</span>';
+  }
   return '<span class="st-line">'+t('lvl2')+': '+(diasN2puro==null?0:diasN2puro)+'d — +'+(diasN3==null?0:diasN3)+'d</span><span class="st-line">'+t('lvl3')+': '+(diasN3==null?0:diasN3)+'d</span>';
 }
 function fmtDt(d){if(!d)return '—';const p=d.split('-');return p.length===3?(p[2]+'/'+p[1]+'/'+p[0]):d;}
