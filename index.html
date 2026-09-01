@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070595';
+  var V='2026070596';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -562,7 +562,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070595';
+const APP_VERSION='2026070596';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -812,13 +812,12 @@ async function loadComTotals(){
   try{
     const{data,error}=await sb.from('comissoes').select('vendedor_codigo,valor_calculado,confirmado,mes_pagamento,ano_pagamento');
     if(error){console.error('loadComTotals error:',error);return;}
-    const now=new Date(),mesAtual=now.getMonth()+1,anoAtual=now.getFullYear();
     const totals={};
     (data||[]).forEach(r=>{
       const k=r.vendedor_codigo;
       totals[k]=totals[k]||{pendenteQtd:0,confirmadoQtd:0,pendenteValor:0,confirmadoValor:0};
       if(r.confirmado){totals[k].confirmadoQtd++;totals[k].confirmadoValor+=Number(r.valor_calculado)||0;}
-      else if(r.mes_pagamento===mesAtual&&r.ano_pagamento===anoAtual){totals[k].pendenteQtd++;totals[k].pendenteValor+=Number(r.valor_calculado)||0;}
+      else{totals[k].pendenteQtd++;totals[k].pendenteValor+=Number(r.valor_calculado)||0;}
     });
     COM_TOTALS=totals;
   }catch(e){console.error('loadComTotals exception:',e);}
@@ -1324,14 +1323,15 @@ async function calcComissoes(c){
 }
 async function loadAndRenderComPend(){
   document.getElementById('com-pend-list').innerHTML='<div class="empty">'+t('loading')+'</div>';
-  const now=new Date();
-  const{data,error}=await sb.from('comissoes').select('*').eq('confirmado',false).eq('mes_pagamento',now.getMonth()+1).eq('ano_pagamento',now.getFullYear()).order('created_at',{ascending:false});
+  const{data,error}=await sb.from('comissoes').select('*').eq('confirmado',false).order('ano_pagamento',{ascending:false}).order('mes_pagamento',{ascending:false});
   renderComPend(data||[]);
 }
 function renderComPend(list){
   const box=document.getElementById('com-pend-list');
   if(!list.length){box.innerHTML='<div class="empty">'+t('com_pend_empty')+'</div>';return;}
   const etapaLbl=e=>e==='A1'?t('lvl1'):e==='A2'?t('lvl2'):e==='A3'?t('lvl3'):e;
+  const mArr=MESES[LANG]||MESES.pt;
+  const mesLbl=r=>r.mes_pagamento?(mArr[r.mes_pagamento-1]+'/'+r.ano_pagamento):'';
   const grouped={};
   list.forEach(r=>{grouped[r.vendedor_codigo]=grouped[r.vendedor_codigo]||[];grouped[r.vendedor_codigo].push(r);});
   let html='';
@@ -1342,7 +1342,7 @@ function renderComPend(list){
     const multiNivel=niveis.length>1;
     html+='<div class="rel-group"><div class="rel-ghead"><b>'+esc(v)+'</b><span>'+fmtUSD(total)+(multiNivel?' ('+niveis.map(etapaLbl).join('+')+')':'')+'</span></div>';
     rows.forEach(r=>{
-      html+='<div class="rel-sub"><span class="rs-info"><span class="rs-nome">'+esc(r.cliente_nome||'—')+' · '+etapaLbl(r.etapa)+'</span><span class="rs-renda">'+t('com_base')+': R$ '+fmtMoney(r.base_calculo)+' · '+(Number(r.percentual)*100).toFixed(0)+'%</span></span><span class="rs-val">'+fmtUSD(r.valor_calculado)+'</span></div>'
+      html+='<div class="rel-sub"><span class="rs-info"><span class="rs-nome">'+esc(r.cliente_nome||'—')+' · '+etapaLbl(r.etapa)+' · '+mesLbl(r)+'</span><span class="rs-renda">'+t('com_base')+': R$ '+fmtMoney(r.base_calculo)+' · '+(Number(r.percentual)*100).toFixed(0)+'%</span></span><span class="rs-val">'+fmtUSD(r.valor_calculado)+'</span></div>'
         +'<div style="padding:0 14px 12px;text-align:right"><button class="btn-mini com-confirm" data-id="'+r.id+'">'+t('com_confirm')+'</button></div>';
     });
     html+='</div>';
