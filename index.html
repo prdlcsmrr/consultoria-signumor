@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070597';
+  var V='2026070598';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -562,7 +562,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070597';
+const APP_VERSION='2026070598';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1708,6 +1708,24 @@ function pr_parseSituacao(s,ctx){
   return def;
 }
 function pr_norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');}
+function levenshtein(a,b){
+  const m=a.length,n=b.length;
+  if(m===0)return n;if(n===0)return m;
+  const dp=Array.from({length:m+1},()=>new Array(n+1).fill(0));
+  for(let i=0;i<=m;i++)dp[i][0]=i;
+  for(let j=0;j<=n;j++)dp[0][j]=j;
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){
+    dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  }
+  return dp[m][n];
+}
+function fuzzyNameMatch(nameNorm,candidateNorm){
+  if(!nameNorm||!candidateNorm)return false;
+  const maxLen=Math.max(nameNorm.length,candidateNorm.length);
+  if(maxLen<4)return false;
+  const dist=levenshtein(nameNorm,candidateNorm);
+  return dist<=Math.max(1,Math.floor(maxLen*0.15));
+}
 function pr_parseProc(s){
   if(!s)return[];
   const map={'procedimentosiniciais':'procedimentos_iniciais','procedimentoinicial':'procedimentos_iniciais',
@@ -1776,16 +1794,38 @@ function parseReport(text){
   };
 }
 function applyParsedToForm(p){
-  openCForm(null);
-  document.getElementById('cf-pnome').value=p.primeiro_nome||'';
-  document.getElementById('cf-snome').value=p.segundo_nome||'';
-  document.getElementById('cf-dtentrada').value=p.data_entrada||'';
-  ensureOpt('cf-va1',p.vendedor_a1||'');document.getElementById('cf-va1').value=p.vendedor_a1||'';
-  ensureOpt('cf-va1b',p.vendedor_a1b||'');document.getElementById('cf-va1b').value=p.vendedor_a1b||'';
-  ensureOpt('cf-va2',p.vendedor_a2||'');document.getElementById('cf-va2').value=p.vendedor_a2||'';
-  ensureOpt('cf-va2b',p.vendedor_a2b||'');document.getElementById('cf-va2b').value=p.vendedor_a2b||'';
-  ensureOpt('cf-va3',p.vendedor_a3||'');document.getElementById('cf-va3').value=p.vendedor_a3||'';
-  ensureOpt('cf-va3b',p.vendedor_a3b||'');document.getElementById('cf-va3b').value=p.vendedor_a3b||'';
+  const nameNorm=pr_norm((p.primeiro_nome||'')+(p.segundo_nome||''));
+  let found=CLI.list.find(c=>{
+    const full=pr_norm((c.primeiro_nome||'')+(c.segundo_nome||''));
+    return nameNorm&&(full===nameNorm||full.includes(nameNorm)||nameNorm.includes(full));
+  });
+  if(!found&&p.primeiro_nome){
+    const firstNorm=pr_norm(p.primeiro_nome);
+    if(firstNorm)found=CLI.list.find(c=>pr_norm(c.primeiro_nome||'')===firstNorm);
+  }
+  if(!found&&nameNorm){
+    found=CLI.list.find(c=>{
+      const full=pr_norm((c.primeiro_nome||'')+(c.segundo_nome||''));
+      return fuzzyNameMatch(nameNorm,full);
+    });
+  }
+  openCForm(found||null);
+  if(found)msg('c-msg','ok',t('paste_client_matched'));
+  document.getElementById('cf-pnome').value=p.primeiro_nome||(found?found.primeiro_nome:'')||'';
+  document.getElementById('cf-snome').value=p.segundo_nome||(found?found.segundo_nome:'')||'';
+  document.getElementById('cf-dtentrada').value=p.data_entrada||(found?found.data_entrada:'')||'';
+  const va1=p.vendedor_a1||(found?found.vendedor_a1:'')||'';
+  const va1b=p.vendedor_a1b||(found?found.vendedor_a1b:'')||'';
+  const va2=p.vendedor_a2||(found?found.vendedor_a2:'')||'';
+  const va2b=p.vendedor_a2b||(found?found.vendedor_a2b:'')||'';
+  const va3=p.vendedor_a3||(found?found.vendedor_a3:'')||'';
+  const va3b=p.vendedor_a3b||(found?found.vendedor_a3b:'')||'';
+  ensureOpt('cf-va1',va1);document.getElementById('cf-va1').value=va1;
+  ensureOpt('cf-va1b',va1b);document.getElementById('cf-va1b').value=va1b;
+  ensureOpt('cf-va2',va2);document.getElementById('cf-va2').value=va2;
+  ensureOpt('cf-va2b',va2b);document.getElementById('cf-va2b').value=va2b;
+  ensureOpt('cf-va3',va3);document.getElementById('cf-va3').value=va3;
+  ensureOpt('cf-va3b',va3b);document.getElementById('cf-va3b').value=va3b;
   document.getElementById('cf-situacao').value=p.situacao;
   renderProcList(p.procedimentos_lista);
   document.getElementById('cf-renda_mensal').value=p.renda_mensal||0;
@@ -1895,6 +1935,12 @@ async function applyParsedToA3Form(p){
     const firstWord=p.nome.trim().split(/\s+/)[0]||'';
     const firstNorm=pr_norm(firstWord);
     if(firstNorm)found=CLI.list.find(c=>pr_norm(c.primeiro_nome||'')===firstNorm);
+  }
+  if(!found&&nameNorm){
+    found=CLI.list.find(c=>{
+      const full=pr_norm((c.primeiro_nome||'')+(c.segundo_nome||''));
+      return fuzzyNameMatch(nameNorm,full);
+    });
   }
   if(!found){
     const nameParts=(p.nome||'').trim().split(/\s+/).filter(Boolean);
