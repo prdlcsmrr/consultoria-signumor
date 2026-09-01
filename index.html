@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070594';
+  var V='2026070595';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -562,7 +562,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070594';
+const APP_VERSION='2026070595';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1100,7 +1100,9 @@ function renderRel(){
     }).join('');
   const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('cli_va1b')+'</th><th>'+t('lvl2')+'</th><th>'+t('cli_va2b')+'</th><th>'+t('lvl3')+'</th><th>'+t('cli_va3b')+'</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('f_depositado')+'</th><th>'+t('cli_col_sit')+'</th><th></th></tr>';
   const k2=Object.keys(mapA2).sort();
-  const totalA2=k2.reduce((s,k)=>s+mapA2[k].clientes.length,0);
+  const distinctA2Ids=new Set();
+  k2.forEach(k=>mapA2[k].clientes.forEach(c=>distinctA2Ids.add(c.id)));
+  const totalA2=distinctA2Ids.size;
   const statChip=(val,lbl)=>'<div class="gstat"><span class="gs-val">'+val+'</span><span class="gs-lbl">'+lbl+'</span></div>';
   document.getElementById('rel-a2').innerHTML=!k2.length?'<div class="empty">'+t('rel_empty')+'</div>':
     '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+totalA2+'</b></div>'
@@ -1116,7 +1118,9 @@ function renderRel(){
         +'<div class="reltab-wrap"><table class="reltab"><thead>'+relHeadRow+'</thead><tbody>'+r.clientes.map(relRow).join('')+'</tbody></table></div></div>';
     }).join('');
   const k3=Object.keys(mapA3).sort();
-  const totalA3=k3.reduce((s,k)=>s+mapA3[k].clientes.length,0);
+  const distinctA3Ids=new Set();
+  k3.forEach(k=>mapA3[k].clientes.forEach(c=>distinctA3Ids.add(c.id)));
+  const totalA3=distinctA3Ids.size;
   const a3HeadRow='<tr><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('rel_col_diasa3')+'</th><th>'+t('rel_col_resgatavel')+'</th><th>'+t('f_depositado')+'</th><th>'+t('rel_col_categorias')+'</th><th>'+t('cli_col_sit')+'</th><th></th></tr>';
   const a3Row=c=>{
     const nome=fullName(c);
