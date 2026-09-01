@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070596';
+  var V='2026070597';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -562,7 +562,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070596';
+const APP_VERSION='2026070597';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1836,6 +1836,7 @@ document.getElementById('paste-process').onclick=()=>{
 };
 const PR_FIELDS_A3=[
   ['recebido',/CLIENTE\s*RECEBIDO/i],['data_rel',/\bDATA\s*DO\s*RELAT[ÓO]RIO/i],['nome',/\bNOME\b/i],
+  ['recap_niveis',/(?:^|\s)(?:1️⃣|2️⃣|3️⃣)?\s*N[ÍI]VEL\s*[123]\s*:/i],
   ['agenda',/AGENDA\s*DI[ÁA]RIA/i],['valor_est',/VALOR\s*ESTIMADO\s*TOTAL/i],
   ['dconta',/DINHEIRO\s*EM\s*CONTA/i],['dgasto',/DINHEIRO\s*GASTO/i],
   ['disp',/\bDISPON[ÍI]VEL\s*PARA\s*RESGATE\b/i],['indisp',/\bINDISPON[ÍI]VEL\s*PARA\s*RESGATE\b/i],
@@ -1865,7 +1866,7 @@ function parseReportA3(text){
   if(notes.length)motivo=(motivo?motivo+' ':'')+notes.join('. ')+(notes.length?'.':'');
   const situacaoRaw=(raw.situacao||'').trim();
   return{
-    nome:(raw.nome||'').trim(),
+    nome:(raw.nome||'').replace(/\s*(?:1️⃣|2️⃣|3️⃣)?\s*N[ÍI]VEL\s*[123]\s*:.*/is,'').trim(),
     data_entrada_a3:pr_parseDate(raw.recebido),
     data_relatorio_a3:pr_parseDate(raw.data_rel),
     agenda_diaria_a3:(raw.agenda||'').trim()||null,
