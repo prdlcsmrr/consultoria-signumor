@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070598';
+  var V='2026070599';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -520,7 +520,10 @@
             <label class="fld"><span class="lbl" data-i="pag_bonus_assid">Bônus de assiduidade</span><input id="pf-bonus_assiduidade" type="number" inputmode="decimal" step="any" placeholder="0"></label>
             <label class="fld"><span class="lbl" data-i="pag_adiantamento">Adiantamento</span><input id="pf-adiantamento" type="number" inputmode="decimal" step="any" placeholder="0"></label>
           </div>
-          <label class="fld" style="margin-bottom:8px"><span class="lbl" data-i="pag_multa">Multa</span><input id="pf-multa" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          <div class="row2">
+            <label class="fld"><span class="lbl" data-i="pag_multa_qtd">Multas (quantidade)</span><input id="pf-multa_qtd" type="number" inputmode="numeric" placeholder="0"></label>
+            <label class="fld"><span class="lbl" data-i="pag_multa">Multa (valor total)</span><input id="pf-multa" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+          </div>
           <div class="totbox"><span class="tl" data-i="pag_resumo">Resumo do salário</span><span class="tv" id="pf-resumo-preview">0.00</span></div>
           <div class="acts" style="margin-top:10px"><button class="btn" id="pf-save" data-i="vend_save">Salvar</button><button class="btn gold" id="pf-cancel" data-i="vend_cancel">Cancelar</button></div>
           <div id="pf-msg" class="msg"></div>
@@ -562,7 +565,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070598';
+const APP_VERSION='2026070599';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -624,7 +627,7 @@ const I18N={
    pag_desemp_rs:'Desempenho (R$)',pag_desemp_usdt:'Desempenho (USDT)',pag_comissao:'Comissão',pag_salario_base:'Salário base',pag_col_mes:'Mês',pag_col_total:'Total',st_date_conflict:'Divergência de datas',
    pag_dias:'Dias presentes',pag_presenca_valor:'Valor da presença',pag_dias_no_mes:'dias no mês',
    pag_comissao_ind:'Comissão por indicação',pag_bonus_sup:'Bônus de supervisão',pag_bonus_assid:'Bônus de assiduidade',
-   pag_adiantamento:'Adiantamento',pag_multa:'Multa',pag_resumo:'Resumo do salário',
+   pag_adiantamento:'Adiantamento',pag_multa:'Multa',pag_multa_qtd:'Multas (quantidade)',pag_resumo:'Resumo do salário',
    pag_empty:'Nenhum mês registrado ainda.',pag_dup:'Já existe um registro para esse mês/ano.',pag_del:'Excluir este registro de pagamento?',pag_ano_req:'Informe um ano válido.',
    nav_sal:'Salários',sal_back:'Voltar',rel_a1_tab:'Relatório Nível 1',rel_a2_tab:'Relatório Nível 2',rel_a3_tab:'Relatório Nível 3',
    com_pend_btn:'🧾 Comissões Pendentes',com_pend_empty:'Nenhuma comissão pendente.',com_base:'Base',com_confirm:'✓ Confirmar',com_ganho:'Ganho',com_pend_curto:'Pendente',
@@ -668,7 +671,7 @@ const I18N={
    pag_desemp_rs:'Performance (R$)',pag_desemp_usdt:'Performance (USDT)',pag_comissao:'Commission',pag_salario_base:'Base salary',pag_col_mes:'Month',pag_col_total:'Total',st_date_conflict:'Date conflict',
    pag_dias:'Days present',pag_presenca_valor:'Attendance value',pag_dias_no_mes:'days in month',
    pag_comissao_ind:'Referral commission',pag_bonus_sup:'Supervision bonus',pag_bonus_assid:'Attendance bonus',
-   pag_adiantamento:'Advance',pag_multa:'Penalty',pag_resumo:'Salary summary',
+   pag_adiantamento:'Advance',pag_multa:'Penalty',pag_multa_qtd:'Penalties (count)',pag_resumo:'Salary summary',
    pag_empty:'No months recorded yet.',pag_dup:'A record for this month/year already exists.',pag_del:'Delete this payroll record?',pag_ano_req:'Enter a valid year.',
    nav_sal:'Salaries',sal_back:'Back',rel_a1_tab:'Level 1 Report',rel_a2_tab:'Level 2 Report',rel_a3_tab:'Level 3 Report',
    com_pend_btn:'🧾 Pending Commissions',com_pend_empty:'No pending commissions.',com_base:'Base',com_confirm:'✓ Confirm',com_ganho:'Earned',com_pend_curto:'Pending',
@@ -712,7 +715,7 @@ const I18N={
    pag_desemp_rs:'業績（R$）',pag_desemp_usdt:'業績（USDT）',pag_comissao:'佣金',pag_salario_base:'底薪',pag_col_mes:'月份',pag_col_total:'總計',st_date_conflict:'日期衝突',
    pag_dias:'出勤天數',pag_presenca_valor:'出勤金額',pag_dias_no_mes:'當月天數',
    pag_comissao_ind:'介紹佣金',pag_bonus_sup:'督導獎金',pag_bonus_assid:'全勤獎金',
-   pag_adiantamento:'預支',pag_multa:'罰款',pag_resumo:'薪資總結',
+   pag_adiantamento:'預支',pag_multa:'罰款',pag_multa_qtd:'罰款次數',pag_resumo:'薪資總結',
    pag_empty:'尚無月份紀錄。',pag_dup:'該月份/年份的紀錄已存在。',pag_del:'確定刪除此薪資紀錄？',pag_ano_req:'請輸入有效年份。',
    nav_sal:'薪資',sal_back:'返回',rel_a1_tab:'第一級報表',rel_a2_tab:'第二級報表',rel_a3_tab:'第三級報表',
    com_pend_btn:'🧾 待確認佣金',com_pend_empty:'沒有待確認的佣金。',com_base:'計算基礎',com_confirm:'✓ 確認',com_ganho:'已賺取',com_pend_curto:'待確認',
@@ -935,7 +938,7 @@ function pagPreview(){
   const resumo=num('pf-desempenho_rs')+num('pf-desempenho_usdt')+num('pf-comissao')+presenca+num('pf-comissao_indicacao')+num('pf-bonus_supervisao')+num('pf-bonus_assiduidade')-num('pf-adiantamento')-num('pf-multa');
   document.getElementById('pf-resumo-preview').textContent=fmtMoney(resumo);
 }
-['pf-mes','pf-ano','pf-desempenho_rs','pf-desempenho_usdt','pf-comissao','pf-salario_base','pf-dias_presentes','pf-comissao_indicacao','pf-bonus_supervisao','pf-bonus_assiduidade','pf-adiantamento','pf-multa'].forEach(id=>{
+['pf-mes','pf-ano','pf-desempenho_rs','pf-desempenho_usdt','pf-comissao','pf-salario_base','pf-dias_presentes','pf-comissao_indicacao','pf-bonus_supervisao','pf-bonus_assiduidade','pf-adiantamento','pf-multa','pf-multa_qtd'].forEach(id=>{
   document.getElementById(id).addEventListener('input',pagPreview);
   document.getElementById(id).addEventListener('change',pagPreview);
 });
@@ -951,9 +954,9 @@ function renderPagList(){
   if(!PAG.list.length){box.innerHTML='<div class="empty">'+t('pag_empty')+'</div>';return;}
   const mArr=MESES[LANG]||MESES.pt;
   let html='<div class="reltab-wrap"><table class="reltab"><thead><tr>'
-    +'<th>'+t('pag_col_mes')+'</th><th>'+t('pag_salario_base')+'</th><th>'+t('pag_comissao')+'</th><th>'+t('pag_col_total')+'</th><th></th>'
+    +'<th>'+t('pag_col_mes')+'</th><th>'+t('pag_salario_base')+'</th><th>'+t('pag_comissao')+'</th><th>'+t('pag_multa')+'</th><th>'+t('pag_col_total')+'</th><th></th>'
     +'</tr></thead><tbody>';
-  html+=PAG.list.map(p=>'<tr><td><b>'+mArr[p.mes-1]+'/'+p.ano+'</b></td><td>'+fmtMoney(p.salario_base)+'</td><td>'+fmtMoney(p.comissao)+'</td><td><b>'+fmtMoney(p.resumo_salario)+'</b></td>'
+  html+=PAG.list.map(p=>'<tr><td><b>'+mArr[p.mes-1]+'/'+p.ano+'</b></td><td>'+fmtMoney(p.salario_base)+'</td><td>'+fmtMoney(p.comissao)+'</td><td>'+(p.multa_qtd?(p.multa_qtd+'x · '):'')+fmtMoney(p.multa)+'</td><td><b>'+fmtMoney(p.resumo_salario)+'</b></td>'
     +'<td class="rel-edit-cell"><button class="iconbtn" data-pedit="'+p.id+'">✏️</button><button class="iconbtn" data-pdel="'+p.id+'">🗑️</button></td></tr>').join('');
   html+='</tbody></table></div>';
   box.innerHTML=html;
@@ -979,6 +982,7 @@ function openPagForm(p){
   document.getElementById('pf-bonus_assiduidade').value=p?p.bonus_assiduidade:0;
   document.getElementById('pf-adiantamento').value=p?p.adiantamento:0;
   document.getElementById('pf-multa').value=p?p.multa:0;
+  document.getElementById('pf-multa_qtd').value=p?(p.multa_qtd||0):0;
   pagPreview();
   msg('pf-msg');document.getElementById('pag-form').classList.remove('hide');
 }
@@ -995,7 +999,8 @@ document.getElementById('pf-save').onclick=async function(){
     comissao:num('pf-comissao'),salario_base:num('pf-salario_base'),
     dias_presentes:parseInt(document.getElementById('pf-dias_presentes').value)||0,
     comissao_indicacao:num('pf-comissao_indicacao'),bonus_supervisao:num('pf-bonus_supervisao'),
-    bonus_assiduidade:num('pf-bonus_assiduidade'),adiantamento:num('pf-adiantamento'),multa:num('pf-multa')
+    bonus_assiduidade:num('pf-bonus_assiduidade'),adiantamento:num('pf-adiantamento'),multa:num('pf-multa'),
+    multa_qtd:parseInt(document.getElementById('pf-multa_qtd').value)||0
   };
   this.disabled=true;const o=this.textContent;this.innerHTML='<span class="spin"></span>';
   let error;
