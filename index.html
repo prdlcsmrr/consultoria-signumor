@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070599';
+  var V='2026070600';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -294,16 +294,19 @@
       <button class="btn-out" id="btn-logout" data-i="logout">Sair</button></div>
     <div class="tabs">
       <button data-tab="vend" class="active" data-i="nav_vend">Funcionários</button>
-      <button data-tab="cli" data-i="nav_cli">Clientes</button>
-      <button data-tab="rel-a1" data-i="rel_a1_tab">Relatório A1</button>
-      <button data-tab="rel-a2" data-i="rel_a2_tab">Relatório A2</button>
-      <button data-tab="rel-a3" data-i="rel_a3_tab">Relatório A3</button>
+      <button data-tab="cli" data-pais="BR" data-i="nav_cli_br">BR - Clientes</button>
+      <button data-tab="rel-a2" data-pais="BR" data-i="rel_a2_tab_br">BR - Relatório Nível 2</button>
+      <button data-tab="rel-a3" data-pais="BR" data-i="rel_a3_tab_br">BR - Relatório Nível 3</button>
+      <button data-tab="cli" data-pais="EUA" data-i="nav_cli_eua">EUA - Clientes</button>
+      <button data-tab="rel-a2" data-pais="EUA" data-i="rel_a2_tab_eua">EUA - Relatório Nível 2</button>
+      <button data-tab="rel-a3" data-pais="EUA" data-i="rel_a3_tab_eua">EUA - Relatório Nível 3</button>
+      <button data-tab="rel-a1" data-i="rel_a1_tab">Relatório Nível 1</button>
       <button data-tab="sal" data-i="nav_sal">Salários</button>
     </div>
 
     <!-- TAB CLIENTES -->
     <div id="tab-cli" class="card hide">
-      <div class="pane-head"><h2 data-i="cli_title">Clientes</h2></div>
+      <div class="pane-head"><h2 id="cli-title-h2" data-i="cli_title">Clientes</h2></div>
       <div id="cli-total-header" class="rel-total"></div>
 
       <!-- FICHA -->
@@ -430,13 +433,13 @@
 
     <!-- TAB RELATÓRIO A2 -->
     <div id="tab-rel-a2" class="card hide">
-      <div class="pane-head"><h2 data-i="rel_a2">A2 — Gestão</h2><span style="display:flex;gap:8px"><button class="btn-mini" id="rel-a2-paste" data-i="paste_btn">📋 Colar Relatório</button><button class="btn-mini" id="rel-a2-new" data-i="cli_new">+ Novo</button></span></div>
+      <div class="pane-head"><h2 id="rel-a2-title-h2" data-i="rel_a2">A2 — Gestão</h2><span style="display:flex;gap:8px"><button class="btn-mini" id="rel-a2-paste" data-i="paste_btn">📋 Colar Relatório</button><button class="btn-mini" id="rel-a2-new" data-i="cli_new">+ Novo</button></span></div>
       <div id="rel-a2" class="reltab-wrap"></div>
     </div>
 
     <!-- TAB RELATÓRIO A3 -->
     <div id="tab-rel-a3" class="card hide">
-      <div class="pane-head"><h2 data-i="rel_a3">A3 — Resgate</h2><span style="display:flex;gap:8px"><button class="btn-mini" id="rel-a3-paste" data-i="paste_btn">📋 Colar Relatório</button><button class="btn-mini" id="rel-a3-new" data-i="cli_new">+ Novo</button></span></div>
+      <div class="pane-head"><h2 id="rel-a3-title-h2" data-i="rel_a3">A3 — Resgate</h2><span style="display:flex;gap:8px"><button class="btn-mini" id="rel-a3-paste" data-i="paste_btn">📋 Colar Relatório</button><button class="btn-mini" id="rel-a3-new" data-i="cli_new">+ Novo</button></span></div>
       <div id="rel-a3" class="reltab-wrap"></div>
       <div id="a3-form" class="hide" style="margin-top:14px;background:#f7f8fb;border:1px solid var(--line);border-radius:10px;padding:14px">
         <input type="hidden" id="a3f-id">
@@ -565,7 +568,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070599';
+const APP_VERSION='2026070600';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -594,7 +597,7 @@ const I18N={
    login_title:'Acesso',login_sub:'Painel de gestão · acesso restrito',email:'E-mail',password:'Senha',login_btn:'Entrar',
    first_access:'Primeiro acesso? Criar conta',signup_title:'Criar conta',signup_sub:'Apenas gerentes autorizados',
    signup_btn:'Criar conta',back_login:'← Voltar ao login',logged_as:'Conectado como',logout:'Sair',
-   nav_vend:'Funcionários',nav_cli:'Clientes',
+   nav_vend:'Funcionários',nav_cli:'Clientes',nav_cli_br:'BR - Clientes',nav_cli_eua:'EUA - Clientes',rel_a2_tab_br:'BR - Relatório Nível 2',rel_a2_tab_eua:'EUA - Relatório Nível 2',rel_a3_tab_br:'BR - Relatório Nível 3',rel_a3_tab_eua:'EUA - Relatório Nível 3',
    vend_title:'Funcionários',vend_new:'+ Novo',vend_code:'Código',vend_channel:'Canal',vend_name:'Nome (opcional)',vend_active:'Ativo',vend_inactive:'Desativado',vend_atua_a3:'Também atua no Nível 3',vend_save:'Salvar',vend_cancel:'Cancelar',
    cli_title:'Clientes',cli_total_ativos:'Total ativos',cli_new:'+ Novo',cli_pnome:'Primeiro nome',cli_snome:'Segundo nome',
    sec_ident:'Identidade',sec_funil:'Funil',sec_situacao:'Situação & Procedimentos',sec_carteira:'Carteira financeira',sec_obs:'Observações',sec_a3rel:'Relatório de Atendimento A3',
@@ -638,7 +641,7 @@ const I18N={
    login_title:'Sign in',login_sub:'Management panel · restricted access',email:'E-mail',password:'Password',login_btn:'Sign in',
    first_access:'First time? Create account',signup_title:'Create account',signup_sub:'Authorized managers only',
    signup_btn:'Create account',back_login:'← Back to sign in',logged_as:'Signed in as',logout:'Sign out',
-   nav_vend:'Employees',nav_cli:'Clients',
+   nav_vend:'Employees',nav_cli:'Clients',nav_cli_br:'BR - Clients',nav_cli_eua:'US - Clients',rel_a2_tab_br:'BR - Level 2 Report',rel_a2_tab_eua:'US - Level 2 Report',rel_a3_tab_br:'BR - Level 3 Report',rel_a3_tab_eua:'US - Level 3 Report',
    vend_title:'Employees',vend_new:'+ New',vend_code:'Code',vend_channel:'Channel',vend_name:'Name (optional)',vend_active:'Active',vend_inactive:'Inactive',vend_atua_a3:'Also works in Level 3',vend_save:'Save',vend_cancel:'Cancel',
    cli_title:'Clients',cli_total_ativos:'Total active',cli_new:'+ New',cli_pnome:'First name',cli_snome:'Second name',
    sec_ident:'Identity',sec_funil:'Funnel',sec_situacao:'Status & Procedures',sec_carteira:'Financial portfolio',sec_obs:'Notes',sec_a3rel:'A3 Attendance Report',
@@ -682,7 +685,7 @@ const I18N={
    login_title:'登入',login_sub:'管理面板 · 限受權人員',email:'電子郵件',password:'密碼',login_btn:'登入',
    first_access:'首次使用？建立帳號',signup_title:'建立帳號',signup_sub:'僅限授權經理',
    signup_btn:'建立帳號',back_login:'← 返回登入',logged_as:'登入身分',logout:'登出',
-   nav_vend:'員工',nav_cli:'客戶',
+   nav_vend:'員工',nav_cli:'客戶',nav_cli_br:'巴西 - 客戶',nav_cli_eua:'美國 - 客戶',rel_a2_tab_br:'巴西 - 第二級報表',rel_a2_tab_eua:'美國 - 第二級報表',rel_a3_tab_br:'巴西 - 第三級報表',rel_a3_tab_eua:'美國 - 第三級報表',
    vend_title:'員工',vend_new:'+ 新增',vend_code:'代碼',vend_channel:'通路',vend_name:'姓名（選填）',vend_active:'啟用',vend_inactive:'已停用',vend_atua_a3:'同時支援第三級',vend_save:'儲存',vend_cancel:'取消',
    cli_title:'客戶',cli_total_ativos:'活躍總數',cli_new:'+ 新增',cli_pnome:'名',cli_snome:'第二名',
    sec_ident:'身分',sec_funil:'漏斗',sec_situacao:'狀態與程序',sec_carteira:'金融資產',sec_obs:'備註',sec_a3rel:'A3服務報告',
@@ -781,14 +784,17 @@ document.getElementById('btn-signup').onclick=async function(){
 };
 document.getElementById('btn-logout').onclick=async()=>{await sb.auth.signOut();};
 
+let PAIS_ATIVO='BR';
 document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));
+  if(b.dataset.pais)PAIS_ATIVO=b.dataset.pais;
   document.getElementById('tab-cli').classList.toggle('hide',b.dataset.tab!=='cli');
   document.getElementById('tab-vend').classList.toggle('hide',b.dataset.tab!=='vend');
   document.getElementById('tab-rel-a1').classList.toggle('hide',b.dataset.tab!=='rel-a1');
   document.getElementById('tab-rel-a2').classList.toggle('hide',b.dataset.tab!=='rel-a2');
   document.getElementById('tab-rel-a3').classList.toggle('hide',b.dataset.tab!=='rel-a3');
   document.getElementById('tab-sal').classList.toggle('hide',b.dataset.tab!=='sal');
+  if(b.dataset.tab==='cli')renderCli();
   if(['rel-a1','rel-a2','rel-a3'].includes(b.dataset.tab))renderRel();
   if(b.dataset.tab==='vend'){if(!VEND.loaded)loadVend();else{loadComTotals().then(renderVend);}}
   if(b.dataset.tab==='sal'){document.getElementById('sal-pag-view').classList.add('hide');document.getElementById('sal-emp-list').classList.remove('hide');if(!VEND.loaded)loadVend();else{loadComTotals().then(renderSalEmpList);}}
@@ -1023,6 +1029,7 @@ function relBuild(){
       mapA1[k].receb++;
       if(c.vendedor_a2)mapA1[k].transferidos.push({id:c.id,nome:nome||'—',valor:Number(c.valor_total)||0,renda:Number(c.renda_mensal)||0,data:c.data_entrada});
     });
+    if((c.pais||'BR')!==PAIS_ATIVO)return;
     [c.vendedor_a2,c.vendedor_a2b].filter(Boolean).forEach(k=>{
       mapA2[k]=mapA2[k]||{total:0,morreu:0,valorTotal:0,valorDepositado:0,enva3:0,clientes:[]};
       mapA2[k].clientes.push(c);
@@ -1042,7 +1049,7 @@ function relBuild(){
       if(c.situacao==='MORREU A3')mapA3[k].morreu++;
     });
   });
-  const listA3=CLI.list.filter(c=>c.vendedor_a3).map(c=>({
+  const listA3=CLI.list.filter(c=>c.vendedor_a3&&(c.pais||'BR')===PAIS_ATIVO).map(c=>({
     id:c.id,
     nome:fullName(c),
     a1:c.vendedor_a1,a2:c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,
@@ -1093,6 +1100,8 @@ function relRow(c){
 }
 function renderRel(){
   if(!CLI.loaded)return;
+  const t2=document.getElementById('rel-a2-title-h2');if(t2)t2.textContent=PAIS_ATIVO+' - '+t('rel_a2');
+  const t3=document.getElementById('rel-a3-title-h2');if(t3)t3.textContent=PAIS_ATIVO+' - '+t('rel_a3');
   const {mapA1,mapA2,mapA3,listA3}=relBuild();
   const k1=Object.keys(mapA1).sort();
   const totalA1=k1.reduce((s,k)=>s+mapA1[k].transferidos.length,0);
@@ -1315,14 +1324,15 @@ async function calcComissoes(c){
     entries.push({etapa:'A3',vendedor:c.vendedor_a3,percentual:0.05});
   }
   const nome=fullName(c);
+  const pais=c.pais||'BR';
   for(const e of entries){
     const{base,valor}=calcComissaoValor(c,e.percentual);
     if(valor<=0)continue;
     const{data:existing}=await sb.from('comissoes').select('id').eq('cliente_id',c.id).eq('etapa',e.etapa).eq('vendedor_codigo',e.vendedor).eq('confirmado',false).limit(1);
     if(existing&&existing.length){
-      await sb.from('comissoes').update({percentual:e.percentual,base_calculo:base,valor_calculado:valor,cliente_nome:nome,mes_pagamento:mesRef,ano_pagamento:anoRef}).eq('id',existing[0].id);
+      await sb.from('comissoes').update({percentual:e.percentual,base_calculo:base,valor_calculado:valor,cliente_nome:nome,mes_pagamento:mesRef,ano_pagamento:anoRef,pais}).eq('id',existing[0].id);
     }else{
-      await sb.from('comissoes').insert({cliente_id:c.id,cliente_nome:nome,vendedor_codigo:e.vendedor,etapa:e.etapa,percentual:e.percentual,base_calculo:base,valor_calculado:valor,confirmado:false,mes_pagamento:mesRef,ano_pagamento:anoRef});
+      await sb.from('comissoes').insert({cliente_id:c.id,cliente_nome:nome,vendedor_codigo:e.vendedor,etapa:e.etapa,percentual:e.percentual,base_calculo:base,valor_calculado:valor,confirmado:false,mes_pagamento:mesRef,ano_pagamento:anoRef,pais});
     }
   }
 }
@@ -1343,11 +1353,14 @@ function renderComPend(list){
   Object.keys(grouped).sort().forEach(v=>{
     const rows=grouped[v];
     const total=rows.reduce((s,r)=>s+Number(r.valor_calculado||0),0);
+    const totalBR=rows.filter(r=>(r.pais||'BR')==='BR').reduce((s,r)=>s+Number(r.valor_calculado||0),0);
+    const totalEUA=rows.filter(r=>r.pais==='EUA').reduce((s,r)=>s+Number(r.valor_calculado||0),0);
     const niveis=[...new Set(rows.map(r=>r.etapa))];
     const multiNivel=niveis.length>1;
-    html+='<div class="rel-group"><div class="rel-ghead"><b>'+esc(v)+'</b><span>'+fmtUSD(total)+(multiNivel?' ('+niveis.map(etapaLbl).join('+')+')':'')+'</span></div>';
+    const paisBreak=(totalBR>0&&totalEUA>0)?' <small>(BR: '+fmtUSD(totalBR)+' · EUA: '+fmtUSD(totalEUA)+')</small>':'';
+    html+='<div class="rel-group"><div class="rel-ghead"><b>'+esc(v)+'</b><span>'+fmtUSD(total)+(multiNivel?' ('+niveis.map(etapaLbl).join('+')+')':'')+paisBreak+'</span></div>';
     rows.forEach(r=>{
-      html+='<div class="rel-sub"><span class="rs-info"><span class="rs-nome">'+esc(r.cliente_nome||'—')+' · '+etapaLbl(r.etapa)+' · '+mesLbl(r)+'</span><span class="rs-renda">'+t('com_base')+': R$ '+fmtMoney(r.base_calculo)+' · '+(Number(r.percentual)*100).toFixed(0)+'%</span></span><span class="rs-val">'+fmtUSD(r.valor_calculado)+'</span></div>'
+      html+='<div class="rel-sub"><span class="rs-info"><span class="rs-nome">'+esc(r.cliente_nome||'—')+' · '+(r.pais||'BR')+' · '+etapaLbl(r.etapa)+' · '+mesLbl(r)+'</span><span class="rs-renda">'+t('com_base')+': R$ '+fmtMoney(r.base_calculo)+' · '+(Number(r.percentual)*100).toFixed(0)+'%</span></span><span class="rs-val">'+fmtUSD(r.valor_calculado)+'</span></div>'
         +'<div style="padding:0 14px 12px;text-align:right"><button class="btn-mini com-confirm" data-id="'+r.id+'">'+t('com_confirm')+'</button></div>';
     });
     html+='</div>';
@@ -1578,7 +1591,7 @@ function cliRowClass(c){
   return '';
 }
 function cliTotalsBar(){
-  const list=CLI.list;
+  const list=CLI.list.filter(c=>(c.pais||'BR')===PAIS_ATIVO);
   const cnt=s=>list.filter(c=>c.situacao===s).length;
   const totAtencao=cnt('ATENCAO');
   const totReportando=cnt('REPORTANDO A2')+cnt('REPORTANDO A3');
@@ -1600,14 +1613,16 @@ function cliTotalsBar(){
 }
 function renderCli(){
   const box=document.getElementById('c-list');
-  let arr=CLI.list.slice();
-  const totAtivos=CLI.list.filter(c=>(c.situacao||'').indexOf('MORREU')!==0&&c.situacao!=='FINALIZADO').length;
+  const titleEl=document.getElementById('cli-title-h2');
+  if(titleEl)titleEl.textContent=PAIS_ATIVO+' - '+t('cli_title');
+  let arr=CLI.list.filter(c=>(c.pais||'BR')===PAIS_ATIVO);
+  const totAtivos=arr.filter(c=>(c.situacao||'').indexOf('MORREU')!==0&&c.situacao!=='FINALIZADO').length;
   const hdr=document.getElementById('cli-total-header');
   if(hdr)hdr.innerHTML=t('cli_total_ativos')+': <b>'+totAtivos+'</b>';
   if(CLI.filtro==='MORTO')arr=arr.filter(c=>(c.situacao||'').indexOf('MORREU')===0);
   else if(CLI.filtro==='REPORTANDO')arr=arr.filter(c=>(c.situacao||'').indexOf('REPORTANDO')===0);
   else if(CLI.filtro!=='ALL')arr=arr.filter(c=>c.situacao===CLI.filtro);
-  if(!CLI.list.length){box.innerHTML='<div class="empty">'+t('c_empty')+'</div>';return;}
+  if(!CLI.list.filter(c=>(c.pais||'BR')===PAIS_ATIVO).length){box.innerHTML='<div class="empty">'+t('c_empty')+'</div>';return;}
   if(!arr.length){box.innerHTML=cliTotalsBar()+'<div class="empty">'+t('c_none')+'</div>';return;}
   let html=cliTotalsBar()+'<div class="reltab-wrap"><table class="reltab"><thead><tr>'
     +'<th>'+t('cli_col_entrada')+'</th><th>'+t('cli_col_nome')+'</th><th>'+t('cli_col_saida')+'</th>'
@@ -1969,7 +1984,8 @@ async function applyParsedToA3Form(p){
       valor_deposito_ted:p.valor_deposito_ted||0,
       valor_depositado:p.valor_depositado||0,
       situacao:p.situacao||'REPORTANDO A3',
-      observacoes:p.observacoes||null
+      observacoes:p.observacoes||null,
+      pais:PAIS_ATIVO
     };
     const{data,error}=await sb.from('clientes').insert(payload).select().single();
     if(error){openA3Form(null);msg('a3f-msg','err',error.message||t('generic'));return;}
@@ -2094,6 +2110,7 @@ document.getElementById('cf-save').onclick=async function(){
     observacoes:document.getElementById('cf-obs').value.trim()||null
   };
   FINF.forEach(k=>payload[k]=num('cf-'+k));
+  if(!id)payload.pais=PAIS_ATIVO;
   let error;
   if(id)({error}=await sb.from('clientes').update(payload).eq('id',id));
   else ({error}=await sb.from('clientes').insert(payload));
