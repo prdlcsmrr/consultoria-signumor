@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070601';
+  var V='2026070602';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -212,6 +212,7 @@
   .vitem-wrap .vitem{border-radius:10px 10px 0 0;margin-bottom:0}
   .vitem-com{display:flex;gap:12px;padding:6px 12px;border:1px solid var(--line);border-top:none;border-radius:0 0 10px 10px;background:#fafbfd;font-size:11.5px}
   .vitem-com .vc-conf{color:#1e7d3c;font-weight:bold}
+  .vitem-com .vc-multa{color:#c0392b;font-weight:bold}
   .vitem-com .vc-pend{color:#b5781a;font-weight:bold}
   .vitem .vc{font-weight:bold;color:var(--navy);font-size:15px;min-width:46px}
   .vitem .vn{flex:1;font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -569,7 +570,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070601';
+const APP_VERSION='2026070602';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -798,7 +799,7 @@ document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.cl
   if(b.dataset.tab==='cli')renderCli();
   if(['rel-a1','rel-a2','rel-a3'].includes(b.dataset.tab))renderRel();
   if(b.dataset.tab==='vend'){if(!VEND.loaded)loadVend();else{loadComTotals().then(renderVend);}}
-  if(b.dataset.tab==='sal'){document.getElementById('sal-pag-view').classList.add('hide');document.getElementById('sal-emp-list').classList.remove('hide');if(!VEND.loaded)loadVend();else{loadComTotals().then(renderSalEmpList);}}
+  if(b.dataset.tab==='sal'){document.getElementById('sal-pag-view').classList.add('hide');document.getElementById('sal-emp-list').classList.remove('hide');if(!VEND.loaded)loadVend();else{Promise.all([loadComTotals(),loadPagTotals()]).then(renderSalEmpList);}}
 });
 
 /* ===== VENDEDORES ===== */
@@ -812,12 +813,27 @@ async function loadVend(){
   if(error){document.getElementById('v-list').innerHTML='<div class="empty">'+t('generic')+'</div>';VEND.loading=false;return;}
   VEND.list=data||[];VEND.loaded=true;renderVend();fillVendSelects();
   if(document.getElementById('sal-emp-list'))renderSalEmpList();
-  await loadComTotals();
+  await Promise.all([loadComTotals(),loadPagTotals()]);
   renderVend();
   if(document.getElementById('sal-emp-list'))renderSalEmpList();
   VEND.loading=false;
 }
 let COM_TOTALS={};
+let PAG_TOTALS={};
+async function loadPagTotals(){
+  try{
+    const{data,error}=await sb.from('pagamentos').select('vendedor_id,multa,multa_qtd');
+    if(error){console.error('loadPagTotals error:',error);return;}
+    const totals={};
+    (data||[]).forEach(r=>{
+      const k=r.vendedor_id;
+      totals[k]=totals[k]||{multaValor:0,multaQtd:0};
+      totals[k].multaValor+=Number(r.multa)||0;
+      totals[k].multaQtd+=Number(r.multa_qtd)||0;
+    });
+    PAG_TOTALS=totals;
+  }catch(e){console.error('loadPagTotals exception:',e);}
+}
 async function loadComTotals(){
   try{
     const{data,error}=await sb.from('comissoes').select('vendedor_codigo,valor_calculado,confirmado,mes_pagamento,ano_pagamento');
@@ -901,12 +917,16 @@ function renderSalEmpList(){
     if(!arr.length)html+='<div class="empty">'+t('v_none')+'</div>';
     else arr.forEach(v=>{const nm=v.nome?esc(v.nome):'<small>—</small>';
       const com=COM_TOTALS[v.codigo];
+      const pag=PAG_TOTALS[v.id];
       const comLine=com&&(com.confirmadoValor>0||com.pendenteValor>0)
         ?'<div class="vitem-com">'+(com.confirmadoValor>0?'<span class="vc-conf">'+t('com_ganho')+': '+fmtUSD(com.confirmadoValor)+'</span>':'')+(com.pendenteValor>0?'<span class="vc-pend">'+t('com_pend_curto')+': '+fmtUSD(com.pendenteValor)+'</span>':'')+'</div>'
         :'';
+      const multaLine=pag&&pag.multaValor>0
+        ?'<div class="vitem-com"><span class="vc-multa">'+t('pag_multa')+': R$ '+fmtMoney(pag.multaValor)+(pag.multaQtd?' ('+pag.multaQtd+'x)':'')+'</span></div>'
+        :'';
       html+='<div class="vitem-wrap"><div class="vitem" data-sal="'+v.id+'" data-cod="'+esc(v.codigo)+'" style="cursor:pointer"><span class="vc">'+esc(v.codigo)+'</span><span class="vn">'+nm+'</span>'
         +'<span class="badge '+(v.ativo?'on':'off')+'">'+(v.ativo?t('vend_active'):t('vend_inactive'))+'</span></div>'
-        +comLine+'</div>';});
+        +comLine+multaLine+'</div>';});
     html+='</div>';
   });
   box.innerHTML=html;
@@ -1017,8 +1037,9 @@ document.getElementById('pf-save').onclick=async function(){
   if(error){msg('pf-msg','err',(error.code==='23505'?t('pag_dup'):error.message)||t('generic'));return;}
   document.getElementById('pag-form').classList.add('hide');
   await loadPag(PAG.vendorId,PAG.vendorCodigo);
+  await loadPagTotals();
 };
-async function delPag(id){if(!confirm(t('pag_del')))return;const {error}=await sb.from('pagamentos').delete().eq('id',id);if(error){alert(error.message||t('generic'));return;}await loadPag(PAG.vendorId,PAG.vendorCodigo);}
+async function delPag(id){if(!confirm(t('pag_del')))return;const {error}=await sb.from('pagamentos').delete().eq('id',id);if(error){alert(error.message||t('generic'));return;}await loadPag(PAG.vendorId,PAG.vendorCodigo);await loadPagTotals();}
 
 /* ===== RELATÓRIOS ===== */
 function relBuild(){
