@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070602';
+  var V='2026070603';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -398,6 +398,13 @@
           <button class="btn" id="cf-save" data-i="cli_save">Salvar</button>
           <button class="btn gold" id="cf-cancel" data-i="cli_cancel">Cancelar</button>
         </div>
+        <div id="cf-linkform-wrap" style="display:none;margin-top:10px;background:#f7f8fb;border:1px solid var(--line);border-radius:10px;padding:12px">
+          <div class="lbl" data-i="cli_link_form">Link do Relatório Financeiro (para o cliente preencher)</div>
+          <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+            <input id="cf-linkform-url" readonly style="flex:1;min-width:200px;font-size:12px;color:var(--muted)">
+            <button class="btn-mini" id="cf-linkform-copy" data-i="cli_link_copy">📋 Copiar link</button>
+          </div>
+        </div>
         <div style="text-align:center;margin-top:12px"><a id="cf-del" data-i="cli_delete" style="color:var(--red);cursor:pointer;font-size:13px;text-decoration:underline;display:none">Excluir cliente</a></div>
       </div>
 
@@ -570,7 +577,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070602';
+const APP_VERSION='2026070603';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -613,7 +620,7 @@ const I18N={
    cli_dia1:'Dia 1',cli_dia2:'Dia 2',cli_dia3:'Dia 3',cli_dia4:'Dia 4',
    f_cc:'Conta corrente',f_dp:'Depósito a prazo',f_inv:'Investimentos',f_ac:'Ações',f_cr:'Criptomoedas',f_im:'Imóveis',f_ou:'Ouro',f_di:'Dinheiro',f_cj:'Conta conjunta',
    f_total:'Valor total',f_est:'Saldo estimado',f_res:'Saldo resgatável',f_renda:'Renda mensal',f_depositado:'Valor depositado',resg_title:'Resgates por categoria',f_excl_note:'Imóveis e Conta conjunta ficam registrados separadamente e não entram no Valor total.',
-   cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',
+   cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',cli_link_form:'Link do Relatório Financeiro (para o cliente preencher)',cli_link_copy:'📋 Copiar link',cli_link_copied:'Copiado!',
    f_all:'Todos',st_morto:'Morreu',
    st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu Nível 2','st_MORREU A3':'Morreu Nível 3',st_REPORTANDO:'Reportando','st_REPORTANDO A2':'Reportando Nível 2','st_REPORTANDO A3':'Reportando Nível 3',st_BLOQUEIO:'Bloqueio',cli_va1b:'Nível 1 (2º)',cli_va2b:'Nível 2 (2º)',cli_va3b:'Nível 3 (2º)',
    cli_col_nome:'Cliente',cli_col_entrada:'Entrada',cli_col_saida:'Saída',cli_col_atend:'Atendimento',cli_col_tempo:'Tempo na etapa',cli_col_resg:'Resgatável',cli_col_sit:'Situação',
@@ -657,7 +664,7 @@ const I18N={
    cli_dia1:'Day 1',cli_dia2:'Day 2',cli_dia3:'Day 3',cli_dia4:'Day 4',
    f_cc:'Checking',f_dp:'Time deposit',f_inv:'Investments',f_ac:'Stocks',f_cr:'Crypto',f_im:'Real estate',f_ou:'Gold',f_di:'Cash',f_cj:'Joint account',
    f_total:'Total value',f_est:'Estimated balance',f_res:'Redeemable balance',f_renda:'Monthly income',f_depositado:'Deposited value',resg_title:'Redemptions by category',f_excl_note:'Real estate and Joint account are recorded separately and are not included in Total value.',
-   cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',
+   cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',cli_link_form:'Financial Report link (for the client to fill out)',cli_link_copy:'📋 Copy link',cli_link_copied:'Copied!',
    f_all:'All',st_morto:'Lost',
    st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost Level 2','st_MORREU A3':'Lost Level 3',st_REPORTANDO:'Reporting','st_REPORTANDO A2':'Reporting Level 2','st_REPORTANDO A3':'Reporting Level 3',st_BLOQUEIO:'Block',cli_va1b:'Level 1 (2nd)',cli_va2b:'Level 2 (2nd)',cli_va3b:'Level 3 (2nd)',
    cli_col_nome:'Client',cli_col_entrada:'Entry',cli_col_saida:'Exit',cli_col_atend:'Handled by',cli_col_tempo:'Time in stage',cli_col_resg:'Redeemable',cli_col_sit:'Status',
@@ -701,7 +708,7 @@ const I18N={
    cli_dia1:'第1天',cli_dia2:'第2天',cli_dia3:'第3天',cli_dia4:'第4天',
    f_cc:'活期帳戶',f_dp:'定期存款',f_inv:'投資',f_ac:'股票',f_cr:'加密貨幣',f_im:'房地產',f_ou:'黃金',f_di:'現金',f_cj:'聯名帳戶',
    f_total:'總值',f_est:'預估餘額',f_res:'可贖回餘額',f_renda:'月收入',f_depositado:'已存入金額',resg_title:'分類贖回設定',f_excl_note:'不動產與共同帳戶會單獨記錄，不計入總值。',
-   cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',
+   cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',cli_link_form:'財務報告連結（供客戶填寫）',cli_link_copy:'📋 複製連結',cli_link_copied:'已複製！',
    f_all:'全部',st_morto:'流失',
    st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'第二級流失','st_MORREU A3':'第三級流失',st_REPORTANDO:'報告中','st_REPORTANDO A2':'第二級報告中','st_REPORTANDO A3':'第三級報告中',st_BLOQUEIO:'鎖定',cli_va1b:'第一級（第二位）',cli_va2b:'第二級（第二位）',cli_va3b:'第三級（第二位）',
    cli_col_nome:'客戶',cli_col_entrada:'進入日',cli_col_saida:'離開日',cli_col_atend:'負責人',cli_col_tempo:'目前階段時間',cli_col_resg:'可贖回',cli_col_sit:'狀況',
@@ -2076,6 +2083,13 @@ function openCForm(c){
   renderProcList(c&&c.procedimentos_lista?c.procedimentos_lista:[]);
   document.getElementById('cf-obs').value=c&&c.observacoes?c.observacoes:'';
   document.getElementById('cf-del').style.display=c?'inline':'none';
+  const linkWrap=document.getElementById('cf-linkform-wrap');
+  if(c){
+    linkWrap.style.display='block';
+    document.getElementById('cf-linkform-url').value=location.origin+location.pathname.replace(/index\.html$/,'')+'relatorio-financeiro.html?cliente='+c.id;
+  }else{
+    linkWrap.style.display='none';
+  }
   msg('c-msg');calcTotal();calcPrazos();
   cbrowse.classList.add('hide');cform.classList.remove('hide');window.scrollTo(0,0);
 }
@@ -2148,6 +2162,13 @@ async function deleteCliente(id){
   if(error){alert(error.message||t('generic'));return;}
   await loadCli();renderRel();
 }
+document.getElementById('cf-linkform-copy').onclick=function(){
+  const input=document.getElementById('cf-linkform-url');
+  input.select();
+  navigator.clipboard&&navigator.clipboard.writeText(input.value).catch(()=>{});
+  const orig=this.textContent;this.textContent='✅ '+t('cli_link_copied');
+  setTimeout(()=>{this.textContent=orig;},2000);
+};
 document.getElementById('cf-del').onclick=async function(){
   const id=document.getElementById('cf-id').value;if(!id)return;
   if(!confirm(t('c_del')))return;
