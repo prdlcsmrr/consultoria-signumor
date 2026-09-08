@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070603';
+  var V='2026070604';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -577,7 +577,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070603';
+const APP_VERSION='2026070604';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1261,9 +1261,18 @@ function openReport(c){
     html+=rptRow(t('a3_ted'),fmtMoney(c.valor_deposito_ted));
   }
   html+='<div class="rpt-sec">'+t('sec_obs')+'</div><div class="rpt-obs" id="rpt-obs-val">'+(esc(c.observacoes||'')||'—')+'</div>';
+  const linkUrl=location.origin+location.pathname.replace(/index\.html$/,'')+'relatorio-financeiro.html?cliente='+c.id;
+  html+='<div class="rpt-sec">'+t('cli_link_form')+'</div><div class="rpt-obs" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input readonly value="'+esc(linkUrl)+'" style="flex:1;min-width:180px;font-size:11px;color:var(--muted);padding:8px;border:1px solid var(--line);border-radius:6px" id="rpt-linkform-url"><button class="btn-mini" id="rpt-linkform-copy">'+t('cli_link_copy')+'</button></div>';
   document.getElementById('report-body').innerHTML=html;
   document.getElementById('report-edit-a3').classList.toggle('hide',!c.vendedor_a3);
   document.getElementById('report-modal').classList.remove('hide');
+  const rlCopy=document.getElementById('rpt-linkform-copy');
+  if(rlCopy)rlCopy.onclick=function(){
+    const inp=document.getElementById('rpt-linkform-url');inp.select();
+    navigator.clipboard&&navigator.clipboard.writeText(inp.value).catch(()=>{});
+    const orig=this.textContent;this.textContent='✅ '+t('cli_link_copied');
+    setTimeout(()=>{this.textContent=orig;},2000);
+  };
   if(LANG!=='pt'){
     autoTranslateField('rpt-agenda-val',c.agenda_diaria_a3);
     autoTranslateField('rpt-motivo-val',c.motivo_indisponibilidade_a3);
