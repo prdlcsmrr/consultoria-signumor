@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário de Apresentação Voluntária de Relatório Financeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --navy:#12193f; --navy-l:#1c2557; --gold:#c79a3d; --gold-l:#e0b95a;
+    --line:#e4e2da; --muted:#6b6f7a; --bg:#f6f5f1; --card:#ffffff; --red:#b3382c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Inter',sans-serif;background:var(--bg);color:var(--navy);}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy-l));color:#fff;padding:28px 20px;text-align:center}
+  header h1{font-family:'Playfair Display',serif;font-size:22px;margin:0 0 4px;font-weight:700}
+  header p{margin:0;color:#c7cde0;font-size:13px}
+  main{max-width:820px;margin:0 auto;padding:20px 16px 60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:0 1px 3px rgba(18,25,63,.05)}
+  .card h2{font-family:'Playfair Display',serif;font-size:17px;margin:0 0 16px;color:var(--navy);border-bottom:2px solid var(--gold);padding-bottom:8px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .row3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:12px}
+  .row-addr{display:grid;grid-template-columns:2fr .8fr 1fr 1fr .7fr 1fr;gap:10px;margin-bottom:12px}
+  @media(max-width:640px){.row,.row3,.row-addr{grid-template-columns:1fr}}
+  label{display:block}
+  .lbl{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:5px}
+  .lbl .req{color:var(--red)}
+  input,select,textarea{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:8px;font-size:14px;font-family:inherit;background:#fff;color:var(--navy)}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--gold-l);outline-offset:1px;border-color:var(--gold)}
+  textarea{resize:vertical;min-height:90px}
+  .tbl-wrap{overflow-x:auto;margin-bottom:12px;border:1px solid var(--line);border-radius:10px}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:680px}
+  th{text-align:left;padding:10px 8px;background:#faf9f6;color:var(--muted);font-weight:600;font-size:11.5px;text-transform:none;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+  td input,td select{padding:8px 9px;font-size:13px}
+  tfoot td{background:#faf9f6;font-weight:700;padding:9px 8px}
+  .btn{border:none;border-radius:9px;padding:10px 16px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn-add{background:#eef0fb;color:var(--navy);margin-top:2px}
+  .btn-add:hover{background:#e2e5f7}
+  .btn-del{background:var(--red);color:#fff;padding:8px 12px;font-size:12.5px}
+  .btn-del:hover{background:#94291f}
+  .btn-primary{background:var(--navy);color:#fff}
+  .btn-primary:hover{background:var(--navy-l)}
+  .btn-gold{background:var(--gold);color:var(--navy)}
+  .btn-gold:hover{background:var(--gold-l)}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .resumo-box{display:flex;flex-wrap:wrap;gap:10px;background:#f2f4fb;border:1px solid #dfe3f5;border-radius:10px;padding:14px;margin-bottom:16px;font-size:14px}
+  .resumo-box b{color:var(--navy)}
+  .pill{background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-size:12.5px;color:var(--muted)}
+  .tips{font-size:12.5px;color:var(--muted);line-height:1.6}
+  .tips li{margin-bottom:2px}
+  #msg{font-size:13.5px;font-weight:600;margin-top:10px;padding:10px 12px;border-radius:8px;display:none}
+  #msg.ok{display:block;background:#e5f5ea;color:#1e7d3c}
+  #msg.err{display:block;background:#fbe9e7;color:var(--red)}
+  .req-star{color:var(--red)}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:20px 0}
+</style>
+</head>
+<body>
+<header>
+  <h1>Formulário de Apresentação Voluntária de Relatório Financeiro</h1>
+  <p>Sistema Signumor</p>
+</header>
+<main>
+
+  <div class="card">
+    <h2>Dados Pessoais</h2>
+    <div class="row">
+      <label><span class="lbl">Nome completo <span class="req-star">*</span></span><input id="f-nome" placeholder="Nome e sobrenome"></label>
+      <label><span class="lbl">CPF (somente números) <span class="req-star">*</span></span><input id="f-cpf" placeholder="000.000.000-00"></label>
+    </div>
+    <div class="row">
+      <label><span class="lbl">RG (somente números) <span class="req-star">*</span></span><input id="f-rg" placeholder="00.000.000-0"></label>
+      <label><span class="lbl">Data de Nascimento <span class="req-star">*</span></span><input id="f-nasc" type="date"></label>
+    </div>
+    <div class="row">
+      <label><span class="lbl">Telefone <span class="req-star">*</span></span><input id="f-tel" placeholder="(11) 99999-9999"></label>
+      <label><span class="lbl">E-mail <span class="req-star">*</span></span><input id="f-email" type="email" placeholder="email@exemplo.com"></label>
+    </div>
+    <div class="row-addr">
+      <label><span class="lbl">Rua <span class="req-star">*</span></span><input id="f-rua" placeholder="Nome da rua/avenida"></label>
+      <label><span class="lbl">Número</span><input id="f-numero" placeholder="000"></label>
+      <label><span class="lbl">Bairro <span class="req-star">*</span></span><input id="f-bairro" placeholder="Bairro"></label>
+      <label><span class="lbl">Cidade <span class="req-star">*</span></span><input id="f-cidade" placeholder="Cidade"></label>
+      <label><span class="lbl">Estado <span class="req-star">*</span></span>
+        <select id="f-estado">
+          <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option>
+        </select>
+      </label>
+      <label><span class="lbl">CEP <span class="req-star">*</span></span><input id="f-cep" placeholder="00000-000"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Dados do Agente Responsável</h2>
+    <div class="row">
+      <label><span class="lbl">Nome do agente responsável <span class="req-star">*</span></span><input id="f-agente" placeholder="Nome completo do agente"></label>
+      <label><span class="lbl">Código de confirmação <span class="req-star">*</span></span><input id="f-codigo" placeholder="XXXX-XXXX-XXXX-XXXX"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Investimentos</h2>
+    <div class="tbl-wrap">
+      <table id="tbl-inv">
+        <thead><tr><th>Instituição</th><th>Modalidade</th><th>Nome do Fundo</th><th>Data do aporte</th><th>Carência</th><th>Vencimento</th><th>Saldo atual (R$)</th><th>Ações</th></tr></thead>
+        <tbody></tbody>
+        <tfoot><tr><td colspan="6" style="text-align:right">Total de Investimentos</td><td id="tot-inv">R$ 0,00</td><td></td></tr></tfoot>
+      </table>
+    </div>
+    <button class="btn btn-add" id="add-inv">+ Adicionar Investimento</button>
+  </div>
+
+  <div class="card">
+    <h2>Contas Bancárias</h2>
+    <div class="tbl-wrap">
+      <table id="tbl-contas">
+        <thead><tr><th>Banco</th><th>Agência</th><th>Tipo</th><th>Conjunta</th><th>Titular</th><th>Saldo atual (R$)</th><th>Ações</th></tr></thead>
+        <tbody></tbody>
+        <tfoot><tr><td colspan="5" style="text-align:right">Total de Contas</td><td id="tot-contas">R$ 0,00</td><td></td></tr></tfoot>
+      </table>
+    </div>
+    <button class="btn btn-add" id="add-conta">+ Adicionar Conta</button>
+  </div>
+
+  <div class="card">
+    <h2>Resumo de Aquisição dos Bens</h2>
+    <label><span class="lbl">Resumo de Aquisição dos Bens <span class="req-star">*</span></span>
+      <textarea id="f-resumo-bens" placeholder="Descreva aqui, de forma resumida, a origem e a evolução do seu patrimônio ao longo do tempo."></textarea>
+    </label>
+  </div>
+
+  <div class="card">
+    <h2>Resumo</h2>
+    <div class="resumo-box">
+      <span class="pill">Investimentos <b id="rs-inv">R$ 0,00</b></span>
+      <span class="pill">Contas <b id="rs-contas">R$ 0,00</b></span>
+      <span class="pill">Geral <b id="rs-geral">R$ 0,00</b></span>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" id="btn-calc">📊 Calcular Totais</button>
+      <button class="btn btn-gold" id="btn-pdf">📄 Gerar PDF</button>
+      <button class="btn btn-primary" id="btn-enviar" style="background:#1e7d3c">✅ Enviar Relatório</button>
+    </div>
+    <div id="msg"></div>
+    <p class="tips">Dicas:</p>
+    <ul class="tips">
+      <li>Preencha as tabelas e use "Calcular Totais" antes de gerar o PDF.</li>
+      <li>Se sua residência não possuir número, informe <b>000</b> no campo "Número".</li>
+      <li>Clique em "Enviar Relatório" para que seu agente responsável receba os dados.</li>
+    </ul>
+  </div>
+
+</main>
+<footer>SIGNUMOR · ORION VALE</footer>
+
+<script>
+const SB_URL='https://exvocatkdzhsvlewpvik.supabase.co';
+const SB_KEY='sb_publishable__96M4ijl_Azu2zPU6Jma-g_hp1beIqh';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const params=new URLSearchParams(location.search);
+const clienteId=params.get('cliente')||null;
+let relatorioId=params.get('r')||null;
+
+function fmtMoney(n){n=Number(n)||0;return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function uid(){return 'r'+Math.random().toString(36).slice(2,9);}
+
+function invRowHtml(row){
+  row=row||{};
+  const id=uid();
+  return '<tr data-id="'+id+'">'
+    +'<td><input class="inv-inst" value="'+(row.instituicao||'').replace(/"/g,'&quot;')+'" placeholder="Instituição"></td>'
+    +'<td><select class="inv-mod"><option '+(row.modalidade==='Ações'||!row.modalidade?'selected':'')+'>Ações</option><option '+(row.modalidade==='Renda Fixa'?'selected':'')+'>Renda Fixa</option><option '+(row.modalidade==='Fundo Imobiliário'?'selected':'')+'>Fundo Imobiliário</option><option '+(row.modalidade==='Criptomoeda'?'selected':'')+'>Criptomoeda</option><option '+(row.modalidade==='Previdência'?'selected':'')+'>Previdência</option><option '+(row.modalidade==='Outro'?'selected':'')+'>Outro</option></select></td>'
+    +'<td><input class="inv-fundo" value="'+(row.fundo||'').replace(/"/g,'&quot;')+'" placeholder="Nome do fundo"></td>'
+    +'<td><input class="inv-data" type="date" value="'+(row.data_aporte||'')+'"></td>'
+    +'<td><input class="inv-carencia" value="'+(row.carencia||'').replace(/"/g,'&quot;')+'" placeholder=""></td>'
+    +'<td><input class="inv-venc" type="date" value="'+(row.vencimento||'')+'"></td>'
+    +'<td><input class="inv-saldo" type="number" inputmode="decimal" step="0.01" value="'+(row.saldo||0)+'" placeholder="0,00"></td>'
+    +'<td><button class="btn btn-del" data-del-row>Excluir</button></td></tr>';
+}
+function contaRowHtml(row){
+  row=row||{};
+  return '<tr data-id="'+uid()+'">'
+    +'<td><input class="cta-banco" value="'+(row.banco||'').replace(/"/g,'&quot;')+'" placeholder="Banco"></td>'
+    +'<td><input class="cta-agencia" value="'+(row.agencia||'').replace(/"/g,'&quot;')+'" placeholder="Agência"></td>'
+    +'<td><select class="cta-tipo"><option '+(row.tipo==='Corrente'||!row.tipo?'selected':'')+'>Corrente</option><option '+(row.tipo==='Poupança'?'selected':'')+'>Poupança</option><option '+(row.tipo==='Investimento'?'selected':'')+'>Investimento</option></select></td>'
+    +'<td><select class="cta-conjunta"><option '+(row.conjunta==='Não'||!row.conjunta?'selected':'')+'>Não</option><option '+(row.conjunta==='Sim'?'selected':'')+'>Sim</option></select></td>'
+    +'<td><input class="cta-titular" value="'+(row.titular||'').replace(/"/g,'&quot;')+'" placeholder=""></td>'
+    +'<td><input class="cta-saldo" type="number" inputmode="decimal" step="0.01" value="'+(row.saldo||0)+'" placeholder="0,00"></td>'
+    +'<td><button class="btn btn-del" data-del-row>Excluir</button></td></tr>';
+}
+function addInvRow(row){document.querySelector('#tbl-inv tbody').insertAdjacentHTML('beforeend',invRowHtml(row));}
+function addContaRow(row){document.querySelector('#tbl-contas tbody').insertAdjacentHTML('beforeend',contaRowHtml(row));}
+
+document.getElementById('add-inv').onclick=()=>addInvRow();
+document.getElementById('add-conta').onclick=()=>addContaRow();
+document.getElementById('tbl-inv').addEventListener('click',e=>{if(e.target.closest('[data-del-row]'))e.target.closest('tr').remove();});
+document.getElementById('tbl-contas').addEventListener('click',e=>{if(e.target.closest('[data-del-row]'))e.target.closest('tr').remove();});
+
+function collectInvestimentos(){
+  return Array.from(document.querySelectorAll('#tbl-inv tbody tr')).map(tr=>({
+    instituicao:tr.querySelector('.inv-inst').value.trim(),
+    modalidade:tr.querySelector('.inv-mod').value,
+    fundo:tr.querySelector('.inv-fundo').value.trim(),
+    data_aporte:tr.querySelector('.inv-data').value,
+    carencia:tr.querySelector('.inv-carencia').value.trim(),
+    vencimento:tr.querySelector('.inv-venc').value,
+    saldo:Number(tr.querySelector('.inv-saldo').value)||0
+  }));
+}
+function collectContas(){
+  return Array.from(document.querySelectorAll('#tbl-contas tbody tr')).map(tr=>({
+    banco:tr.querySelector('.cta-banco').value.trim(),
+    agencia:tr.querySelector('.cta-agencia').value.trim(),
+    tipo:tr.querySelector('.cta-tipo').value,
+    conjunta:tr.querySelector('.cta-conjunta').value,
+    titular:tr.querySelector('.cta-titular').value.trim(),
+    saldo:Number(tr.querySelector('.cta-saldo').value)||0
+  }));
+}
+function calcTotais(){
+  const inv=collectInvestimentos().reduce((s,r)=>s+r.saldo,0);
+  const con=collectContas().reduce((s,r)=>s+r.saldo,0);
+  document.getElementById('tot-inv').textContent=fmtMoney(inv);
+  document.getElementById('tot-contas').textContent=fmtMoney(con);
+  document.getElementById('rs-inv').textContent=fmtMoney(inv);
+  document.getElementById('rs-contas').textContent=fmtMoney(con);
+  document.getElementById('rs-geral').textContent=fmtMoney(inv+con);
+  return {inv,con,geral:inv+con};
+}
+document.getElementById('btn-calc').onclick=calcTotais;
+
+function msg(text,ok){const el=document.getElementById('msg');el.textContent=text;el.className=ok?'ok':'err';}
+
+function validar(){
+  const req=['f-nome','f-cpf','f-rg','f-nasc','f-tel','f-email','f-rua','f-bairro','f-cidade','f-cep','f-agente','f-codigo','f-resumo-bens'];
+  for(const id of req){if(!document.getElementById(id).value.trim()){document.getElementById(id).focus();return id;}}
+  return null;
+}
+
+function coletarPayload(){
+  const t=calcTotais();
+  return {
+    cliente_id:clienteId,
+    nome_completo:document.getElementById('f-nome').value.trim(),
+    cpf:document.getElementById('f-cpf').value.trim(),
+    rg:document.getElementById('f-rg').value.trim(),
+    data_nascimento:document.getElementById('f-nasc').value||null,
+    telefone:document.getElementById('f-tel').value.trim(),
+    email:document.getElementById('f-email').value.trim(),
+    rua:document.getElementById('f-rua').value.trim(),
+    numero:document.getElementById('f-numero').value.trim(),
+    bairro:document.getElementById('f-bairro').value.trim(),
+    cidade:document.getElementById('f-cidade').value.trim(),
+    estado:document.getElementById('f-estado').value,
+    cep:document.getElementById('f-cep').value.trim(),
+    nome_agente:document.getElementById('f-agente').value.trim(),
+    codigo_confirmacao:document.getElementById('f-codigo').value.trim(),
+    investimentos:collectInvestimentos(),
+    contas_bancarias:collectContas(),
+    resumo_aquisicao_bens:document.getElementById('f-resumo-bens').value.trim(),
+    total_investimentos:t.inv,
+    total_contas:t.con,
+    total_geral:t.geral,
+    updated_at:new Date().toISOString()
+  };
+}
+
+document.getElementById('btn-enviar').onclick=async function(){
+  const faltando=validar();
+  if(faltando){msg('Preencha todos os campos obrigatórios (*) antes de enviar.',false);return;}
+  this.disabled=true;const orig=this.textContent;this.textContent='Enviando…';
+  const payload=coletarPayload();
+  let error;
+  if(relatorioId){
+    ({error}=await sb.from('relatorios_financeiros').update({...payload,enviado_em:new Date().toISOString()}).eq('id',relatorioId));
+  }else{
+    const{data,error:err}=await sb.from('relatorios_financeiros').insert({...payload,enviado_em:new Date().toISOString()}).select().single();
+    error=err;
+    if(data)relatorioId=data.id;
+  }
+  this.disabled=false;this.textContent=orig;
+  if(error){msg('Não foi possível enviar. Tente novamente. ('+error.message+')',false);return;}
+  msg('Relatório enviado com sucesso! Seu agente responsável já tem acesso aos dados.',true);
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+};
+
+document.getElementById('btn-pdf').onclick=function(){
+  calcTotais();
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  let y=18;
+  doc.setFont('helvetica','bold');doc.setFontSize(14);
+  doc.text('Formulário de Apresentação Voluntária de Relatório Financeiro',14,y);y+=10;
+  doc.setFontSize(11);doc.setFont('helvetica','normal');
+  const line=(label,val)=>{doc.setFont('helvetica','bold');doc.text(label+':',14,y);doc.setFont('helvetica','normal');doc.text(String(val||'—'),70,y);y+=7;};
+  line('Nome completo',document.getElementById('f-nome').value);
+  line('CPF',document.getElementById('f-cpf').value);
+  line('RG',document.getElementById('f-rg').value);
+  line('Data de nascimento',document.getElementById('f-nasc').value);
+  line('Telefone',document.getElementById('f-tel').value);
+  line('E-mail',document.getElementById('f-email').value);
+  line('Endereço',[document.getElementById('f-rua').value,document.getElementById('f-numero').value,document.getElementById('f-bairro').value,document.getElementById('f-cidade').value+'/'+document.getElementById('f-estado').value,document.getElementById('f-cep').value].filter(Boolean).join(', '));
+  y+=3;
+  line('Agente responsável',document.getElementById('f-agente').value);
+  line('Código de confirmação',document.getElementById('f-codigo').value);
+  y+=4;
+  doc.setFont('helvetica','bold');doc.text('Investimentos',14,y);y+=7;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  collectInvestimentos().forEach(r=>{
+    doc.text((r.instituicao||'—')+' · '+r.modalidade+' · '+(r.fundo||'—')+' · '+fmtMoney(r.saldo),14,y);y+=6;
+    if(y>270){doc.addPage();y=18;}
+  });
+  y+=4;doc.setFontSize(11);doc.setFont('helvetica','bold');doc.text('Contas Bancárias',14,y);y+=7;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  collectContas().forEach(r=>{
+    doc.text((r.banco||'—')+' · Ag '+(r.agencia||'—')+' · '+r.tipo+' · '+fmtMoney(r.saldo),14,y);y+=6;
+    if(y>270){doc.addPage();y=18;}
+  });
+  y+=6;doc.setFontSize(11);doc.setFont('helvetica','bold');doc.text('Resumo de Aquisição dos Bens',14,y);y+=7;
+  doc.setFont('helvetica','normal');doc.setFontSize(10);
+  const bens=doc.splitTextToSize(document.getElementById('f-resumo-bens').value||'—',180);
+  doc.text(bens,14,y);y+=bens.length*5+8;
+  const t=calcTotais();
+  doc.setFont('helvetica','bold');
+  doc.text('Total Investimentos: '+fmtMoney(t.inv)+'   |   Total Contas: '+fmtMoney(t.con)+'   |   Total Geral: '+fmtMoney(t.geral),14,y);
+  doc.save('relatorio-financeiro-'+(document.getElementById('f-nome').value||'cliente').replace(/\s+/g,'_')+'.pdf');
+};
+
+async function carregarSeExistente(){
+  if(!clienteId&&!relatorioId){addInvRow();addContaRow();calcTotais();return;}
+  try{
+    let q=sb.from('relatorios_financeiros').select('*');
+    q=relatorioId?q.eq('id',relatorioId):q.eq('cliente_id',clienteId).order('created_at',{ascending:false}).limit(1);
+    const{data,error}=await q;
+    const row=Array.isArray(data)?data[0]:data;
+    if(row){
+      relatorioId=row.id;
+      document.getElementById('f-nome').value=row.nome_completo||'';
+      document.getElementById('f-cpf').value=row.cpf||'';
+      document.getElementById('f-rg').value=row.rg||'';
+      document.getElementById('f-nasc').value=row.data_nascimento||'';
+      document.getElementById('f-tel').value=row.telefone||'';
+      document.getElementById('f-email').value=row.email||'';
+      document.getElementById('f-rua').value=row.rua||'';
+      document.getElementById('f-numero').value=row.numero||'';
+      document.getElementById('f-bairro').value=row.bairro||'';
+      document.getElementById('f-cidade').value=row.cidade||'';
+      if(row.estado)document.getElementById('f-estado').value=row.estado;
+      document.getElementById('f-cep').value=row.cep||'';
+      document.getElementById('f-agente').value=row.nome_agente||'';
+      document.getElementById('f-codigo').value=row.codigo_confirmacao||'';
+      document.getElementById('f-resumo-bens').value=row.resumo_aquisicao_bens||'';
+      (row.investimentos&&row.investimentos.length?row.investimentos:[{}]).forEach(addInvRow);
+      (row.contas_bancarias&&row.contas_bancarias.length?row.contas_bancarias:[{}]).forEach(addContaRow);
+    }else{
+      addInvRow();addContaRow();
+    }
+  }catch(e){addInvRow();addContaRow();}
+  calcTotais();
+}
+carregarSeExistente();
+</script>
+</body>
+</html>
