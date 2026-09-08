@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário de Apresentação Voluntária de Relatório Financeiro</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --navy:#0f1d3d;--navy-l:#16274f;--gold:#c9a24b;--gold-l:#e0bd6e;
+  --line:#e4e2da;--muted:#6b6f7a;--bg:#f6f5f1;--danger:#b3442f;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,'Times New Roman',serif;background:var(--bg);color:#1b1b1f}
+header{background:linear-gradient(160deg,var(--navy),var(--navy-l));color:#fff;padding:22px 20px;text-align:center}
+header h1{margin:0;font-size:19px;letter-spacing:.3px;font-weight:600}
+header p{margin:6px 0 0;font-size:12.5px;color:#c7cde0;font-family:Arial,sans-serif}
+main{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px}
+.card h2{margin:0 0 14px;font-size:15px;color:var(--navy);border-bottom:1px solid var(--line);padding-bottom:8px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.row-addr{display:grid;grid-template-columns:2fr .8fr 1fr 1fr .6fr 1fr;gap:10px;margin-bottom:12px}
+@media (max-width:640px){.row,.row3{grid-template-columns:1fr}.row-addr{grid-template-columns:1fr 1fr}}
+label{display:block;font-family:Arial,sans-serif;font-size:12.5px;color:var(--muted);margin-bottom:5px}
+label b{color:var(--danger);font-weight:normal}
+input,select,textarea{width:100%;padding:9px 10px;border:1px solid #d3d1c8;border-radius:7px;font-size:14px;font-family:Arial,sans-serif;background:#fff}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold-l);border-color:var(--gold)}
+textarea{resize:vertical;min-height:80px}
+table{width:100%;border-collapse:collapse;font-family:Arial,sans-serif}
+th{text-align:left;font-size:11.5px;color:var(--muted);padding:0 8px 8px;font-weight:600}
+td{padding:4px 8px 8px;vertical-align:top}
+td input,td select{padding:7px 8px;font-size:13px}
+.tfoot td{border-top:1px solid var(--line);padding-top:10px;font-weight:bold;font-size:13px}
+.btn{border:none;border-radius:7px;padding:10px 16px;font-size:13.5px;font-family:Arial,sans-serif;font-weight:600;cursor:pointer}
+.btn-add{background:#eee9db;color:var(--navy)}
+.btn-del{background:var(--danger);color:#fff;padding:7px 12px;font-size:12px}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.resumo-bar{background:#f0f3fb;border:1px solid #dbe3f5;border-radius:8px;padding:12px 14px;font-family:Arial,sans-serif;font-size:14px;color:var(--navy);margin-bottom:14px;display:flex;gap:18px;flex-wrap:wrap}
+.resumo-bar b{font-size:15px}
+.dicas{font-family:Arial,sans-serif;font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
+.msg{font-family:Arial,sans-serif;font-size:13.5px;border-radius:8px;padding:10px 12px;margin-top:12px;display:none}
+.msg.ok{display:block;background:#e3f6e9;color:#1e7d3c}
+.msg.err{display:block;background:#fde2e2;color:#a12f2f}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+footer{text-align:center;font-family:Arial,sans-serif;font-size:11px;color:#9a9a9a;padding:20px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Formulário de Apresentação Voluntária de Relatório Financeiro</h1>
+  <p>Preencha com atenção — os dados serão analisados pelo agente responsável pelo seu atendimento.</p>
+</header>
+<main>
+
+  <div class="card">
+    <h2>Dados Pessoais</h2>
+    <div class="row">
+      <label>Nome completo <b>*</b><input id="nome" placeholder="Nome e sobrenome"></label>
+      <label>CPF (somente números) <b>*</b><input id="cpf" placeholder="000.000.000-00"></label>
+    </div>
+    <div class="row">
+      <label>RG (somente números) <b>*</b><input id="rg" placeholder="00.000.000-0"></label>
+      <label>Data de Nascimento <b>*</b><input id="nascimento" type="date"></label>
+    </div>
+    <div class="row">
+      <label>Telefone <b>*</b><input id="telefone" placeholder="(11) 99999-9999"></label>
+      <label>E-mail <b>*</b><input id="email" type="email" placeholder="email@exemplo.com"></label>
+    </div>
+    <div class="row-addr">
+      <label>Rua <b>*</b><input id="rua" placeholder="Nome da rua/avenida"></label>
+      <label>Número<input id="numero" placeholder="000"></label>
+      <label>Bairro <b>*</b><input id="bairro" placeholder="Bairro"></label>
+      <label>Cidade <b>*</b><input id="cidade" placeholder="Cidade"></label>
+      <label>Estado <b>*</b>
+        <select id="estado">
+          <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option>
+        </select>
+      </label>
+      <label>CEP <b>*</b><input id="cep" placeholder="00000-000"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Dados do Agente Responsável</h2>
+    <div class="row">
+      <label>Nome do agente responsável <b>*</b><input id="agente" placeholder="Nome completo do agente"></label>
+      <label>Código de confirmação <b>*</b><input id="codigo" placeholder="XXXX-XXXX-XXXX-XXXX"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Investimentos</h2>
+    <table>
+      <thead><tr><th style="width:16%">Instituição</th><th style="width:14%">Modalidade</th><th style="width:20%">Nome do Fundo</th><th style="width:12%">Data do aporte</th><th style="width:10%">Carência</th><th style="width:10%">Vencimento</th><th style="width:12%">Saldo atual (R$)</th><th></th></tr></thead>
+      <tbody id="inv-body"></tbody>
+      <tfoot><tr class="tfoot"><td colspan="6" style="text-align:right">Total de Investimentos</td><td id="inv-total">R$ 0,00</td><td></td></tr></tfoot>
+    </table>
+    <button class="btn btn-add" onclick="addInv()">+ Adicionar Investimento</button>
+  </div>
+
+  <div class="card">
+    <h2>Contas Bancárias</h2>
+    <table>
+      <thead><tr><th style="width:20%">Banco</th><th style="width:14%">Agência</th><th style="width:14%">Tipo</th><th style="width:12%">Conjunta</th><th style="width:16%">Titular</th><th style="width:14%">Saldo atual (R$)</th><th></th></tr></thead>
+      <tbody id="cta-body"></tbody>
+      <tfoot><tr class="tfoot"><td colspan="5" style="text-align:right">Total de Contas</td><td id="cta-total">R$ 0,00</td><td></td></tr></tfoot>
+    </table>
+    <button class="btn btn-add" onclick="addCta()">+ Adicionar Conta</button>
+  </div>
+
+  <div class="card">
+    <h2>Resumo de Aquisição dos Bens</h2>
+    <label>Resumo de Aquisição dos Bens <b>*</b>
+      <textarea id="resumo-bens" placeholder="Descreva aqui, de forma resumida, a origem e a evolução do seu patrimônio ao longo do tempo."></textarea>
+    </label>
+  </div>
+
+  <div class="card">
+    <h2>Resumo</h2>
+    <div class="resumo-bar">
+      <span>Investimentos <b id="r-inv">R$ 0,00</b></span>
+      <span>Contas <b id="r-cta">R$ 0,00</b></span>
+      <span>Geral <b id="r-geral">R$ 0,00</b></span>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" id="btn-calc">📊 Calcular Totais</button>
+      <button class="btn btn-gold" id="btn-pdf">🖨️ Gerar PDF</button>
+      <button class="btn btn-primary" id="btn-enviar" style="background:#1e7d3c">✔ Enviar Formulário</button>
+    </div>
+    <div class="dicas">
+      <b>Dicas:</b><br>
+      • Preencha as tabelas e use "Calcular Totais" antes de gerar o PDF ou enviar.<br>
+      • Se sua residência não possuir número, informe <b>000</b> no campo "Número".
+    </div>
+    <div class="msg" id="msg"></div>
+  </div>
+
+</main>
+<footer>SIGNUMOR · ORION VALE</footer>
+
+<script>
+const SB_URL='https://exvocatkdzhsvlewpvik.supabase.co';
+const SB_KEY='sb_publishable__96M4ijl_Azu2zPU6Jma-g_hp1beIqh';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+
+let invId=0,ctaId=0;
+function fmtBRL(n){return 'R$ '+(Number(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+function addInv(vals){
+  vals=vals||{};
+  const id='inv'+(invId++);
+  const tr=document.createElement('tr');
+  tr.id=id;
+  tr.innerHTML=`
+    <td><input class="inv-inst" placeholder="Instituição" value="${vals.instituicao||''}"></td>
+    <td><select class="inv-mod">
+      <option${vals.modalidade==='Ações'||!vals.modalidade?' selected':''}>Ações</option>
+      <option${vals.modalidade==='Renda Fixa'?' selected':''}>Renda Fixa</option>
+      <option${vals.modalidade==='Fundo Imobiliário'?' selected':''}>Fundo Imobiliário</option>
+      <option${vals.modalidade==='Previdência'?' selected':''}>Previdência</option>
+      <option${vals.modalidade==='Criptomoeda'?' selected':''}>Criptomoeda</option>
+      <option${vals.modalidade==='Outro'?' selected':''}>Outro</option>
+    </select></td>
+    <td><input class="inv-fundo" placeholder="Nome do fundo" value="${vals.fundo||''}"></td>
+    <td><input class="inv-data" type="date" value="${vals.dataAporte||''}"></td>
+    <td><input class="inv-carencia" placeholder="Ex: 90 dias" value="${vals.carencia||''}"></td>
+    <td><input class="inv-vencimento" type="date" value="${vals.vencimento||''}"></td>
+    <td><input class="inv-saldo" type="number" step="0.01" placeholder="0,00" value="${vals.saldo||''}"></td>
+    <td><button class="btn btn-del" onclick="document.getElementById('${id}').remove()">Excluir</button></td>`;
+  document.getElementById('inv-body').appendChild(tr);
+}
+function addCta(vals){
+  vals=vals||{};
+  const id='cta'+(ctaId++);
+  const tr=document.createElement('tr');
+  tr.id=id;
+  tr.innerHTML=`
+    <td><input class="cta-banco" placeholder="Banco" value="${vals.banco||''}"></td>
+    <td><input class="cta-agencia" placeholder="Agência" value="${vals.agencia||''}"></td>
+    <td><select class="cta-tipo">
+      <option${vals.tipo==='Corrente'||!vals.tipo?' selected':''}>Corrente</option>
+      <option${vals.tipo==='Poupança'?' selected':''}>Poupança</option>
+      <option${vals.tipo==='Investimento'?' selected':''}>Investimento</option>
+    </select></td>
+    <td><select class="cta-conjunta">
+      <option${vals.conjunta==='Não'||!vals.conjunta?' selected':''}>Não</option>
+      <option${vals.conjunta==='Sim'?' selected':''}>Sim</option>
+    </select></td>
+    <td><input class="cta-titular" placeholder="Nome do co-titular" value="${vals.titular||''}"></td>
+    <td><input class="cta-saldo" type="number" step="0.01" placeholder="0,00" value="${vals.saldo||''}"></td>
+    <td><button class="btn btn-del" onclick="document.getElementById('${id}').remove()">Excluir</button></td>`;
+  document.getElementById('cta-body').appendChild(tr);
+}
+addInv();addCta();
+
+function coletarInvestimentos(){
+  return Array.from(document.querySelectorAll('#inv-body tr')).map(tr=>({
+    instituicao:tr.querySelector('.inv-inst').value.trim(),
+    modalidade:tr.querySelector('.inv-mod').value,
+    fundo:tr.querySelector('.inv-fundo').value.trim(),
+    dataAporte:tr.querySelector('.inv-data').value,
+    carencia:tr.querySelector('.inv-carencia').value.trim(),
+    vencimento:tr.querySelector('.inv-vencimento').value,
+    saldo:Number(tr.querySelector('.inv-saldo').value)||0
+  })).filter(r=>r.instituicao||r.fundo||r.saldo);
+}
+function coletarContas(){
+  return Array.from(document.querySelectorAll('#cta-body tr')).map(tr=>({
+    banco:tr.querySelector('.cta-banco').value.trim(),
+    agencia:tr.querySelector('.cta-agencia').value.trim(),
+    tipo:tr.querySelector('.cta-tipo').value,
+    conjunta:tr.querySelector('.cta-conjunta').value,
+    titular:tr.querySelector('.cta-titular').value.trim(),
+    saldo:Number(tr.querySelector('.cta-saldo').value)||0
+  })).filter(r=>r.banco||r.saldo);
+}
+function calcularTotais(){
+  const inv=coletarInvestimentos().reduce((s,r)=>s+r.saldo,0);
+  const cta=coletarContas().reduce((s,r)=>s+r.saldo,0);
+  document.getElementById('inv-total').textContent=fmtBRL(inv);
+  document.getElementById('cta-total').textContent=fmtBRL(cta);
+  document.getElementById('r-inv').textContent=fmtBRL(inv);
+  document.getElementById('r-cta').textContent=fmtBRL(cta);
+  document.getElementById('r-geral').textContent=fmtBRL(inv+cta);
+  return {inv,cta,geral:inv+cta};
+}
+document.getElementById('btn-calc').onclick=calcularTotais;
+document.getElementById('btn-pdf').onclick=()=>{calcularTotais();window.print();};
+
+function msg(kind,text){
+  const el=document.getElementById('msg');
+  el.className='msg '+kind;
+  el.textContent=text;
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+document.getElementById('btn-enviar').onclick=async function(){
+  const nome=document.getElementById('nome').value.trim();
+  const cpf=document.getElementById('cpf').value.trim();
+  const rg=document.getElementById('rg').value.trim();
+  const nascimento=document.getElementById('nascimento').value;
+  const telefone=document.getElementById('telefone').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const rua=document.getElementById('rua').value.trim();
+  const bairro=document.getElementById('bairro').value.trim();
+  const cidade=document.getElementById('cidade').value.trim();
+  const cep=document.getElementById('cep').value.trim();
+  const agente=document.getElementById('agente').value.trim();
+  const codigo=document.getElementById('codigo').value.trim();
+  const resumoBens=document.getElementById('resumo-bens').value.trim();
+  if(!nome||!cpf||!rg||!nascimento||!telefone||!email||!rua||!bairro||!cidade||!cep||!agente||!codigo||!resumoBens){
+    msg('err','Preencha todos os campos obrigatórios (marcados com *) antes de enviar.');
+    return;
+  }
+  const totais=calcularTotais();
+  const payload={
+    nome_completo:nome,cpf,rg,data_nascimento:nascimento,telefone,email,
+    rua,numero:document.getElementById('numero').value.trim()||null,bairro,cidade,
+    estado:document.getElementById('estado').value,cep,
+    nome_agente:agente,codigo_confirmacao:codigo,
+    investimentos:coletarInvestimentos(),contas_bancarias:coletarContas(),
+    resumo_bens:resumoBens,
+    total_investimentos:totais.inv,total_contas:totais.cta,total_geral:totais.geral
+  };
+  const btn=this;btn.disabled=true;const orig=btn.innerHTML;btn.innerHTML='<span class="spin"></span> Enviando...';
+  const {error}=await sb.from('formularios_financeiros').insert(payload);
+  btn.disabled=false;btn.innerHTML=orig;
+  if(error){msg('err','Não foi possível enviar. Tente novamente. ('+error.message+')');return;}
+  msg('ok','✔ Formulário enviado com sucesso! Seu agente responsável já foi notificado e irá revisar as informações.');
+  document.querySelectorAll('input,select,textarea').forEach(el=>{if(el.tagName!=='SELECT')el.value='';});
+  document.getElementById('inv-body').innerHTML='';document.getElementById('cta-body').innerHTML='';
+  addInv();addCta();calcularTotais();
+};
+</script>
+</body>
+</html>
