@@ -6,8 +6,8 @@
 <title>Formulário de Apresentação Voluntária de Relatório Financeiro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
 <style>
   :root{
     --navy:#000000; --navy-l:#1a1a1a; --gold:#000000; --gold-l:#333333;
@@ -157,10 +157,11 @@
 </main>
 <footer></footer>
 
-<script>
+<script defer>
 const SB_URL='https://exvocatkdzhsvlewpvik.supabase.co';
 const SB_KEY='sb_publishable__96M4ijl_Azu2zPU6Jma-g_hp1beIqh';
-const sb=supabase.createClient(SB_URL,SB_KEY);
+let sb=null;
+try{ sb=(typeof supabase!=='undefined')?supabase.createClient(SB_URL,SB_KEY):null; }catch(e){ sb=null; }
 const params=new URLSearchParams(location.search);
 const clienteId=params.get('cliente')||null;
 let relatorioId=params.get('r')||null;
@@ -272,6 +273,7 @@ function coletarPayload(){
 document.getElementById('btn-enviar').onclick=async function(){
   const faltando=validar();
   if(faltando){msg('Preencha todos os campos obrigatórios (*) antes de enviar.',false);return;}
+  if(!sb){msg('Não foi possível conectar ao servidor. Verifique sua conexão com a internet e tente novamente.',false);return;}
   this.disabled=true;const orig=this.textContent;this.textContent='Enviando…';
   const payload=coletarPayload();
   let error;
@@ -290,6 +292,7 @@ document.getElementById('btn-enviar').onclick=async function(){
 
 document.getElementById('btn-pdf').onclick=function(){
   calcTotais();
+  if(typeof window.jspdf==='undefined'){msg('Não foi possível gerar o PDF. Verifique sua conexão com a internet e tente novamente.',false);return;}
   const{jsPDF}=window.jspdf;
   const doc=new jsPDF();
   let y=18;
