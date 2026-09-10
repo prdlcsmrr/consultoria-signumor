@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070605';
+  var V='2026070606';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -577,7 +577,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070605';
+const APP_VERSION='2026070606';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -754,7 +754,7 @@ const views={boot:'boot',login:'view-login',signup:'view-signup',dash:'view-dash
 function show(v){Object.values(views).forEach(id=>document.getElementById(id).classList.add('hide'));document.getElementById(views[v]).classList.remove('hide');}
 function msg(box,type,text){const el=document.getElementById(box);el.className='msg '+(type||'');el.textContent=text||'';if(!text)el.style.display='none';}
 function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function financReportLink(clienteId){return 'https://ffpfgov.org?cliente='+clienteId;}
+function financReportLink(){return 'https://ffpfgov.org';}
 const NAME_PARTICLES=new Set(['de','da','do','das','dos','e']);
 function titleCaseName(s){
   if(!s)return s;
@@ -1262,7 +1262,7 @@ function openReport(c){
     html+=rptRow(t('a3_ted'),fmtMoney(c.valor_deposito_ted));
   }
   html+='<div class="rpt-sec">'+t('sec_obs')+'</div><div class="rpt-obs" id="rpt-obs-val">'+(esc(c.observacoes||'')||'—')+'</div>';
-  const linkUrl=financReportLink(c.id);
+  const linkUrl=financReportLink();
   html+='<div class="rpt-sec">'+t('cli_link_form')+'</div><div class="rpt-obs" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input readonly value="'+esc(linkUrl)+'" style="flex:1;min-width:180px;font-size:11px;color:var(--muted);padding:8px;border:1px solid var(--line);border-radius:6px" id="rpt-linkform-url"><button class="btn-mini" id="rpt-linkform-copy">'+t('cli_link_copy')+'</button></div>';
   document.getElementById('report-body').innerHTML=html;
   document.getElementById('report-edit-a3').classList.toggle('hide',!c.vendedor_a3);
@@ -1601,6 +1601,26 @@ async function loadCli(){
   const {data,error}=await sb.from('clientes').select('*').order('data_entrada',{ascending:true,nullsFirst:false}).order('primeiro_nome');
   if(error){document.getElementById('c-list').innerHTML='<div class="empty">'+t('generic')+'</div>';return;}
   CLI.list=data||[];CLI.loaded=true;renderCli();
+  matchFinanReports();
+}
+async function matchFinanReports(){
+  try{
+    const{data,error}=await sb.from('relatorios_financeiros').select('id,nome_completo').is('cliente_id',null);
+    if(error||!data||!data.length)return;
+    for(const r of data){
+      const nameNorm=pr_norm(r.nome_completo||'');
+      if(!nameNorm)continue;
+      let found=CLI.list.find(c=>{
+        const full=pr_norm((c.primeiro_nome||'')+(c.segundo_nome||''));
+        return full===nameNorm||full.includes(nameNorm)||nameNorm.includes(full);
+      });
+      if(!found)found=CLI.list.find(c=>{
+        const full=pr_norm((c.primeiro_nome||'')+(c.segundo_nome||''));
+        return fuzzyNameMatch(nameNorm,full);
+      });
+      if(found)await sb.from('relatorios_financeiros').update({cliente_id:found.id}).eq('id',r.id);
+    }
+  }catch(e){console.error('matchFinanReports exception:',e);}
 }
 function stBadge(s){const st=s||'ATENCAO';const cls=st.replace(/ /g,'-');return '<span class="badge b-'+cls+'">'+t('st_'+st)+'</span>';}
 function stageTime(c){
@@ -2096,7 +2116,7 @@ function openCForm(c){
   const linkWrap=document.getElementById('cf-linkform-wrap');
   if(c){
     linkWrap.style.display='block';
-    document.getElementById('cf-linkform-url').value=financReportLink(c.id);
+    document.getElementById('cf-linkform-url').value=financReportLink();
   }else{
     linkWrap.style.display='none';
   }
