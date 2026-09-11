@@ -3,7 +3,7 @@
 <head>
 <script>
 (function(){
-  var V='2026070607';
+  var V='2026070608';
   var p=new URLSearchParams(location.search);
   if(p.get('v')!==V){
     p.set('v',V);
@@ -150,6 +150,9 @@
   .reltab tr.row-bloqueio{background:#d9ecfc}
   .reltab tr.row-bloqueio td{color:#1a5fa8}
   .rel-group{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .rel-group.warn{border:2px solid #c0392b}
+  .rel-group.warn .rel-ghead,.rel-group.warn .rel-ghead-merged{background:#fbe3e1;color:#8a231a}
+  .rel-group.warn .rel-ghead-code .gs-val{color:#8a231a}
   .rel-ghead-merged{background:var(--navy);border-bottom:2px solid var(--gold);display:flex;flex-wrap:nowrap;overflow-x:auto}
   .rel-ghead-code{flex:0 0 auto;min-width:80px;text-align:center;padding:9px 10px;border-right:1px solid rgba(255,255,255,.15);position:sticky;left:0;background:var(--navy);z-index:2}
   .rel-ghead-code .gs-val{display:block;color:#fff;font-size:16px}
@@ -582,7 +585,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026070607';
+const APP_VERSION='2026070608';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -832,6 +835,7 @@ async function loadVend(){
   VEND.loading=false;
 }
 let COM_TOTALS={};
+const SEMFUNC='— SEM FUNCIONÁRIO —';
 let PAG_TOTALS={};
 async function loadPagTotals(){
   try{
@@ -1060,12 +1064,15 @@ function relBuild(){
   CLI.list.forEach(c=>{
     if((c.pais||'BR')!==PAIS_ATIVO)return;
     const nome=fullName(c);
-    [c.vendedor_a1,c.vendedor_a1b].filter(Boolean).forEach(k=>{
+    const ativo=(c.situacao||'').indexOf('MORREU')!==0&&c.situacao!=='FINALIZADO';
+    const a1keys=[c.vendedor_a1,c.vendedor_a1b].filter(Boolean);
+    (a1keys.length?a1keys:(ativo&&c.data_entrada?[SEMFUNC]:[])).forEach(k=>{
       mapA1[k]=mapA1[k]||{receb:0,transferidos:[]};
       mapA1[k].receb++;
       if(c.vendedor_a2)mapA1[k].transferidos.push({id:c.id,nome:nome||'—',valor:Number(c.valor_total)||0,renda:Number(c.renda_mensal)||0,data:c.data_entrada});
     });
-    [c.vendedor_a2,c.vendedor_a2b].filter(Boolean).forEach(k=>{
+    const a2keys=[c.vendedor_a2,c.vendedor_a2b].filter(Boolean);
+    (a2keys.length?a2keys:(ativo&&c.data_entrada_a2?[SEMFUNC]:[])).forEach(k=>{
       mapA2[k]=mapA2[k]||{total:0,morreu:0,valorTotal:0,valorDepositado:0,enva3:0,clientes:[]};
       mapA2[k].clientes.push(c);
       mapA2[k].total++;
@@ -1074,7 +1081,8 @@ function relBuild(){
       if(c.situacao==='MORREU A2'||c.situacao==='MORREU A3')mapA2[k].morreu++;
       if(c.vendedor_a3)mapA2[k].enva3++;
     });
-    [c.vendedor_a3,c.vendedor_a3b].filter(Boolean).forEach(k=>{
+    const a3keys=[c.vendedor_a3,c.vendedor_a3b].filter(Boolean);
+    (a3keys.length?a3keys:(ativo&&c.data_entrada_a3?[SEMFUNC]:[])).forEach(k=>{
       mapA3[k]=mapA3[k]||{total:0,reportando:0,morreu:0,valorTotal:0,valorDepositado:0,clientes:[]};
       mapA3[k].clientes.push(c);
       mapA3[k].total++;
@@ -1084,11 +1092,16 @@ function relBuild(){
       if(c.situacao==='MORREU A3')mapA3[k].morreu++;
     });
   });
-  const listA3=CLI.list.filter(c=>c.vendedor_a3&&(c.pais||'BR')===PAIS_ATIVO).map(c=>({
+  const listA3=CLI.list.filter(c=>{
+    if((c.pais||'BR')!==PAIS_ATIVO)return false;
+    if(c.vendedor_a3)return true;
+    const ativo=(c.situacao||'').indexOf('MORREU')!==0&&c.situacao!=='FINALIZADO';
+    return ativo&&c.data_entrada_a3;
+  }).map(c=>({
     id:c.id,
     nome:fullName(c),
     a1:c.vendedor_a1,a2:c.vendedor_a2b?c.vendedor_a2+'+'+c.vendedor_a2b:c.vendedor_a2,
-    func:c.vendedor_a3,
+    func:c.vendedor_a3||SEMFUNC,
     situacao:c.situacao,
     dias:days(c.data_entrada_a3,today()),
     resg:c.saldo_resgatavel,
@@ -1145,7 +1158,7 @@ function renderRel(){
     '<div class="rel-total">'+t('rel_col_transf')+': <b>'+totalA1+'</b></div>'
     +k1.map(k=>{const r=mapA1[k];
       const sub=r.transferidos.length?r.transferidos.map(x=>'<div class="rel-sub" data-report="'+x.id+'" style="cursor:pointer"><span class="rs-date">'+fmtDt(x.data)+'</span><span class="rs-info"><span class="rs-nome">'+esc(x.nome)+'</span><span class="rs-renda">'+t('rel_col_renda')+': '+fmtMoney(x.renda)+'</span></span><span class="rs-val">'+fmtMoney(x.valor)+'</span></div>').join(''):'<div class="rel-sub muted">'+t('rel_empty')+'</div>';
-      return '<div class="rel-group"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
+      return '<div class="rel-group'+(k===SEMFUNC?' warn':'')+'"><div class="rel-ghead"><b>'+esc(k)+'</b><span>'+r.transferidos.length+' '+t('rel_col_transf')+'</span></div>'+sub+'</div>';
     }).join('');
   const relHeadRow='<tr><th>'+t('cli_col_entrada')+'</th><th>'+t('rel_col_cliente')+'</th><th>'+t('lvl1')+'</th><th>'+t('cli_va1b')+'</th><th>'+t('lvl2')+'</th><th>'+t('cli_va2b')+'</th><th>'+t('lvl3')+'</th><th>'+t('cli_va3b')+'</th><th>'+t('rel_col_valtransf')+'</th><th>'+t('f_depositado')+'</th><th>'+t('cli_col_sit')+'</th><th></th></tr>';
   const k2=Object.keys(mapA2).sort();
@@ -1156,7 +1169,7 @@ function renderRel(){
   document.getElementById('rel-a2').innerHTML=!k2.length?'<div class="empty">'+t('rel_empty')+'</div>':
     '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+totalA2+'</b></div>'
     +k2.map(k=>{const r=mapA2[k];
-      return '<div class="rel-group"><div class="rel-ghead-merged">'
+      return '<div class="rel-group'+(k===SEMFUNC?' warn':'')+'"><div class="rel-ghead-merged">'
         +'<div class="rel-ghead-code"><span class="gs-val">'+esc(k)+'</span><span class="gs-lbl">'+t('rel_col_func')+'</span></div>'
           +statChip(r.total,t('rel_col_total'))
           +statChip(r.morreu,t('rel_col_morreu'))
@@ -1182,7 +1195,7 @@ function renderRel(){
   document.getElementById('rel-a3').innerHTML=!k3.length?'<div class="empty">'+t('rel_empty')+'</div>':
     '<div class="rel-total">'+t('rel_total_clientes')+': <b>'+totalA3+'</b></div>'
     +k3.map(k=>{const r=mapA3[k];
-      return '<div class="rel-group"><div class="rel-ghead-merged">'
+      return '<div class="rel-group'+(k===SEMFUNC?' warn':'')+'"><div class="rel-ghead-merged">'
         +'<div class="rel-ghead-code"><span class="gs-val">'+esc(k)+'</span><span class="gs-lbl">'+t('rel_col_func')+'</span></div>'
           +statChip(r.total,t('rel_col_total'))
           +statChip(r.reportando,t('rel_col_reportando'))
