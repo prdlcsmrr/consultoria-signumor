@@ -60,6 +60,19 @@
 </style>
 </head>
 <body>
+<div id="login-gate" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#071D41;padding:20px">
+  <div style="background:#fff;border-radius:14px;padding:32px 28px;max-width:340px;width:100%;box-shadow:0 4px 20px rgba(0,0,0,.3)">
+    <div style="text-align:center;margin-bottom:20px">
+      <img src="brasao-brasil.svg" alt="Brasão" style="height:56px">
+    </div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:16px;text-align:center;margin:0 0 18px;color:#071D41">Acesso restrito</h2>
+    <label style="display:block;margin-bottom:12px"><span style="display:block;font-size:12.5px;font-weight:600;color:#071D41;margin-bottom:5px">Login</span><input id="lg-user" inputmode="numeric" style="width:100%;padding:10px 11px;border:1px solid #d5d5d5;border-radius:8px;font-size:14px"></label>
+    <label style="display:block;margin-bottom:16px"><span style="display:block;font-size:12.5px;font-weight:600;color:#071D41;margin-bottom:5px">Senha</span><input id="lg-pass" type="password" inputmode="numeric" style="width:100%;padding:10px 11px;border:1px solid #d5d5d5;border-radius:8px;font-size:14px"></label>
+    <button id="lg-btn" style="width:100%;padding:11px;background:#1351B4;color:#fff;border:none;border-radius:9px;font-weight:600;font-size:14px;cursor:pointer">Entrar</button>
+    <div id="lg-msg" style="color:#b3382c;font-size:13px;margin-top:10px;text-align:center;display:none">Login ou senha incorretos.</div>
+  </div>
+</div>
+<div id="app-content" style="display:none">
 <header style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">
   <img src="brasao-brasil.svg" alt="Brasão da República Federativa do Brasil" style="height:64px;flex-shrink:0">
   <div style="text-align:left">
@@ -73,14 +86,14 @@
     <h2>Dados Pessoais</h2>
     <div class="row">
       <label><span class="lbl">Nome completo <span class="req-star">*</span></span><input id="f-nome" placeholder="Nome e sobrenome"></label>
-      <label><span class="lbl">CPF (somente números) <span class="req-star">*</span></span><input id="f-cpf" placeholder="000.000.000-00"></label>
+      <label><span class="lbl">CPF (somente números) <span class="req-star">*</span></span><input id="f-cpf" inputmode="numeric" maxlength="14" placeholder="000.000.000-00"><span id="f-cpf-err" style="display:none;color:#b3382c;font-size:11.5px;margin-top:3px;display:none">CPF inválido.</span></label>
     </div>
     <div class="row">
-      <label><span class="lbl">RG (somente números) <span class="req-star">*</span></span><input id="f-rg" placeholder="00.000.000-0"></label>
+      <label><span class="lbl">RG (somente números) <span class="req-star">*</span></span><input id="f-rg" inputmode="numeric" maxlength="12" placeholder="00.000.000-0"></label>
       <label><span class="lbl">Data de Nascimento <span class="req-star">*</span></span><input id="f-nasc" type="date"></label>
     </div>
     <div class="row">
-      <label><span class="lbl">Telefone <span class="req-star">*</span></span><input id="f-tel" placeholder="(11) 99999-9999"></label>
+      <label><span class="lbl">Telefone <span class="req-star">*</span></span><input id="f-tel" inputmode="numeric" maxlength="15" placeholder="(11) 99999-9999"></label>
       <label><span class="lbl">E-mail <span class="req-star">*</span></span><input id="f-email" type="email" placeholder="email@exemplo.com"></label>
     </div>
     <div class="row-addr">
@@ -93,7 +106,7 @@
           <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option>
         </select>
       </label>
-      <label><span class="lbl">CEP <span class="req-star">*</span></span><input id="f-cep" placeholder="00000-000"></label>
+      <label><span class="lbl">CEP <span class="req-star">*</span></span><input id="f-cep" inputmode="numeric" maxlength="9" placeholder="00000-000"></label>
     </div>
   </div>
 
@@ -159,7 +172,29 @@
 
 </main>
 <footer></footer>
+</div>
 
+<script>
+(function(){
+  const LOGIN='26112', SENHA='30886';
+  function unlock(){
+    document.getElementById('login-gate').style.display='none';
+    document.getElementById('app-content').style.display='block';
+  }
+  if(sessionStorage.getItem('formfin_auth')==='ok'){unlock();return;}
+  document.getElementById('lg-btn').onclick=function(){
+    const u=document.getElementById('lg-user').value.trim();
+    const p=document.getElementById('lg-pass').value.trim();
+    if(u===LOGIN&&p===SENHA){
+      sessionStorage.setItem('formfin_auth','ok');
+      unlock();
+    }else{
+      document.getElementById('lg-msg').style.display='block';
+    }
+  };
+  document.getElementById('lg-pass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('lg-btn').click();});
+})();
+</script>
 <script defer>
 const SB_URL='https://exvocatkdzhsvlewpvik.supabase.co';
 const SB_KEY='sb_publishable__96M4ijl_Azu2zPU6Jma-g_hp1beIqh';
@@ -170,6 +205,69 @@ const clienteId=params.get('cliente')||null;
 let relatorioId=params.get('r')||null;
 
 function fmtMoney(n){n=Number(n)||0;return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+/* ===== Máscaras automáticas ===== */
+function maskCPF(v){
+  v=v.replace(/\D/g,'').slice(0,11);
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  return v;
+}
+function maskRG(v){
+  v=v.replace(/\D/g,'').slice(0,9);
+  v=v.replace(/(\d{2})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d{1})$/,'$1-$2');
+  return v;
+}
+function maskTel(v){
+  v=v.replace(/\D/g,'').slice(0,11);
+  if(v.length>10)v=v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+  else if(v.length>5)v=v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3');
+  else if(v.length>2)v=v.replace(/(\d{2})(\d{0,5})/,'($1) $2');
+  else if(v.length>0)v=v.replace(/(\d{0,2})/,'($1');
+  return v;
+}
+function maskCEP(v){
+  v=v.replace(/\D/g,'').slice(0,8);
+  v=v.replace(/(\d{5})(\d{1,3})$/,'$1-$2');
+  return v;
+}
+function validaCPF(cpfRaw){
+  const cpf=(cpfRaw||'').replace(/\D/g,'');
+  if(cpf.length!==11||/^(\d)\1{10}$/.test(cpf))return false;
+  let soma=0;
+  for(let i=0;i<9;i++)soma+=parseInt(cpf[i])*(10-i);
+  let resto=(soma*10)%11;if(resto===10||resto===11)resto=0;
+  if(resto!==parseInt(cpf[9]))return false;
+  soma=0;
+  for(let i=0;i<10;i++)soma+=parseInt(cpf[i])*(11-i);
+  resto=(soma*10)%11;if(resto===10||resto===11)resto=0;
+  return resto===parseInt(cpf[10]);
+}
+document.getElementById('f-cpf').addEventListener('input',function(){this.value=maskCPF(this.value);});
+document.getElementById('f-cpf').addEventListener('blur',function(){
+  const err=document.getElementById('f-cpf-err');
+  if(this.value.trim()&&!validaCPF(this.value)){err.style.display='block';}
+  else{err.style.display='none';}
+});
+document.getElementById('f-rg').addEventListener('input',function(){this.value=maskRG(this.value);});
+document.getElementById('f-tel').addEventListener('input',function(){this.value=maskTel(this.value);});
+document.getElementById('f-cep').addEventListener('input',function(){this.value=maskCEP(this.value);});
+document.getElementById('f-cep').addEventListener('blur',async function(){
+  const cep=this.value.replace(/\D/g,'');
+  if(cep.length!==8)return;
+  try{
+    const resp=await fetch('https://viacep.com.br/ws/'+cep+'/json/');
+    const data=await resp.json();
+    if(data.erro)return;
+    if(data.logradouro)document.getElementById('f-rua').value=data.logradouro;
+    if(data.bairro)document.getElementById('f-bairro').value=data.bairro;
+    if(data.localidade)document.getElementById('f-cidade').value=data.localidade;
+    if(data.uf)document.getElementById('f-estado').value=data.uf;
+  }catch(e){/* silencioso, cliente preenche manualmente */}
+});
 function uid(){return 'r'+Math.random().toString(36).slice(2,9);}
 
 function invRowHtml(row){
@@ -242,6 +340,11 @@ function msg(text,ok){const el=document.getElementById('msg');el.textContent=tex
 function validar(){
   const req=['f-nome','f-cpf','f-rg','f-nasc','f-tel','f-email','f-rua','f-bairro','f-cidade','f-cep','f-agente','f-codigo','f-resumo-bens'];
   for(const id of req){if(!document.getElementById(id).value.trim()){document.getElementById(id).focus();return id;}}
+  if(!validaCPF(document.getElementById('f-cpf').value)){
+    document.getElementById('f-cpf-err').style.display='block';
+    document.getElementById('f-cpf').focus();
+    return 'f-cpf';
+  }
   return null;
 }
 
@@ -275,6 +378,7 @@ function coletarPayload(){
 
 document.getElementById('btn-enviar').onclick=async function(){
   const faltando=validar();
+  if(faltando==='f-cpf'){msg('O CPF informado não é válido. Confira e tente novamente.',false);return;}
   if(faltando){msg('Preencha todos os campos obrigatórios (*) antes de enviar.',false);return;}
   if(!sb){msg('Não foi possível conectar ao servidor. Verifique sua conexão com a internet e tente novamente.',false);return;}
   this.disabled=true;const orig=this.textContent;this.textContent='Enviando…';
