@@ -376,6 +376,18 @@ function coletarPayload(){
   };
 }
 
+function limparFormulario(){
+  ['f-nome','f-cpf','f-rg','f-nasc','f-tel','f-email','f-rua','f-numero','f-bairro','f-cidade','f-cep','f-agente','f-codigo','f-resumo-bens'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('f-estado').value='AC';
+  document.getElementById('f-cpf-err').style.display='none';
+  document.querySelector('#tbl-inv tbody').innerHTML='';
+  document.querySelector('#tbl-contas tbody').innerHTML='';
+  addInvRow();
+  addContaRow();
+  calcTotais();
+  relatorioId=null;
+}
+
 document.getElementById('btn-enviar').onclick=async function(){
   const faltando=validar();
   if(faltando==='f-cpf'){msg('O CPF informado não é válido. Confira e tente novamente.',false);return;}
@@ -394,6 +406,7 @@ document.getElementById('btn-enviar').onclick=async function(){
   this.disabled=false;this.textContent=orig;
   if(error){msg('Não foi possível enviar. Tente novamente. ('+error.message+')',false);return;}
   msg('Relatório enviado com sucesso! Seu agente responsável já tem acesso aos dados.',true);
+  limparFormulario();
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 };
 
