@@ -1117,6 +1117,14 @@ function inlineVendSelect(list,cur,cid,field){
   html+='</select>';
   return html;
 }
+function inlineSituacaoSelectFull(cur,cid){
+  const opts=['ATENCAO','REPORTANDO','REPORTANDO A2','REPORTANDO A3','BLOQUEIO','FINALIZADO','MORREU A2','MORREU A3'];
+  let html='<select class="rel-edit cli-edit" data-cid="'+cid+'" data-field="situacao">';
+  if(cur&&!opts.includes(cur))opts.unshift(cur);
+  opts.forEach(o=>{html+='<option value="'+o+'"'+(o===cur?' selected':'')+'>'+t('st_'+o)+'</option>';});
+  html+='</select>';
+  return html;
+}
 function inlineSituacaoSelect(cur,cid,stage){
   const opts=stage==='a3'
     ?['ATENCAO','REPORTANDO A3','FINALIZADO','MORREU A3']
@@ -1711,7 +1719,7 @@ function renderCli(){
     const a1txt=c.vendedor_a1b?esc(c.vendedor_a1)+'+'+esc(c.vendedor_a1b):(c.vendedor_a1?esc(c.vendedor_a1):'—');
     const a2txt=c.vendedor_a2b?esc(c.vendedor_a2)+'+'+esc(c.vendedor_a2b):(c.vendedor_a2?esc(c.vendedor_a2):'—');
     const a3txt=c.vendedor_a3b?esc(c.vendedor_a3)+'+'+esc(c.vendedor_a3b):(c.vendedor_a3?esc(c.vendedor_a3):'—');
-    html+='<tr class="'+cliRowClass(c)+'" data-report="'+c.id+'" style="cursor:pointer">'
+    html+='<tr class="'+cliRowClass(c)+'">'
       +'<td>'+fmtDt(c.data_entrada)+'</td>'
       +'<td>'+(nome||'—')+'</td>'
       +'<td>'+fmtDt(c.data_entrada_a3)+'</td>'
@@ -1720,7 +1728,7 @@ function renderCli(){
       +'<td>'+(c.vendedor_a3?'<b>'+a3txt+'</b>':'—')+'</td>'
       +'<td>'+stageTime(c)+'</td>'
       +'<td>'+fmtMoney(c.saldo_resgatavel)+'</td>'
-      +'<td>'+stBadge(c.situacao)+'</td>'
+      +'<td class="rel-edit-cell">'+inlineSituacaoSelectFull(c.situacao,c.id)+'</td>'
       +'</tr>';
   });
   html+='</tbody></table></div>';
@@ -2144,8 +2152,16 @@ function openCForm(c){
 document.getElementById('cf-cancel').onclick=()=>{cform.classList.add('hide');cbrowse.classList.remove('hide');msg('c-msg');};
 document.getElementById('c-list').addEventListener('click',e=>{
   const totItem=e.target.closest('.cli-tot-item');
-  if(totItem){CLI.filtro=(CLI.filtro===totItem.dataset.filtro)?'ALL':totItem.dataset.filtro;renderCli();return;}
-  const it=e.target.closest('[data-report]');if(!it)return;const c=CLI.list.find(x=>x.id===it.dataset.report);if(c)openReport(c);});
+  if(totItem){CLI.filtro=(CLI.filtro===totItem.dataset.filtro)?'ALL':totItem.dataset.filtro;renderCli();}
+});
+document.getElementById('c-list').addEventListener('change',async e=>{
+  const sel=e.target.closest('.cli-edit');if(!sel)return;
+  const cid=sel.dataset.cid,field=sel.dataset.field,val=sel.value||null;
+  const payload={};payload[field]=val;
+  const {error}=await sb.from('clientes').update(payload).eq('id',cid);
+  if(error){alert(error.message||t('generic'));return;}
+  await loadCli();renderCli();
+});
 document.querySelectorAll('.fin').forEach(el=>el.addEventListener('input',calcTotal));
 document.getElementById('cf-dtentrada').addEventListener('change',calcPrazos);
 document.getElementById('cf-dtentregue').addEventListener('change',calcPrazos);
