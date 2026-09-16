@@ -134,6 +134,7 @@
   .ct-green{background:#dff3e6;color:#1e7d3c}
   .ct-darkblue{background:#e2e7fa;color:#2d3f8f}
   .ct-red1{background:#fbe3e1;color:#c0392b}
+  .ct-gold{background:#f4e8c9;color:#7a5c00;cursor:default}
   .ct-red2{background:#f6d2ce;color:#a3271b}
   .atend-cell{display:flex;flex-direction:column;gap:2px}
   .atend-labels{font-size:9px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
@@ -585,7 +586,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026091601';
+const APP_VERSION='2026091602';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -631,14 +632,14 @@ const I18N={
    cli_save:'Salvar',cli_cancel:'Cancelar',cli_delete:'Excluir cliente',cli_link_form:'Link do Relatório Financeiro (para o cliente preencher)',cli_link_copy:'📋 Copiar link',cli_link_copied:'Copiado!',
    f_all:'Todos',st_morto:'Morreu',
    st_ATENCAO:'Atenção',st_FINALIZADO:'Finalizado','st_MORREU A2':'Morreu Nível 2','st_MORREU A3':'Morreu Nível 3',st_REPORTANDO:'Reportando','st_REPORTANDO A2':'Reportando Nível 2','st_REPORTANDO A3':'Reportando Nível 3',st_BLOQUEIO:'Bloqueio',cli_va1b:'Nível 1 (2º)',cli_va2b:'Nível 2 (2º)',cli_va3b:'Nível 3 (2º)',
-   cli_col_nome:'Cliente',cli_col_entrada:'Entrada',cli_col_saida:'Saída',cli_col_atend:'Atendimento',cli_col_tempo:'Tempo na etapa',cli_col_resg:'Resgatável',cli_col_sit:'Situação',
+   cli_col_nome:'Cliente',cli_col_entrada:'Entrada',cli_col_saida:'Saída',cli_col_atend:'Atendimento',cli_col_tempo:'Tempo na etapa',cli_col_resg:'Resgatável',cli_col_dep:'Total Depositado',cli_col_sit:'Situação',
    cli_em_a1:'em Nível 1',cli_em_a2:'em Nível 2',cli_em_a3:'em Nível 3',
    pz_funil:'dias no funil',pz_entrega:'p/ entregar',pz_a3:'dias no Nível 3',
    c_pnome_req:'Informe o primeiro nome.',c_saved:'Cliente salvo.',c_del:'Excluir este cliente?',c_empty:'Nenhum cliente cadastrado. Toque em “+ Novo”.',c_none:'Nenhum cliente neste filtro.',
    v_code_req:'Informe o código.',v_dup:'Já existe um funcionário com esse código.',v_saved:'Funcionário salvo.',v_del:'Excluir este funcionário?',v_none:'Nenhum funcionário neste canal.',v_empty:'Nenhum funcionário cadastrado. Toque em “+ Novo”.',
    nav_rel:'Relatórios',rel_title:'Relatórios',rel_a1:'Nível 1 — Captação',rel_a2:'Nível 2 — Gestão',rel_a3:'Nível 3 — Depósito',
    rel_col_func:'Funcionário',rel_col_receb:'recebidos',rel_col_transf:'transferidos',rel_col_valtransf:'Valor transferido',rel_col_renda:'Renda mensal',rel_total_clientes:'Total de clientes',
-   tot_atencao:'Atenção (atrasado)',tot_reportando:'Reportando',tot_pronto3:'Prontos p/ Nível 3',tot_report3:'Reportando Nível 3',tot_finalizado:'Finalizados',tot_morreu2:'Morreu Nível 2',tot_morreu3:'Morreu Nível 3',
+   tot_atencao:'Atenção (atrasado)',tot_reportando:'Reportando',tot_pronto3:'Prontos p/ Nível 3',tot_report3:'Reportando Nível 3',tot_finalizado:'Finalizados',tot_morreu2:'Morreu Nível 2',tot_morreu3:'Morreu Nível 3',tot_depositado:'Total Depositado',
    lvl1:'Nível 1',lvl2:'Nível 2',lvl3:'Nível 3',
    rel_col_ativos:'ativos',rel_col_valadm:'Valor administrado',rel_col_enva3:'enviados p/ Nível 3',rel_col_valenva3:'Valor enviado Nível 3',rel_col_total:'Total de clientes',rel_col_morreu:'Morreu',rel_col_valtotal:'Valor total trabalhado',rel_col_reportando:'Reportando',
    rel_col_cliente:'Cliente',rel_col_diasa3:'Dias no Nível 3',rel_col_resgatavel:'Saldo resgatável',rel_col_categorias:'Categorias c/ prazo',
@@ -675,14 +676,14 @@ const I18N={
    cli_save:'Save',cli_cancel:'Cancel',cli_delete:'Delete client',cli_link_form:'Financial Report link (for the client to fill out)',cli_link_copy:'📋 Copy link',cli_link_copied:'Copied!',
    f_all:'All',st_morto:'Lost',
    st_ATENCAO:'Attention',st_FINALIZADO:'Finalized','st_MORREU A2':'Lost Level 2','st_MORREU A3':'Lost Level 3',st_REPORTANDO:'Reporting','st_REPORTANDO A2':'Reporting Level 2','st_REPORTANDO A3':'Reporting Level 3',st_BLOQUEIO:'Block',cli_va1b:'Level 1 (2nd)',cli_va2b:'Level 2 (2nd)',cli_va3b:'Level 3 (2nd)',
-   cli_col_nome:'Client',cli_col_entrada:'Entry',cli_col_saida:'Exit',cli_col_atend:'Handled by',cli_col_tempo:'Time in stage',cli_col_resg:'Redeemable',cli_col_sit:'Status',
+   cli_col_nome:'Client',cli_col_entrada:'Entry',cli_col_saida:'Exit',cli_col_atend:'Handled by',cli_col_tempo:'Time in stage',cli_col_resg:'Redeemable',cli_col_dep:'Total Deposited',cli_col_sit:'Status',
    cli_em_a1:'in Level 1',cli_em_a2:'in Level 2',cli_em_a3:'in Level 3',
    pz_funil:'days in funnel',pz_entrega:'to deliver',pz_a3:'days in Level 3',
    c_pnome_req:'Enter the first name.',c_saved:'Client saved.',c_del:'Delete this client?',c_empty:'No clients yet. Tap “+ New”.',c_none:'No clients in this filter.',
    v_code_req:'Enter the code.',v_dup:'An employee with this code already exists.',v_saved:'Employee saved.',v_del:'Delete this employee?',v_none:'No employees in this channel.',v_empty:'No employees yet. Tap “+ New”.',
    nav_rel:'Reports',rel_title:'Reports',rel_a1:'Level 1 — Acquisition',rel_a2:'Level 2 — Management',rel_a3:'Level 3 — Deposit',
    rel_col_func:'Employee',rel_col_receb:'received',rel_col_transf:'transferred',rel_col_valtransf:'Value transferred',rel_col_renda:'Monthly income',rel_total_clientes:'Total clients',
-   tot_atencao:'Attention (delayed)',tot_reportando:'Reporting',tot_pronto3:'Ready for Level 3',tot_report3:'Reporting Level 3',tot_finalizado:'Finalized',tot_morreu2:'Lost Level 2',tot_morreu3:'Lost Level 3',
+   tot_atencao:'Attention (delayed)',tot_reportando:'Reporting',tot_pronto3:'Ready for Level 3',tot_report3:'Reporting Level 3',tot_finalizado:'Finalized',tot_morreu2:'Lost Level 2',tot_morreu3:'Lost Level 3',tot_depositado:'Total Deposited',
    lvl1:'Level 1',lvl2:'Level 2',lvl3:'Level 3',
    rel_col_ativos:'active',rel_col_valadm:'Value managed',rel_col_enva3:'sent to Level 3',rel_col_valenva3:'Value sent to Level 3',rel_col_total:'Total clients',rel_col_morreu:'Lost',rel_col_valtotal:'Total value handled',rel_col_reportando:'Reporting',
    rel_col_cliente:'Client',rel_col_diasa3:'Days in Level 3',rel_col_resgatavel:'Redeemable balance',rel_col_categorias:'Categories w/ deadline',
@@ -719,14 +720,14 @@ const I18N={
    cli_save:'儲存',cli_cancel:'取消',cli_delete:'刪除客戶',cli_link_form:'財務報告連結（供客戶填寫）',cli_link_copy:'📋 複製連結',cli_link_copied:'已複製！',
    f_all:'全部',st_morto:'流失',
    st_ATENCAO:'注意',st_FINALIZADO:'已完成','st_MORREU A2':'第二級流失','st_MORREU A3':'第三級流失',st_REPORTANDO:'報告中','st_REPORTANDO A2':'第二級報告中','st_REPORTANDO A3':'第三級報告中',st_BLOQUEIO:'鎖定',cli_va1b:'第一級（第二位）',cli_va2b:'第二級（第二位）',cli_va3b:'第三級（第二位）',
-   cli_col_nome:'客戶',cli_col_entrada:'進入日',cli_col_saida:'離開日',cli_col_atend:'負責人',cli_col_tempo:'目前階段時間',cli_col_resg:'可贖回',cli_col_sit:'狀況',
+   cli_col_nome:'客戶',cli_col_entrada:'進入日',cli_col_saida:'離開日',cli_col_atend:'負責人',cli_col_tempo:'目前階段時間',cli_col_resg:'可贖回',cli_col_dep:'已存總額',cli_col_sit:'狀況',
    cli_em_a1:'於第一級',cli_em_a2:'於第二級',cli_em_a3:'於第三級',
    pz_funil:'漏斗天數',pz_entrega:'待交付',pz_a3:'第三級天數',
    c_pnome_req:'請輸入名。',c_saved:'已儲存客戶。',c_del:'確定刪除此客戶？',c_empty:'尚無客戶，請點「+ 新增」。',c_none:'此篩選無客戶。',
    v_code_req:'請輸入代碼。',v_dup:'此代碼已存在。',v_saved:'已儲存員工。',v_del:'確定刪除此員工？',v_none:'此通路尚無員工。',v_empty:'尚無員工，請點「+ 新增」。',
    nav_rel:'報表',rel_title:'報表',rel_a1:'第一級 — 開發',rel_a2:'第二級 — 管理',rel_a3:'第三級 — 存款',
    rel_col_func:'員工',rel_col_receb:'已接收',rel_col_transf:'已轉出',rel_col_valtransf:'轉出金額',rel_col_renda:'月收入',rel_total_clientes:'客戶總數',
-   tot_atencao:'注意（已延遲）',tot_reportando:'報告中',tot_pronto3:'準備進入第三級',tot_report3:'第三級報告中',tot_finalizado:'已完成',tot_morreu2:'第二級流失',tot_morreu3:'第三級流失',
+   tot_atencao:'注意（已延遲）',tot_reportando:'報告中',tot_pronto3:'準備進入第三級',tot_report3:'第三級報告中',tot_finalizado:'已完成',tot_morreu2:'第二級流失',tot_morreu3:'第三級流失',tot_depositado:'已存總額',
    lvl1:'第一級',lvl2:'第二級',lvl3:'第三級',
    rel_col_ativos:'活躍',rel_col_valadm:'管理金額',rel_col_enva3:'轉入第三級',rel_col_valenva3:'轉入第三級金額',rel_col_total:'客戶總數',rel_col_morreu:'流失',rel_col_valtotal:'處理總金額',rel_col_reportando:'報告中',
    rel_col_cliente:'客戶',rel_col_diasa3:'第三級天數',rel_col_resgatavel:'可贖回餘額',rel_col_categorias:'有期限的類別',
@@ -1701,6 +1702,7 @@ function cliTotalsBar(){
   const totFinalizado=cnt('FINALIZADO');
   const totMorreu2=cnt('MORREU A2');
   const totMorreu3=cnt('MORREU A3');
+  const totDepositado=list.reduce((s,c)=>s+(Number(c.valor_depositado)||0),0);
   const item=(label,val,cls,filtro)=>'<div class="cli-tot-item '+cls+(CLI.filtro===filtro?' active':'')+'" data-filtro="'+filtro+'"><span class="ct-val">'+val+'</span><span class="ct-lbl">'+label+'</span></div>';
   return '<div class="cli-totals">'
     +item(t('tot_atencao'),totAtencao,'ct-yellow','ATENCAO')
@@ -1710,6 +1712,7 @@ function cliTotalsBar(){
     +item(t('tot_report3'),totReportN3,'ct-green','REPORTANDO A3')
     +item(t('tot_finalizado'),totFinalizado,'ct-darkblue','FINALIZADO')
     +item(t('tot_morreu3'),totMorreu3,'ct-red2','MORREU A3')
+    +'<div class="cli-tot-item ct-gold" data-filtro="_NOFILTER_"><span class="ct-val">'+fmtMoney(totDepositado)+'</span><span class="ct-lbl">'+t('tot_depositado')+'</span></div>'
     +'</div>';
 }
 function renderCli(){
@@ -1727,7 +1730,7 @@ function renderCli(){
   if(!arr.length){box.innerHTML=cliTotalsBar()+'<div class="empty">'+t('c_none')+'</div>';return;}
   let html=cliTotalsBar()+'<div class="reltab-wrap"><table class="reltab"><thead><tr>'
     +'<th>'+t('cli_col_entrada')+'</th><th>'+t('cli_col_nome')+'</th><th>'+t('cli_col_saida')+'</th>'
-    +'<th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('lvl3')+'</th><th>'+t('cli_col_tempo')+'</th><th>'+t('cli_col_resg')+'</th><th>'+t('cli_col_sit')+'</th>'
+    +'<th>'+t('lvl1')+'</th><th>'+t('lvl2')+'</th><th>'+t('lvl3')+'</th><th>'+t('cli_col_tempo')+'</th><th>'+t('cli_col_resg')+'</th><th>'+t('cli_col_dep')+'</th><th>'+t('cli_col_sit')+'</th>'
     +'</tr></thead><tbody>';
   arr.forEach(c=>{
     const nome=esc(fullName(c));
@@ -1743,6 +1746,7 @@ function renderCli(){
       +'<td>'+(c.vendedor_a3?'<b>'+a3txt+'</b>':'—')+'</td>'
       +'<td>'+stageTime(c)+'</td>'
       +'<td>'+fmtMoney(c.saldo_resgatavel)+'</td>'
+      +'<td><b>'+fmtMoney(c.valor_depositado)+'</b></td>'
       +'<td class="rel-edit-cell">'+inlineSituacaoSelectFull(c.situacao,c.id)+'</td>'
       +'</tr>';
   });
@@ -2222,7 +2226,7 @@ function openCForm(c){
 document.getElementById('cf-cancel').onclick=()=>{cform.classList.add('hide');cbrowse.classList.remove('hide');msg('c-msg');};
 document.getElementById('c-list').addEventListener('click',e=>{
   const totItem=e.target.closest('.cli-tot-item');
-  if(totItem){CLI.filtro=(CLI.filtro===totItem.dataset.filtro)?'ALL':totItem.dataset.filtro;renderCli();}
+  if(totItem&&totItem.dataset.filtro!=='_NOFILTER_'){CLI.filtro=(CLI.filtro===totItem.dataset.filtro)?'ALL':totItem.dataset.filtro;renderCli();}
 });
 document.getElementById('c-list').addEventListener('change',async e=>{
   const sel=e.target.closest('.cli-edit');if(!sel)return;
