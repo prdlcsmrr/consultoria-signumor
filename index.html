@@ -121,6 +121,8 @@
   .st-warn{color:#c0392b;font-weight:bold;white-space:normal!important}
   .st-line:first-child{color:var(--muted)}
   .rel-total{font-size:13px;font-weight:bold;color:var(--navy);background:#fdf3e3;border:1px solid var(--gold);border-radius:8px;padding:8px 14px;margin-bottom:12px;display:inline-block}
+  .cli-total-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+  .cli-total-row .rel-total{margin-bottom:0}
   .cli-totals{display:flex;flex-wrap:nowrap;gap:9px;margin-bottom:18px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 2px 6px}
   .cli-tot-item{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:12px;padding:10px 16px;min-width:82px;flex:0 0 auto;text-align:center;cursor:pointer;border:2px solid transparent;transition:transform .12s,box-shadow .12s}
   .cli-tot-item:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.08)}
@@ -318,7 +320,7 @@
     <!-- TAB CLIENTES -->
     <div id="tab-cli" class="card hide">
       <div class="pane-head"><h2 id="cli-title-h2" data-i="cli_title">Clientes</h2></div>
-      <div id="cli-total-header" class="rel-total"></div>
+      <div id="cli-total-header" class="cli-total-row"></div>
 
       <!-- FICHA -->
       <div id="c-form" class="vform hide">
@@ -586,7 +588,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const APP_VERSION='2026091602';
+const APP_VERSION='2026091603';
 (function(){
   let checking=false;
   async function checkVersion(){
@@ -1702,7 +1704,6 @@ function cliTotalsBar(){
   const totFinalizado=cnt('FINALIZADO');
   const totMorreu2=cnt('MORREU A2');
   const totMorreu3=cnt('MORREU A3');
-  const totDepositado=list.reduce((s,c)=>s+(Number(c.valor_depositado)||0),0);
   const item=(label,val,cls,filtro)=>'<div class="cli-tot-item '+cls+(CLI.filtro===filtro?' active':'')+'" data-filtro="'+filtro+'"><span class="ct-val">'+val+'</span><span class="ct-lbl">'+label+'</span></div>';
   return '<div class="cli-totals">'
     +item(t('tot_atencao'),totAtencao,'ct-yellow','ATENCAO')
@@ -1712,7 +1713,6 @@ function cliTotalsBar(){
     +item(t('tot_report3'),totReportN3,'ct-green','REPORTANDO A3')
     +item(t('tot_finalizado'),totFinalizado,'ct-darkblue','FINALIZADO')
     +item(t('tot_morreu3'),totMorreu3,'ct-red2','MORREU A3')
-    +'<div class="cli-tot-item ct-gold" data-filtro="_NOFILTER_"><span class="ct-val">'+fmtMoney(totDepositado)+'</span><span class="ct-lbl">'+t('tot_depositado')+'</span></div>'
     +'</div>';
 }
 function renderCli(){
@@ -1721,8 +1721,10 @@ function renderCli(){
   if(titleEl)titleEl.textContent=PAIS_ATIVO+' - '+t('cli_title');
   let arr=CLI.list.filter(c=>(c.pais||'BR')===PAIS_ATIVO);
   const totAtivos=arr.filter(c=>(c.situacao||'').indexOf('MORREU')!==0&&c.situacao!=='FINALIZADO').length;
+  const totDepositadoGeral=arr.reduce((s,c)=>s+(Number(c.valor_depositado)||0),0);
   const hdr=document.getElementById('cli-total-header');
-  if(hdr)hdr.innerHTML=t('cli_total_ativos')+': <b>'+totAtivos+'</b>';
+  if(hdr)hdr.innerHTML='<div class="rel-total">'+t('cli_total_ativos')+': <b>'+totAtivos+'</b></div>'
+    +'<div class="rel-total">'+t('tot_depositado')+': <b>'+fmtMoney(totDepositadoGeral)+'</b></div>';
   if(CLI.filtro==='MORTO')arr=arr.filter(c=>(c.situacao||'').indexOf('MORREU')===0);
   else if(CLI.filtro==='REPORTANDO')arr=arr.filter(c=>(c.situacao||'').indexOf('REPORTANDO')===0);
   else if(CLI.filtro!=='ALL')arr=arr.filter(c=>c.situacao===CLI.filtro);
